@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Hlášení chyb | Nio Localization</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="community.css">
+    <link rel="stylesheet" href="bug-reports.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="config.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="container nav-wrap">
+
+        <a class="brand" href="index.html">
+            <span class="brand-mark">N</span>
+            <span>Nio <strong>Localization</strong></span>
+        </a>
+
+        <nav class="main-nav" aria-label="Hlavní navigace">
+            <a href="index.html">Domů</a>
+            <a href="index.html#preklady">Překlady</a>
+            <a href="index.html#projekty">Projekty</a>
+            <a href="index.html#o-projektu">O projektu</a>
+            <a href="index.html#kontakt">Kontakt</a>
+            <a href="hlasovani.html" class="vote-nav-link" title="Hlasování">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M8.5 14.5C7.5 13.5 7 12.2 7 10.8a5 5 0 0 1 10 0c0 1.4-.5 2.7-1.5 3.7-.9.9-1.5 1.8-1.5 3h-4c0-1.2-.6-2.1-1.5-3Z"></path><path d="M12 2V1"></path><path d="M4.9 4.9 4.2 4.2"></path><path d="M19.8 4.2 19.1 4.9"></path><path d="M3 11H2"></path><path d="M22 11h-1"></path>
+                </svg><span>Hlasování</span>
+            </a>
+            <a href="bug-reports.html" class="bug-nav-link" title="Nahlásit chybu">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M9 6.5V6a3 3 0 0 1 6 0v.5"></path><path d="M8.5 9.5C8.5 8.12 9.62 7 11 7h2c1.38 0 2.5 1.12 2.5 2.5V15a4.5 4.5 0 1 1-9 0V9.5Z"></path><path d="M12 11v8"></path><path d="M8 11H5"></path><path d="M19 11h-3"></path><path d="M8 15H4.5"></path><path d="M19.5 15H16"></path><path d="M9.2 3.8 7.8 2.4"></path><path d="M14.8 3.8 16.2 2.4"></path>
+                </svg><span>Nahlásit chybu</span>
+            </a>
+            <button class="nav-auth" type="button" data-auth-open>Přihlásit se</button>
+        </nav>
+
+    </div>
+</header>
+
+
+<main>
+
+    <section class="bug-hero">
+
+        <div class="container">
+
+            <div class="bug-hero-top">
+
+                <div>
+                    <p class="eyebrow">KOMUNITA</p>
+                    <h1>🐞 Hlášení chyb</h1>
+                    <p class="bug-subtitle">
+                        Našli jste chybu v překladu? Nahlaste ji zde a pomozte překlad zlepšit.
+                    </p>
+                </div>
+
+                <button type="button" id="open-report-form" class="bug-report-button">
+                    + Nahlásit chybu
+                </button>
+
+            </div>
+
+
+            <div class="bug-stats">
+
+                <div class="bug-stat">
+                    <strong id="stat-waiting">0</strong>
+                    <span>Čeká na zpracování</span>
+                </div>
+
+                <div class="bug-stat">
+                    <strong id="stat-progress">0</strong>
+                    <span>Zpracovává se</span>
+                </div>
+
+                <div class="bug-stat">
+                    <strong id="stat-resolved">0</strong>
+                    <span>Vyřešeno</span>
+                </div>
+
+                <div class="bug-stat">
+                    <strong id="stat-total">0</strong>
+                    <span>Celkem</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="bug-content">
+
+        <div class="container">
+
+            <div id="bug-message" class="bug-message" hidden></div>
+
+            <div id="report-form-box" class="report-form-box" hidden>
+
+                <div class="report-form-header">
+
+                    <div>
+                        <p class="eyebrow">NOVÉ HLÁŠENÍ</p>
+                        <h2>Nahlásit chybu</h2>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="close-report-form"
+                        class="report-close-button"
+                        aria-label="Zavřít"
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+
+                <div id="login-required" class="login-required" hidden>
+                    Pro nahlášení chyby se musíte nejprve přihlásit.
+                </div>
+
+
+                <form id="bug-report-form">
+
+                    <div class="form-group">
+
+                        <label for="bug-game">
+                            Hra
+                        </label>
+
+                        <select id="bug-game" required>
+                            <option value="leafy-corner">
+                                Leafy Corner
+                            </option>
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="bug-title">
+                            Název chyby
+                        </label>
+
+                        <input
+                            type="text"
+                            id="bug-title"
+                            maxlength="120"
+                            placeholder="Např. Chybný text v úvodním tutorialu"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="bug-location">
+                            Kde se chyba nachází?
+                        </label>
+
+                        <input
+                            type="text"
+                            id="bug-location"
+                            maxlength="200"
+                            placeholder="Např. Tutorial → první dialog"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="bug-description">
+                            Popis chyby
+                        </label>
+
+                        <textarea
+                            id="bug-description"
+                            maxlength="3000"
+                            rows="7"
+                            placeholder="Popište chybu co nejpřesněji..."
+                            required
+                        ></textarea>
+
+                        <small>
+                            Maximálně 3 000 znaků.
+                        </small>
+
+                    </div>
+
+
+                    <button type="submit" class="bug-submit-button">
+                        Odeslat hlášení
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <div class="bug-list-header">
+
+                <div>
+                    <p class="eyebrow">HLÁŠENÉ PROBLÉMY</p>
+                    <h2>Seznam chyb</h2>
+                </div>
+
+            </div>
+
+
+            <div id="bug-list" class="bug-list">
+
+                <div class="bug-loading">
+                    Načítám hlášení...
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    <div class="container">
+
+        <a class="brand" href="index.html">
+            <span class="brand-mark">N</span>
+            <span>Nio <strong>Localization</strong></span>
+        </a>
+
+        <p>
+            © 2026 NioCZ komunitní překlady.
+        </p>
+
+        <div class="footer-info"><h3>Informace</h3><a href="podminky.html">Podmínky použití</a><a href="soukromi.html">Ochrana osobních údajů</a></div>
+
+    </div>
+
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+    const supabaseClient = window.supabase.createClient(
+        window.NIO_CONFIG.supabaseUrl,
+        window.NIO_CONFIG.supabaseAnonKey
+    );
+
+
+    const openButton =
+        document.getElementById("open-report-form");
+
+    const closeButton =
+        document.getElementById("close-report-form");
+
+    const formBox =
+        document.getElementById("report-form-box");
+
+    const form =
+        document.getElementById("bug-report-form");
+
+    const loginRequired =
+        document.getElementById("login-required");
+
+    const bugList =
+        document.getElementById("bug-list");
+
+    const messageBox =
+        document.getElementById("bug-message");
+
+
+    let currentUser = null;
+    let currentProfile = null;
+
+
+    async function loadCurrentUser() {
+
+        const {
+            data: { user }
+        } = await supabaseClient.auth.getUser();
+
+        currentUser = user;
+
+        if (!currentUser) {
+            return;
+        }
+
+
+        const { data: profile } =
+            await supabaseClient
+                .from("profiles")
+                .select("display_name,is_author")
+                .eq("id", currentUser.id)
+                .maybeSingle();
+
+        currentProfile = profile;
+
+    }
+
+
+    function showMessage(text, type = "success") {
+
+        messageBox.hidden = false;
+        messageBox.textContent = text;
+        messageBox.dataset.type = type;
+
+    }
+
+
+    openButton.addEventListener("click", () => {
+
+        formBox.hidden = false;
+
+        if (!currentUser) {
+
+            loginRequired.hidden = false;
+
+            form.style.display = "none";
+
+        } else {
+
+            loginRequired.hidden = true;
+
+            form.style.display = "";
+
+        }
+
+        formBox.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    });
+
+
+    closeButton.addEventListener("click", () => {
+
+        formBox.hidden = true;
+
+    });
+
+
+    form.addEventListener("submit", async (event) => {
+
+        event.preventDefault();
+
+
+        if (!currentUser) {
+
+            showMessage(
+                "Pro nahlášení chyby se musíte přihlásit.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        const gameSlug =
+            document.getElementById("bug-game").value;
+
+        const title =
+            document.getElementById("bug-title").value.trim();
+
+        const location =
+            document.getElementById("bug-location").value.trim();
+
+        const description =
+            document.getElementById("bug-description").value.trim();
+
+
+        const submitButton =
+            form.querySelector('button[type="submit"]');
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Odesílám...";
+
+
+        const { error } =
+            await supabaseClient
+                .from("bug_reports")
+                .insert({
+                    user_id: currentUser.id,
+                    game_slug: gameSlug,
+                    title: title,
+                    location: location || null,
+                    description: description
+                });
+
+
+        submitButton.disabled = false;
+        submitButton.textContent = "Odeslat hlášení";
+
+
+        if (error) {
+
+            console.error(error);
+
+            showMessage(
+                "Hlášení se nepodařilo odeslat.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        form.reset();
+
+        formBox.hidden = true;
+
+        showMessage(
+            "Hlášení bylo úspěšně odesláno."
+        );
+
+        await loadReports();
+
+    });
+
+
+    async function loadReports() {
+
+        bugList.innerHTML =
+            '<div class="bug-loading">Načítám hlášení...</div>';
+
+
+        const { data: reports, error } =
+            await supabaseClient
+                .from("bug_reports")
+                .select("*")
+                .order("created_at", {
+                    ascending: false
+                });
+
+
+        if (error) {
+
+            console.error(error);
+
+            bugList.innerHTML =
+                '<div class="bug-loading">Hlášení se nepodařilo načíst.</div>';
+
+            return;
+
+        }
+
+
+        const waiting =
+            reports.filter(
+                report => report.status === "Čaká"
+            ).length;
+
+        const progress =
+            reports.filter(
+                report => report.status === "Spracováva sa"
+            ).length;
+
+        const resolved =
+            reports.filter(
+                report => report.status === "Vyriešené"
+            ).length;
+
+
+        document.getElementById(
+            "stat-waiting"
+        ).textContent = waiting;
+
+        document.getElementById(
+            "stat-progress"
+        ).textContent = progress;
+
+        document.getElementById(
+            "stat-resolved"
+        ).textContent = resolved;
+
+        document.getElementById(
+            "stat-total"
+        ).textContent = reports.length;
+
+
+        if (reports.length === 0) {
+
+            bugList.innerHTML = `
+                <div class="bug-empty">
+                    Zatím nebyla nahlášena žádná chyba.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        const userIds = [
+            ...new Set(
+                reports
+                    .map(report => report.user_id)
+                    .filter(Boolean)
+            )
+        ];
+
+
+        let profiles = [];
+
+
+        if (userIds.length > 0) {
+
+            const { data } =
+                await supabaseClient
+                    .from("profiles")
+                    .select("id,display_name,is_author")
+                    .in("id", userIds);
+
+            profiles = data || [];
+
+        }
+
+
+        bugList.innerHTML = "";
+
+
+        for (const report of reports) {
+
+            const profile =
+                profiles.find(
+                    item => item.id === report.user_id
+                );
+
+
+            const reporter =
+                profile?.display_name || "Uživatel";
+
+
+            const card =
+                document.createElement("article");
+
+            card.className = "bug-card";
+
+
+            const date =
+                new Date(
+                    report.created_at
+                ).toLocaleDateString("cs-CZ");
+
+
+            card.innerHTML = `
+
+                <div class="bug-card-status bug-status-${statusClass(report.status)}">
+                    ${escapeHtml(statusLabel(report.status))}
+                </div>
+
+                <div class="bug-card-main">
+
+                    <div class="bug-card-heading">
+
+                        <div>
+
+                            <h3>
+                                ${escapeHtml(report.title)}
+                            </h3>
+
+                            <p class="bug-game-name">
+                                ${gameName(report.game_slug)}
+                            </p>
+
+                        </div>
+
+                        <time>
+                            ${date}
+                        </time>
+
+                    </div>
+
+
+                    ${
+                        report.location
+                            ? `
+                                <p class="bug-location">
+                                    <strong>Kde:</strong>
+                                    ${escapeHtml(report.location)}
+                                </p>
+                            `
+                            : ""
+                    }
+
+
+                    <p class="bug-description">
+                        ${escapeHtml(report.description)}
+                    </p>
+
+
+                    <div class="bug-card-footer">
+
+                        <span>
+                            Nahlásil:
+                            <strong>
+                                ${escapeHtml(reporter)}
+                            </strong>
+                            ${profile?.is_author === true ? '<span class="author-badge">AUTOR</span>' : ''}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            if (currentProfile?.is_author) {
+
+                const controls =
+                    document.createElement("div");
+
+                controls.className =
+                    "bug-author-controls";
+
+
+                const select =
+                    document.createElement("select");
+
+
+                [
+                    "Čaká",
+                    "Spracováva sa",
+                    "Vyriešené"
+                ].forEach(status => {
+
+                    const option =
+                        document.createElement("option");
+
+                    option.value = status;
+
+                    option.textContent =
+                        statusLabel(status);
+
+                    option.selected =
+                        report.status === status;
+
+                    select.appendChild(option);
+
+                });
+
+
+                select.addEventListener(
+                    "change",
+                    async () => {
+
+                        const { error } =
+                            await supabaseClient
+                                .from("bug_reports")
+                                .update({
+                                    status: select.value,
+                                    updated_at:
+                                        new Date().toISOString()
+                                })
+                                .eq("id", report.id);
+
+
+                        if (error) {
+
+                            console.error(error);
+
+                            showMessage(
+                                "Stav se nepodařilo změnit.",
+                                "error"
+                            );
+
+                            return;
+
+                        }
+
+
+                        await loadReports();
+
+                    }
+                );
+
+
+                controls.appendChild(select);
+
+                card.appendChild(controls);
+
+            }
+
+
+            bugList.appendChild(card);
+
+        }
+
+    }
+
+
+    function statusLabel(status) {
+
+        if (status === "Čaká") {
+            return "Čeká";
+        }
+
+        if (status === "Spracováva sa") {
+            return "Zpracovává se";
+        }
+
+        if (status === "Vyriešené") {
+            return "Vyřešeno";
+        }
+
+        return status;
+
+    }
+
+
+    function statusClass(status) {
+
+        if (status === "Čaká") {
+            return "waiting";
+        }
+
+        if (status === "Spracováva sa") {
+            return "progress";
+        }
+
+        if (status === "Vyriešené") {
+            return "resolved";
+        }
+
+        return "waiting";
+
+    }
+
+
+    function gameName(slug) {
+
+        if (slug === "leafy-corner") {
+            return "Leafy Corner";
+        }
+
+        return slug;
+
+    }
+
+
+    function escapeHtml(value) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent =
+            value ?? "";
+
+        return div.innerHTML;
+
+    }
+
+
+    await loadCurrentUser();
+    await loadReports();
+
+});
+
+</script>
+
+</body>
+</html>

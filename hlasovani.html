@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Hlasujte, které hry má NioCZ přeložit do češtiny jako další."><meta name="theme-color" content="#070a10">
+  <title>Hlasování o další překlad | Nio Localization</title>
+  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="community.css"><link rel="stylesheet" href="voting.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script><script src="config.js" defer></script><script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Přejít na obsah</a>
+  <header class="site-header" data-header><div class="container nav-wrap">
+    <a class="brand" href="index.html"><span class="brand-mark">N</span><span>Nio <strong>Localization</strong></span></a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-menu" data-menu-toggle><span class="sr-only">Otevřít menu</span><span></span><span></span><span></span></button>
+    <nav id="main-menu" class="main-nav" aria-label="Hlavní navigace" data-menu><a href="index.html">Domů</a><a href="index.html#preklady">Překlady</a><a href="index.html#projekty">Projekty</a><a href="index.html#o-projektu">O projektu</a><a href="index.html#kontakt">Kontakt</a><a href="hlasovani.html" class="vote-nav-link" title="Hlasování"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M8.5 14.5C7.5 13.5 7 12.2 7 10.8a5 5 0 0 1 10 0c0 1.4-.5 2.7-1.5 3.7-.9.9-1.5 1.8-1.5 3h-4c0-1.2-.6-2.1-1.5-3Z"></path><path d="M12 2V1"></path><path d="M4.9 4.9 4.2 4.2"></path><path d="M19.8 4.2 19.1 4.9"></path><path d="M3 11H2"></path><path d="M22 11h-1"></path></svg><span>Hlasování</span></a><a href="bug-reports.html" class="bug-nav-link" title="Nahlásit chybu">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M9 6.5V6a3 3 0 0 1 6 0v.5"></path>
+    <path d="M8.5 9.5C8.5 8.12 9.62 7 11 7h2c1.38 0 2.5 1.12 2.5 2.5V15a4.5 4.5 0 1 1-9 0V9.5Z"></path>
+    <path d="M12 11v8"></path>
+    <path d="M8 11H5"></path>
+    <path d="M19 11h-3"></path>
+    <path d="M8 15H4.5"></path>
+    <path d="M19.5 15H16"></path>
+    <path d="M9.2 3.8 7.8 2.4"></path>
+    <path d="M14.8 3.8 16.2 2.4"></path>
+  </svg>
+  <span>Nahlásit chybu</span>
+</a><button class="nav-auth" type="button" data-auth-open>Přihlásit se</button></nav>
+  </div></header>
+  <main id="main">
+    <section class="voting-hero"><div class="hero-glow" aria-hidden="true"></div><div class="container reveal"><p class="eyebrow">Hlas komunity</p><h1>Co přeložíme <span>jako další?</span></h1><p>Hlasujte pro hru, kterou chcete v češtině. Každý přihlášený účet má u každé hry jeden hlas a může ho kdykoli zrušit.</p></div></section>
+    <section class="section voting-content"><div class="container">
+      <div class="voting-toolbar reveal"><div><h2>Kandidáti na překlad</h2><p>Výsledky jsou veřejné a hry jsou seřazené podle počtu hlasů.</p></div><div class="vote-user-note" data-vote-user-note>Přihlaste se, abyste mohli hlasovat.</div></div>
+      <div class="vote-list" data-vote-list aria-live="polite"><p class="empty-state">Načítám hlasování…</p></div>
+    </div></section>
+  </main>
+  <footer><div class="container"><a class="brand" href="index.html"><span class="brand-mark">N</span><span>Nio <strong>Localization</strong></span></a><p>© <span data-year></span> NioCZ komunitní překlady.</p><div class="footer-info"><h3>Informace</h3><a href="podminky.html">Podmínky použití</a><a href="soukromi.html">Ochrana osobních údajů</a></div></div></footer>
+  <div class="auth-modal" data-auth-modal hidden><div class="auth-backdrop" data-auth-close></div><section class="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="auth-title"><button class="auth-close" type="button" data-auth-close aria-label="Zavřít">×</button><p class="eyebrow">Komunitní účet</p><h2 id="auth-title">Přihlášení</h2><div class="auth-tabs"><button class="active" type="button" data-auth-tab="login">Přihlásit</button><button type="button" data-auth-tab="register">Registrovat</button></div><form data-auth-form><label for="auth-name" data-name-label hidden>Jméno</label><input id="auth-name" data-auth-name maxlength="40" autocomplete="nickname" placeholder="Vaše jméno" hidden><label for="auth-email">E-mail</label><input id="auth-email" data-auth-email type="email" autocomplete="email" required placeholder="vas@email.cz"><label for="auth-password">Heslo</label><input id="auth-password" data-auth-password type="password" minlength="6" autocomplete="current-password" required placeholder="Minimálně 6 znaků"><button class="button button-primary" type="submit" data-auth-submit>Přihlásit se</button><p class="form-message" data-auth-message role="status"></p></form></section></div>
+</body></html>

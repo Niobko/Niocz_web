@@ -1,0 +1,360 @@
+.bug-hero{
+    padding:70px 0 34px;
+    background:
+        linear-gradient(rgba(7,10,16,.82),rgba(7,10,16,.9)),
+        radial-gradient(circle at top right,rgba(255,65,65,.12),transparent 35%);
+    border-bottom:1px solid var(--line);
+}
+
+.bug-hero-top{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:30px;
+    margin-bottom:34px;
+}
+
+.bug-hero h1{
+    margin:8px 0 10px;
+    font-size:clamp(2rem,4vw,3.2rem);
+}
+
+.bug-subtitle{
+    margin:0;
+    color:var(--muted);
+    max-width:720px;
+}
+
+.bug-report-button{
+    border:0;
+    border-radius:12px;
+    padding:14px 20px;
+    background:#ff3b48;
+    color:white;
+    font-weight:800;
+    cursor:pointer;
+    white-space:nowrap;
+}
+
+.bug-report-button:hover{
+    filter:brightness(1.08);
+}
+
+.bug-stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+}
+
+.bug-stat{
+    background:#0d1320;
+    border:1px solid #243149;
+    border-radius:14px;
+    padding:20px;
+}
+
+.bug-stat strong{
+    display:block;
+    font-size:1.7rem;
+    margin-bottom:4px;
+}
+
+.bug-stat:nth-child(1) strong{
+    color:#f6b91f;
+}
+
+.bug-stat:nth-child(2) strong{
+    color:#4aa3ff;
+}
+
+.bug-stat:nth-child(3) strong{
+    color:#31d17c;
+}
+
+.bug-stat:nth-child(4) strong{
+    color:#ffffff;
+}
+
+.bug-stat span{
+    color:var(--muted);
+    font-size:.92rem;
+}
+
+.bug-content{
+    padding:36px 0 70px;
+}
+
+.report-form-box{
+    background:#0d1320;
+    border:1px solid #243149;
+    border-radius:16px;
+    padding:26px;
+    margin-bottom:30px;
+}
+
+.report-form-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:20px;
+    margin-bottom:22px;
+}
+
+.report-form-header h2{
+    margin:5px 0 0;
+}
+
+.report-close-button{
+    width:38px;
+    height:38px;
+    border:1px solid #344258;
+    border-radius:10px;
+    background:#111927;
+    color:white;
+    font-size:1.5rem;
+    cursor:pointer;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-bottom:18px;
+}
+
+.form-group label{
+    font-weight:700;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+    width:100%;
+    padding:13px 14px;
+    border-radius:10px;
+    border:1px solid #344258;
+    background:#080d15;
+    color:white;
+    font:inherit;
+}
+
+.form-group textarea{
+    resize:vertical;
+    min-height:150px;
+}
+
+.form-group small{
+    color:var(--muted);
+}
+
+.bug-submit-button{
+    border:0;
+    border-radius:11px;
+    padding:14px 20px;
+    background:#1f6fc2;
+    color:white;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.login-required{
+    padding:15px 16px;
+    margin-bottom:20px;
+    border:1px solid rgba(255,185,31,.35);
+    border-radius:10px;
+    color:#ffd36b;
+    background:rgba(255,185,31,.08);
+}
+
+.bug-message{
+    margin-bottom:20px;
+    padding:14px 16px;
+    border-radius:10px;
+    border:1px solid rgba(49,209,124,.35);
+    color:#56e69a;
+    background:rgba(49,209,124,.08);
+}
+
+.bug-message[data-type="error"]{
+    border-color:rgba(255,59,72,.35);
+    color:#ff7a84;
+    background:rgba(255,59,72,.08);
+}
+
+.bug-list-header{
+    margin:25px 0 18px;
+}
+
+.bug-list-header h2{
+    margin:5px 0 0;
+}
+
+.bug-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.bug-card{
+    position:relative;
+    display:flex;
+    gap:18px;
+    background:#0b111d;
+    border:1px solid #243149;
+    border-radius:14px;
+    padding:18px 20px;
+}
+
+.bug-card-status{
+    flex:0 0 auto;
+    align-self:flex-start;
+    padding:6px 10px;
+    border-radius:999px;
+    font-size:.78rem;
+    font-weight:800;
+}
+
+.bug-status-waiting{
+    color:#f6b91f;
+    background:rgba(246,185,31,.12);
+    border:1px solid rgba(246,185,31,.28);
+}
+
+.bug-status-progress{
+    color:#4aa3ff;
+    background:rgba(74,163,255,.12);
+    border:1px solid rgba(74,163,255,.28);
+}
+
+.bug-status-resolved{
+    color:#31d17c;
+    background:rgba(49,209,124,.12);
+    border:1px solid rgba(49,209,124,.28);
+}
+
+.bug-card-main{
+    flex:1;
+    min-width:0;
+}
+
+.bug-card-heading{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+}
+
+.bug-card-heading h3{
+    margin:0 0 4px;
+    font-size:1.08rem;
+}
+
+.bug-card-heading time{
+    color:var(--muted);
+    font-size:.82rem;
+    white-space:nowrap;
+}
+
+.bug-game-name{
+    margin:0 0 10px;
+    color:#7dbbff;
+    font-size:.88rem;
+}
+
+.bug-location{
+    margin:8px 0;
+    color:#b4c3d8;
+}
+
+.bug-description{
+    margin:10px 0 14px;
+    color:#dbe6f4;
+    white-space:pre-wrap;
+}
+
+.bug-card-footer{
+    color:var(--muted);
+    font-size:.86rem;
+}
+
+.bug-author-controls{
+    flex:0 0 auto;
+    align-self:center;
+}
+
+.bug-author-controls select{
+    padding:9px 11px;
+    border-radius:9px;
+    border:1px solid #344258;
+    background:#0a111c;
+    color:white;
+}
+
+.bug-loading,
+.bug-empty{
+    padding:30px;
+    text-align:center;
+    color:var(--muted);
+    border:1px dashed #2d3b50;
+    border-radius:14px;
+}
+
+@media (max-width:900px){
+    .bug-stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .bug-hero-top{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .bug-card{
+        flex-direction:column;
+    }
+
+    .bug-author-controls{
+        align-self:flex-start;
+    }
+}
+
+@media (max-width:560px){
+    .bug-stats{
+        grid-template-columns:1fr;
+    }
+
+    .bug-card-heading{
+        flex-direction:column;
+        gap:6px;
+    }
+}
+
+/* Pevná čierna hlavička na stránke hlásení */
+.site-header{
+    position:relative;
+    top:auto;
+    left:auto;
+    right:auto;
+    z-index:100;
+
+    width:100%;
+    background:#070a10;
+    border-bottom:1px solid #202b3d;
+}
+
+.site-header .nav-wrap{
+    min-height:76px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+/* Nadpis už nezačína pod hlavičkou */
+.bug-hero{
+    padding-top:50px;
+}
+.site-header{
+    position:sticky !important;
+    top:0 !important;
+    z-index:1000;
+    background:#070a10;
+}
