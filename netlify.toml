@@ -1,0 +1,10 @@
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+  included_files = ["data/game-status.json"]
+
+[[redirects]]
+  from = "/api/game-status"
+  to = "/.netlify/functions/game-status"
+  status = 200
+

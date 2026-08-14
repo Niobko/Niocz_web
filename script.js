@@ -24,6 +24,60 @@ if (reducedMotion || !('IntersectionObserver' in window)) {
 }
 
 const settings = window.NIO_CONFIG || {};
+const gameStatusDefinitions = {
+  functional: { key: 'functional', label: 'Funkční', color: 'green' },
+  pending: { key: 'pending', label: 'Čeká na ověření', color: 'orange' },
+  broken: { key: 'broken', label: 'Nefunkční / vyžaduje update', color: 'red' }
+};
+
+const resolveGameDisplayStatus = game => {
+  if (game?.override && gameStatusDefinitions[game.override]) return gameStatusDefinitions[game.override];
+  if (game?.manualStatus === 'broken') return gameStatusDefinitions.broken;
+
+  const verifiedBuildId = game?.verifiedBuildId ? String(game.verifiedBuildId) : null;
+  const currentBuildId = game?.currentBuildId ? String(game.currentBuildId) : null;
+  if (verifiedBuildId && currentBuildId && verifiedBuildId !== currentBuildId) {
+    return gameStatusDefinitions.pending;
+  }
+
+  return gameStatusDefinitions[game?.manualStatus] || game?.displayStatus || gameStatusDefinitions.functional;
+};
+
+const applyGameStatuses = games => {
+  document.querySelectorAll('[data-game-status]').forEach(node => {
+    const game = games?.[node.dataset.gameStatus];
+    if (!game) return;
+    const status = resolveGameDisplayStatus(game);
+    node.dataset.statusState = status.key;
+    node.dataset.statusColor = status.color;
+    node.setAttribute('aria-label', `Stav překladu: ${status.label}`);
+    const label = node.querySelector('[data-game-status-label]');
+    if (label) label.textContent = status.label;
+  });
+};
+
+const loadGameStatuses = async () => {
+  const endpoints = [
+    settings.gameStatusEndpoint || '/api/game-status',
+    new URL('data/game-status.json', document.baseURI).href
+  ];
+
+  for (const endpoint of endpoints) {
+    try {
+      const response = await fetch(endpoint, { headers: { Accept: 'application/json' } });
+      if (!response.ok) continue;
+      const payload = await response.json();
+      if (payload?.games) {
+        applyGameStatuses(payload.games);
+        return;
+      }
+    } catch {
+      // Keep the server-rendered safe status and try the static JSON fallback.
+    }
+  }
+};
+
+loadGameStatuses();
 const configured = settings.supabaseUrl?.startsWith('https://') && !settings.supabaseAnonKey?.startsWith('DOPLNTE_');
 const db = configured && window.supabase ? window.supabase.createClient(settings.supabaseUrl, settings.supabaseAnonKey) : null;
 const gameSlug = document.body.dataset.game || 'leafy-corner';
@@ -321,3 +375,4 @@ async function toggleVote(requestId, voted, button, feedback) {
 }
 
 loadVoting();
+
