@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "provider": {
+    "type": "manual-control-json",
+    "automatic": false,
+    "lastCheckedAt": null,
+    "note": "TODO: Replace with a documented, reliable provider for the Steam public-branch build ID."
+  },
+  "games": {
+    "restory": {
+      "name": "ReStory: Chill Electronics Repairs",
+      "appId": "3812600",
+      "verifiedBuildId": null,
+      "currentBuildId": null,
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
+    "leafy-corner": {
+      "name": "Leafy Corner",
+      "appId": "3558600",
+      "verifiedBuildId": null,
+      "currentBuildId": null,
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
+    "bookshop-simulator": {
+      "name": "Bookshop Simulator",
+      "appId": "3467040",
+      "verifiedBuildId": null,
+      "currentBuildId": null,
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    }
+  }
+}
+

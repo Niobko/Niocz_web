@@ -245,6 +245,15 @@ body:has(.legal-page) .site-header .nav-wrap{
     margin-top:55px !important;
 }
 
+/* Shared compatibility status */
+[data-game-status][data-status-state="functional"]{color:var(--green)}
+[data-game-status][data-status-state="pending"]{color:#f0a44b}
+[data-game-status][data-status-state="broken"]{color:#ff6572}
+.game-status{max-width:100%;line-height:1.35}
+.latest-game-body .game-status{display:flex;width:max-content;margin:0 0 12px;font-size:.64rem}
+.translation-card-body>.game-status{width:max-content;margin:-7px 0 17px;font-size:.66rem}
+.game-status-text{font-weight:800}
+
 
 /* Standalone translations page */
 .translations-page{padding-top:170px}
@@ -402,3 +411,4 @@ body:has(.legal-page) .site-header .nav-wrap{
 .hero .stats{
     margin-top:55px !important;
 }
+
