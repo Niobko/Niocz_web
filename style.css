@@ -245,6 +245,14 @@ body:has(.legal-page) .site-header .nav-wrap{
     margin-top:55px !important;
 }
 
+/* Standalone translations page */
+.translations-page{padding-top:170px}
+.translations-page .section-heading h1{font-size:clamp(2.6rem,5vw,4.5rem);line-height:1.05;letter-spacing:-.05em;margin:0 0 14px}
+.translations-page .section-heading>p:last-child{color:var(--muted);font-size:1.05rem}
+.translations-page .project-info h2{font-size:clamp(2rem,4vw,3.2rem);line-height:1;letter-spacing:normal;margin:0 0 22px}
+
+@media(max-width:800px){.translations-page{padding-top:130px}}
+
 /* Launch status, translation dates and homepage news */
 .launch-notice{
     width:min(100%,660px);
