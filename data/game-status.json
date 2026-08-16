@@ -45,6 +45,19 @@
         "label": "Funkční",
         "color": "green"
       }
+    },
+    "factory-planner": {
+      "name": "Factory Planner",
+      "appId": "3679930",
+      "verifiedBuildId": null,
+      "currentBuildId": null,
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
     }
   }
 }
