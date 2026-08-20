@@ -8,3 +8,8 @@
   to = "/.netlify/functions/game-status"
   status = 200
 
+[[redirects]]
+  from = "/api/contact-message"
+  to = "/.netlify/functions/contact-message"
+  status = 200
+

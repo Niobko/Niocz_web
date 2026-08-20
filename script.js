@@ -134,6 +134,65 @@ authForm?.addEventListener('submit', async event => {
   if (result.data.session) setTimeout(closeAuth, 500);
 });
 
+const contactToggle = document.querySelector('[data-contact-toggle]');
+const contactForm = document.querySelector('[data-contact-form]');
+const contactSubmit = document.querySelector('[data-contact-submit]');
+const contactMessage = document.querySelector('[data-contact-message]');
+
+contactToggle?.addEventListener('click', () => {
+  if (!contactForm) return;
+  const shouldOpen = contactForm.hidden;
+  contactForm.hidden = !shouldOpen;
+  contactToggle.setAttribute('aria-expanded', String(shouldOpen));
+  if (shouldOpen) requestAnimationFrame(() => document.querySelector('#contact-subject')?.focus());
+});
+
+contactForm?.addEventListener('submit', async event => {
+  event.preventDefault();
+  if (!contactForm.checkValidity()) {
+    contactForm.reportValidity();
+    return setMessage(contactMessage, 'Vyplňte prosím předmět i zprávu.', true);
+  }
+
+  const formData = new FormData(contactForm);
+  const payload = {
+    subject: String(formData.get('subject') || '').trim(),
+    message: String(formData.get('message') || '').trim(),
+    website: String(formData.get('website') || ''),
+    page: window.location.href
+  };
+  const headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
+
+  if (db && currentUser) {
+    const { data } = await db.auth.getSession();
+    if (data.session?.access_token) headers.Authorization = `Bearer ${data.session.access_token}`;
+  }
+
+  contactSubmit.disabled = true;
+  contactSubmit.setAttribute('aria-busy', 'true');
+  contactSubmit.textContent = 'Odesílám…';
+  setMessage(contactMessage, '');
+
+  try {
+    const response = await fetch('/api/contact-message', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload)
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || 'Zprávu se nepodařilo odeslat. Zkuste to prosím později.');
+
+    contactForm.reset();
+    setMessage(contactMessage, 'Děkujeme. Zpráva byla úspěšně odeslána.');
+  } catch (error) {
+    setMessage(contactMessage, error.message || 'Zprávu se nepodařilo odeslat. Zkuste to prosím později.', true);
+  } finally {
+    contactSubmit.disabled = false;
+    contactSubmit.removeAttribute('aria-busy');
+    contactSubmit.textContent = 'Odeslat';
+  }
+});
+
 function updateAuthUi(user) {
   currentUser = user;
   document.querySelectorAll('[data-auth-open]').forEach(button => button.textContent = user ? 'Odhlásit se' : 'Přihlásit se');
