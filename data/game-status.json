@@ -71,6 +71,19 @@
         "label": "Funkční",
         "color": "green"
       }
+    },
+    "the-universim": {
+      "name": "The Universim",
+      "appId": "352720",
+      "verifiedBuildId": "16850856",
+      "currentBuildId": "16850856",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
     }
   }
 }

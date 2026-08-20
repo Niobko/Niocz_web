@@ -49,3 +49,9 @@ test("Streamer Life Simulator 2 waits for verification after a detected build ch
   assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "21799184" }).key, "pending");
 });
 
+test("The Universim waits for verification after a detected build change", () => {
+  const game = statusConfig.games["the-universim"];
+  assert.equal(resolveDisplayStatus(game).key, "functional");
+  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "16850857" }).key, "pending");
+});
+
