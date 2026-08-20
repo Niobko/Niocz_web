@@ -245,6 +245,55 @@ body:has(.legal-page) .site-header .nav-wrap{
     margin-top:55px !important;
 }
 
+/* Expandable contact form */
+.contact-actions{
+    width:min(100%,640px);
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.contact-form{
+    width:100%;
+    margin-top:24px;
+    padding:28px;
+    text-align:left;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:linear-gradient(145deg,rgba(17,25,39,.96),rgba(10,16,25,.96));
+    box-shadow:0 22px 60px rgba(0,0,0,.22);
+}
+
+.contact-form[hidden]{display:none}
+.contact-field+.contact-field{margin-top:18px}
+.contact-field label{display:block;margin-bottom:7px;color:#dce6f3;font-size:.86rem;font-weight:750}
+.contact-field input,
+.contact-field textarea{
+    width:100%;
+    padding:13px 14px;
+    border:1px solid #2a394e;
+    border-radius:10px;
+    outline:none;
+    background:#080d15;
+    color:var(--text);
+    font:inherit;
+    transition:border-color .2s ease,box-shadow .2s ease;
+}
+
+.contact-field textarea{min-height:155px;resize:vertical;line-height:1.55}
+.contact-field input::placeholder,.contact-field textarea::placeholder{color:#68788e}
+.contact-field input:focus,.contact-field textarea:focus{border-color:var(--blue-light);box-shadow:0 0 0 3px rgba(73,164,255,.12)}
+.contact-form>.button{min-width:150px;margin-top:20px}
+.contact-form>.button:disabled{cursor:wait;opacity:.72;transform:none}
+.contact-form-message{margin:13px 0 0;min-height:1.5em;text-align:center}
+.contact-honeypot{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important}
+
+@media(max-width:540px){
+    .contact-form{padding:20px}
+    .contact-form>.button{width:100%}
+}
+
 /* Shared compatibility status */
 [data-game-status][data-status-state="functional"]{color:var(--green)}
 [data-game-status][data-status-state="pending"]{color:#f0a44b}
