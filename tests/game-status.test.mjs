@@ -1,6 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { buildStatusPayload, resolveDisplayStatus } from "../netlify/functions/_lib/game-status.mjs";
+
+const statusConfig = JSON.parse(readFileSync(new URL("../data/game-status.json", import.meta.url), "utf8"));
 
 test("a changed build waits for verification", () => {
   assert.equal(resolveDisplayStatus({
@@ -38,5 +41,11 @@ test("missing build IDs preserve the safe manual state", () => {
   });
   assert.equal(payload.games.example.appId, "123");
   assert.equal(payload.games.example.displayStatus.key, "functional");
+});
+
+test("Streamer Life Simulator 2 waits for verification after a detected build change", () => {
+  const game = statusConfig.games["streamer-life-simulator-2"];
+  assert.equal(resolveDisplayStatus(game).key, "functional");
+  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "21799184" }).key, "pending");
 });
 
