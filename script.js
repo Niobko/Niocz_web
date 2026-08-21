@@ -12,6 +12,47 @@ menu?.querySelectorAll('a').forEach(link => link.addEventListener('click', () =>
   menu.classList.remove('open');
   toggle?.setAttribute('aria-expanded', 'false');
 }));
+
+const createSupportUi = () => {
+  const authButton = document.querySelector('.main-nav [data-auth-open]');
+  if (!authButton) return null;
+
+  const actions = document.createElement('div');
+  actions.className = 'nav-account-actions';
+  authButton.before(actions);
+  actions.append(authButton);
+
+  const openButton = document.createElement('button');
+  openButton.className = 'nav-support';
+  openButton.type = 'button';
+  openButton.textContent = 'Podpořit projekt';
+  openButton.setAttribute('aria-haspopup', 'dialog');
+  openButton.setAttribute('aria-controls', 'support-modal');
+  openButton.setAttribute('aria-expanded', 'false');
+  openButton.dataset.supportOpen = '';
+  actions.append(openButton);
+
+  const modal = document.createElement('div');
+  modal.id = 'support-modal';
+  modal.className = 'auth-modal support-modal';
+  modal.dataset.supportModal = '';
+  modal.hidden = true;
+  modal.innerHTML = `
+    <div class="auth-backdrop" data-support-close></div>
+    <section class="auth-dialog support-dialog" role="dialog" aria-modal="true" aria-labelledby="support-title" aria-describedby="support-description support-note" tabindex="-1">
+      <button class="auth-close" type="button" data-support-close aria-label="Zavřít podporu projektu">×</button>
+      <p class="eyebrow">Dobrovolná podpora</p>
+      <h2 id="support-title">Podpořit NioCZ LOC</h2>
+      <p id="support-description" class="support-copy">Pokud vám moje překlady pomáhají a chcete dobrovolně podpořit další práci na NioCZ LOC, můžete tak učinit zde.</p>
+      <a class="button button-primary support-cta" href="https://revolut.me/niokyuubi" target="_blank" rel="noopener noreferrer">Podpořit NioCZ LOC <span aria-hidden="true">↗</span></a>
+      <p id="support-note" class="support-note">Podpora je dobrovolná a není podmínkou používání překladů.</p>
+    </section>`;
+  document.body.append(modal);
+
+  return { modal, openButton };
+};
+
+const supportUi = createSupportUi();
 document.querySelectorAll('[data-year]').forEach(node => node.textContent = new Date().getFullYear());
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (reducedMotion || !('IntersectionObserver' in window)) {
@@ -83,6 +124,9 @@ const db = configured && window.supabase ? window.supabase.createClient(settings
 const gameSlug = document.body.dataset.game || 'leafy-corner';
 const authModal = document.querySelector('[data-auth-modal]');
 const authForm = document.querySelector('[data-auth-form]');
+const supportModal = supportUi?.modal;
+const supportDialog = supportModal?.querySelector('.support-dialog');
+let supportReturnFocus = null;
 let authMode = 'login';
 let currentUser = null;
 
@@ -102,12 +146,50 @@ const closeAuth = () => {
   authModal.hidden = true;
   document.body.classList.remove('modal-open');
 };
+const openSupport = event => {
+  if (!supportModal) return;
+  supportReturnFocus = event.currentTarget;
+  supportModal.hidden = false;
+  supportUi.openButton.setAttribute('aria-expanded', 'true');
+  document.body.classList.add('modal-open');
+  menu?.classList.remove('open');
+  toggle?.setAttribute('aria-expanded', 'false');
+  requestAnimationFrame(() => supportDialog?.focus());
+};
+const closeSupport = () => {
+  if (!supportModal || supportModal.hidden) return;
+  supportModal.hidden = true;
+  supportUi.openButton.setAttribute('aria-expanded', 'false');
+  document.body.classList.remove('modal-open');
+  supportReturnFocus?.focus();
+  supportReturnFocus = null;
+};
+supportUi?.openButton.addEventListener('click', openSupport);
+supportModal?.querySelectorAll('[data-support-close]').forEach(button => button.addEventListener('click', closeSupport));
+supportModal?.addEventListener('keydown', event => {
+  if (event.key !== 'Tab') return;
+  const focusable = [...supportModal.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')];
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (event.shiftKey && (document.activeElement === first || document.activeElement === supportDialog)) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+});
 document.querySelectorAll('[data-auth-open]').forEach(button => button.addEventListener('click', async () => {
   if (currentUser && db) { await db.auth.signOut(); return; }
   openAuth();
 }));
 document.querySelectorAll('[data-auth-close]').forEach(button => button.addEventListener('click', closeAuth));
-document.addEventListener('keydown', event => { if (event.key === 'Escape') closeAuth(); });
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Escape') return;
+  closeAuth();
+  closeSupport();
+});
 document.querySelectorAll('[data-auth-tab]').forEach(tab => tab.addEventListener('click', () => {
   authMode = tab.dataset.authTab;
   document.querySelectorAll('[data-auth-tab]').forEach(item => item.classList.toggle('active', item === tab));
