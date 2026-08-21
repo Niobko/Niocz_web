@@ -97,6 +97,19 @@
         "label": "Funkční",
         "color": "green"
       }
+    },
+    "catmailco": {
+      "name": "CatMailCo",
+      "appId": "4380490",
+      "verifiedBuildId": "24261759",
+      "currentBuildId": "24261759",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
     }
   }
 }

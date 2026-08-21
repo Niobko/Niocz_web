@@ -61,3 +61,9 @@ test("Youtubers Life 2 waits for verification after a detected build change", ()
   assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "20266716" }).key, "pending");
 });
 
+test("CatMailCo waits for verification after a detected build change", () => {
+  const game = statusConfig.games.catmailco;
+  assert.equal(resolveDisplayStatus(game).key, "functional");
+  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "24261760" }).key, "pending");
+});
+
