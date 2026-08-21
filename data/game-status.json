@@ -84,6 +84,19 @@
         "label": "Funkční",
         "color": "green"
       }
+    },
+    "youtubers-life-2": {
+      "name": "Youtubers Life 2",
+      "appId": "1493760",
+      "verifiedBuildId": "20266715",
+      "currentBuildId": "20266715",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
     }
   }
 }

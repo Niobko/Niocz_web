@@ -55,3 +55,9 @@ test("The Universim waits for verification after a detected build change", () =>
   assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "16850857" }).key, "pending");
 });
 
+test("Youtubers Life 2 waits for verification after a detected build change", () => {
+  const game = statusConfig.games["youtubers-life-2"];
+  assert.equal(resolveDisplayStatus(game).key, "functional");
+  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "20266716" }).key, "pending");
+});
+
