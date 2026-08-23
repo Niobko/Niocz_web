@@ -16,7 +16,7 @@ Každá hra má `appId`, `verifiedBuildId`, `currentBuildId`, `manualStatus`, `o
 
 - `manualStatus: "functional"` — překlad je ručně označen jako funkční.
 - `manualStatus: "broken"` — zobrazí červený stav „Nefunkční / vyžaduje update“.
-- rozdílné neprázdné `currentBuildId` a `verifiedBuildId` — server zobrazí oranžové „Čeká na ověření“.
+- neprázdné `currentBuildId` bez stejného `verifiedBuildId` — server zobrazí oranžové „Čeká na ověření“; platí to i pro první zjištěný build bez ověřené výchozí hodnoty.
 - `override` může být `functional`, `pending`, `broken` nebo `null`; neprázdná hodnota má nejvyšší prioritu.
 
 Po ověření kompatibility nastavte `verifiedBuildId` na hodnotu `currentBuildId`, ponechte `manualStatus` jako `functional`, nastavte `override` na `null` a upravte `displayStatus` na zelený funkční stav. Potom commitněte změnu do nasazované větve.

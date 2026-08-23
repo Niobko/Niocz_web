@@ -14,6 +14,15 @@ test("a changed build waits for verification", () => {
   }).key, "pending");
 });
 
+test("a detected build without a verified baseline waits for verification", () => {
+  assert.equal(resolveDisplayStatus({
+    verifiedBuildId: null,
+    currentBuildId: "101",
+    manualStatus: "functional",
+    override: null
+  }).key, "pending");
+});
+
 test("manual broken status is red", () => {
   assert.deepEqual(resolveDisplayStatus({ manualStatus: "broken", override: null }), {
     key: "broken",
@@ -65,5 +74,19 @@ test("CatMailCo waits for verification after a detected build change", () => {
   const game = statusConfig.games.catmailco;
   assert.equal(resolveDisplayStatus(game).key, "functional");
   assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "24261760" }).key, "pending");
+});
+
+test("CloverPit is connected to the pending compatibility state", () => {
+  const game = statusConfig.games.cloverpit;
+  assert.equal(game.appId, "3314790");
+  assert.equal(resolveDisplayStatus(game).key, "functional");
+  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "101" }).key, "pending");
+});
+
+test("Timberborn is connected to the pending compatibility state", () => {
+  const game = statusConfig.games.timberborn;
+  assert.equal(game.appId, "1062090");
+  assert.equal(resolveDisplayStatus(game).key, "functional");
+  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "101" }).key, "pending");
 });
 

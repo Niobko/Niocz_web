@@ -77,7 +77,7 @@ const resolveGameDisplayStatus = game => {
 
   const verifiedBuildId = game?.verifiedBuildId ? String(game.verifiedBuildId) : null;
   const currentBuildId = game?.currentBuildId ? String(game.currentBuildId) : null;
-  if (verifiedBuildId && currentBuildId && verifiedBuildId !== currentBuildId) {
+  if (currentBuildId && (!verifiedBuildId || verifiedBuildId !== currentBuildId)) {
     return gameStatusDefinitions.pending;
   }
 

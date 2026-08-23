@@ -7,6 +7,32 @@
     "note": "TODO: Replace with a documented, reliable provider for the Steam public-branch build ID."
   },
   "games": {
+    "cloverpit": {
+      "name": "CloverPit",
+      "appId": "3314790",
+      "verifiedBuildId": null,
+      "currentBuildId": null,
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
+    "timberborn": {
+      "name": "Timberborn",
+      "appId": "1062090",
+      "verifiedBuildId": null,
+      "currentBuildId": null,
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "restory": {
       "name": "ReStory: Chill Electronics Repairs",
       "appId": "3812600",

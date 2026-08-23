@@ -16,7 +16,7 @@ export const resolveDisplayStatus = game => {
 
   const verifiedBuildId = cleanBuildId(game.verifiedBuildId);
   const currentBuildId = cleanBuildId(game.currentBuildId);
-  if (verifiedBuildId && currentBuildId && verifiedBuildId !== currentBuildId) {
+  if (currentBuildId && (!verifiedBuildId || verifiedBuildId !== currentBuildId)) {
     return STATUSES.pending;
   }
 
