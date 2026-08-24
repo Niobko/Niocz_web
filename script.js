@@ -110,17 +110,20 @@ const loadGameStatuses = async () => {
       const payload = await response.json();
       if (payload?.games) {
         applyGameStatuses(payload.games);
-        return;
+        return payload.games;
       }
     } catch {
       // Keep the server-rendered safe status and try the static JSON fallback.
     }
   }
+
+  return {};
 };
 
-loadGameStatuses();
+window.NIO_GAME_STATUSES_READY = loadGameStatuses();
 const configured = settings.supabaseUrl?.startsWith('https://') && !settings.supabaseAnonKey?.startsWith('DOPLNTE_');
 const db = configured && window.supabase ? window.supabase.createClient(settings.supabaseUrl, settings.supabaseAnonKey) : null;
+window.NIO_SUPABASE_CLIENT = db;
 const gameSlug = document.body.dataset.game?.trim() || '';
 const authModal = document.querySelector('[data-auth-modal]');
 const authForm = document.querySelector('[data-auth-form]');

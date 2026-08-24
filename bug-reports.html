@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Hlášení chyb | Nio Localization</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
 
     <link rel="canonical" href="https://nioczloc.com/bug-reports.html">
     <link rel="stylesheet" href="style.css">
@@ -20,8 +21,8 @@
 <header class="site-header">
     <div class="container nav-wrap">
 
-        <a class="brand" href="index.html">
-            <span class="brand-mark">N</span>
+        <a class="brand" href="index.html" aria-label="Nio Localization – domů">
+            <span class="brand-mark" aria-hidden="true">N</span>
             <span>Nio <strong>Localization</strong></span>
         </a>
 
@@ -140,9 +141,9 @@
                             Hra
                         </label>
 
-                        <select id="bug-game" required>
-                            <option value="leafy-corner">
-                                Leafy Corner
+                        <select id="bug-game" required disabled>
+                            <option value="">
+                                Načítám hry...
                             </option>
                         </select>
 
@@ -158,6 +159,7 @@
                         <input
                             type="text"
                             id="bug-title"
+                            minlength="3"
                             maxlength="120"
                             placeholder="Např. Chybný text v úvodním tutorialu"
                             required
@@ -190,6 +192,7 @@
 
                         <textarea
                             id="bug-description"
+                            minlength="3"
                             maxlength="3000"
                             rows="7"
                             placeholder="Popište chybu co nejpřesněji..."
@@ -257,17 +260,12 @@
 </footer>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js"></script>
-
 <script>
 
 document.addEventListener("DOMContentLoaded", async () => {
 
-    const supabaseClient = window.supabase.createClient(
-        window.NIO_CONFIG.supabaseUrl,
-        window.NIO_CONFIG.supabaseAnonKey
-    );
+    const supabaseClient =
+        window.NIO_SUPABASE_CLIENT;
 
 
     const openButton =
@@ -282,6 +280,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const form =
         document.getElementById("bug-report-form");
 
+    const gameSelect =
+        document.getElementById("bug-game");
+
+    const submitButton =
+        form.querySelector('button[type="submit"]');
+
     const loginRequired =
         document.getElementById("login-required");
 
@@ -294,6 +298,60 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     let currentUser = null;
     let currentProfile = null;
+    let gamesBySlug = {};
+
+
+    async function loadGameOptions() {
+
+        gamesBySlug = await (
+            window.NIO_GAME_STATUSES_READY ||
+            Promise.resolve({})
+        );
+
+        const games = Object.entries(gamesBySlug)
+            .filter(([slug, game]) =>
+                slug &&
+                typeof game?.name === "string" &&
+                game.name.trim()
+            )
+            .sort(([, first], [, second]) =>
+                first.name.localeCompare(
+                    second.name,
+                    "cs"
+                )
+            );
+
+        gameSelect.replaceChildren();
+
+        for (const [slug, game] of games) {
+
+            const option =
+                document.createElement("option");
+
+            option.value = slug;
+            option.textContent = game.name;
+            gameSelect.appendChild(option);
+
+        }
+
+        const gamesLoaded = games.length > 0;
+
+        gameSelect.disabled = !gamesLoaded;
+        submitButton.disabled = !gamesLoaded;
+
+        if (!gamesLoaded) {
+
+            const option =
+                document.createElement("option");
+
+            option.value = "";
+            option.textContent =
+                "Hry se nepodařilo načíst.";
+            gameSelect.appendChild(option);
+
+        }
+
+    }
 
 
     async function loadCurrentUser() {
@@ -380,8 +438,28 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
 
+        if (!form.checkValidity()) {
+
+            form.reportValidity();
+            return;
+
+        }
+
+
         const gameSlug =
-            document.getElementById("bug-game").value;
+            gameSelect.value;
+
+
+        if (!gamesBySlug[gameSlug]) {
+
+            showMessage(
+                "Vyberte prosím platnou hru.",
+                "error"
+            );
+
+            return;
+
+        }
 
         const title =
             document.getElementById("bug-title").value.trim();
@@ -392,9 +470,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         const description =
             document.getElementById("bug-description").value.trim();
 
-
-        const submitButton =
-            form.querySelector('button[type="submit"]');
 
         submitButton.disabled = true;
         submitButton.textContent = "Odesílám...";
@@ -755,11 +830,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function gameName(slug) {
 
-        if (slug === "leafy-corner") {
-            return "Leafy Corner";
-        }
-
-        return slug;
+        return escapeHtml(
+            gamesBySlug[slug]?.name || slug
+        );
 
     }
 
@@ -777,6 +850,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 
+    await loadGameOptions();
     await loadCurrentUser();
     await loadReports();
 
