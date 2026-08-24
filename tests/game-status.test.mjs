@@ -90,3 +90,10 @@ test("Timberborn is connected to the pending compatibility state", () => {
   assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "101" }).key, "pending");
 });
 
+test("Yet Another Zombie Survivors is connected to the pending compatibility state", () => {
+  const game = statusConfig.games["yet-another-zombie-survivors"];
+  assert.equal(game.appId, "2163330");
+  assert.equal(resolveDisplayStatus(game).key, "functional");
+  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "101" }).key, "pending");
+});
+

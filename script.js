@@ -121,7 +121,7 @@ const loadGameStatuses = async () => {
 loadGameStatuses();
 const configured = settings.supabaseUrl?.startsWith('https://') && !settings.supabaseAnonKey?.startsWith('DOPLNTE_');
 const db = configured && window.supabase ? window.supabase.createClient(settings.supabaseUrl, settings.supabaseAnonKey) : null;
-const gameSlug = document.body.dataset.game || 'leafy-corner';
+const gameSlug = document.body.dataset.game?.trim() || '';
 const authModal = document.querySelector('[data-auth-modal]');
 const authForm = document.querySelector('[data-auth-form]');
 const supportModal = supportUi?.modal;
@@ -291,8 +291,13 @@ function updateAuthUi(user) {
 }
 async function loadComments() {
   const list = document.querySelector('[data-comments-list]');
-  if (!list || !db) {
-    if (list) list.innerHTML = '<p class="empty-state">Komentáře se zobrazí po připojení Supabase.</p>';
+  if (!list) return;
+  if (!gameSlug) {
+    list.innerHTML = '<p class="empty-state">Komentáře pro tuto stránku nejsou správně nastavené.</p>';
+    return;
+  }
+  if (!db) {
+    list.innerHTML = '<p class="empty-state">Komentáře se zobrazí po připojení Supabase.</p>';
     return;
   }
   const { data, error } = await db.from('comments').select('id,body,created_at,user_id,profiles(display_name,is_author)').eq('game_slug', gameSlug).order('created_at', { ascending: false });
@@ -321,7 +326,7 @@ document.querySelector('[data-comment-form]')?.addEventListener('submit', async 
   const textarea = document.querySelector('#comment-body');
   const message = document.querySelector('[data-comment-message]');
   const body = textarea.value.trim();
-  if (!db || !currentUser || !body) return;
+  if (!db || !currentUser || !gameSlug || !body) return;
   const { error } = await db.from('comments').insert({ game_slug: gameSlug, user_id: currentUser.id, body });
   if (error) return setMessage(message, 'Komentář se nepodařilo odeslat: ' + error.message, true);
   textarea.value = '';

@@ -7,6 +7,19 @@
     "note": "TODO: Replace with a documented, reliable provider for the Steam public-branch build ID."
   },
   "games": {
+    "yet-another-zombie-survivors": {
+      "name": "Yet Another Zombie Survivors",
+      "appId": "2163330",
+      "verifiedBuildId": null,
+      "currentBuildId": null,
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "cloverpit": {
       "name": "CloverPit",
       "appId": "3314790",
