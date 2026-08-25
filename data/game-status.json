@@ -1,18 +1,19 @@
 {
   "schemaVersion": 1,
   "provider": {
-    "type": "manual-control-json",
+    "type": "manual-steamdb-snapshot",
     "automatic": false,
-    "lastCheckedAt": null,
-    "note": "TODO: Replace with a documented, reliable provider for the Steam public-branch build ID."
+    "lastCheckedAt": "2026-08-25T00:00:00Z",
+    "note": "Steam public-branch snapshot checked against SteamDB on 25 August 2026."
   },
   "games": {
     "e-shop-tycoon": {
       "name": "E-Shop Tycoon",
       "appId": "4249850",
       "supportedVersion": "v1.0.7",
-      "verifiedBuildId": null,
-      "currentBuildId": null,
+      "verifiedBuildId": "24775292",
+      "currentBuildId": "24775292",
+      "lastSteamUpdate": "2026-08-17T11:36:55Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
@@ -25,8 +26,9 @@
       "name": "Yet Another Zombie Survivors",
       "appId": "2163330",
       "supportedVersion": "v1.0.0b_S",
-      "verifiedBuildId": null,
-      "currentBuildId": null,
+      "verifiedBuildId": "24843585",
+      "currentBuildId": "24843585",
+      "lastSteamUpdate": "2026-08-20T15:46:19Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
@@ -39,8 +41,9 @@
       "name": "CloverPit",
       "appId": "3314790",
       "supportedVersion": "v1.4.11",
-      "verifiedBuildId": null,
-      "currentBuildId": null,
+      "verifiedBuildId": "22785177",
+      "currentBuildId": "22785177",
+      "lastSteamUpdate": "2026-04-14T17:27:54Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
@@ -53,8 +56,9 @@
       "name": "Timberborn",
       "appId": "1062090",
       "supportedVersion": "v1.0.13.1-b769e88-sw",
-      "verifiedBuildId": null,
-      "currentBuildId": null,
+      "verifiedBuildId": "23107127",
+      "currentBuildId": "23107127",
+      "lastSteamUpdate": "2026-05-06T10:07:38Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
@@ -67,8 +71,9 @@
       "name": "ReStory: Chill Electronics Repairs",
       "appId": "3812600",
       "supportedVersion": "1.0.014r",
-      "verifiedBuildId": null,
-      "currentBuildId": null,
+      "verifiedBuildId": "24863916",
+      "currentBuildId": "24863916",
+      "lastSteamUpdate": "2026-08-21T14:15:50Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
@@ -81,8 +86,9 @@
       "name": "Leafy Corner",
       "appId": "3558600",
       "supportedVersion": "v1.0.3(ws)",
-      "verifiedBuildId": null,
-      "currentBuildId": null,
+      "verifiedBuildId": "24512633",
+      "currentBuildId": "24512633",
+      "lastSteamUpdate": "2026-08-02T09:48:46Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
@@ -95,8 +101,9 @@
       "name": "Bookshop Simulator",
       "appId": "3467040",
       "supportedVersion": "1.0.1224",
-      "verifiedBuildId": null,
-      "currentBuildId": null,
+      "verifiedBuildId": "24319622",
+      "currentBuildId": "24319622",
+      "lastSteamUpdate": "2026-07-21T17:57:46Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
@@ -109,8 +116,9 @@
       "name": "Factory Planner",
       "appId": "3679930",
       "supportedVersion": "EA v1.0.11",
-      "verifiedBuildId": null,
-      "currentBuildId": null,
+      "verifiedBuildId": "22069907",
+      "currentBuildId": "22069907",
+      "lastSteamUpdate": "2026-02-24T08:42:18Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
@@ -125,6 +133,7 @@
       "supportedVersion": "Aktuální verze",
       "verifiedBuildId": "21799183",
       "currentBuildId": "21799183",
+      "lastSteamUpdate": "2026-02-05T14:00:15Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
@@ -139,6 +148,7 @@
       "supportedVersion": "v1.0.02.48225",
       "verifiedBuildId": "16850856",
       "currentBuildId": "16850856",
+      "lastSteamUpdate": "2024-12-25T21:57:54Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
@@ -153,6 +163,7 @@
       "supportedVersion": "v1.4.0",
       "verifiedBuildId": "20266715",
       "currentBuildId": "20266715",
+      "lastSteamUpdate": "2025-10-06T08:19:20Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
@@ -166,7 +177,8 @@
       "appId": "4380490",
       "supportedVersion": "Aktuální verze",
       "verifiedBuildId": "24261759",
-      "currentBuildId": "24261759",
+      "currentBuildId": "24801860",
+      "lastSteamUpdate": "2026-08-19T08:22:53Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {

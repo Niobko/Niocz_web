@@ -74,18 +74,18 @@ const gameStatusDefinitions = {
 // Safe embedded fallback for local file previews and temporary API/JSON outages.
 // The Netlify endpoint and data/game-status.json remain the primary sources.
 const fallbackGameStatuses = Object.freeze({
-  'e-shop-tycoon': { name: 'E-Shop Tycoon', appId: '4249850', supportedVersion: 'v1.0.7', verifiedBuildId: null, currentBuildId: null, manualStatus: 'functional', override: null },
-  'yet-another-zombie-survivors': { name: 'Yet Another Zombie Survivors', appId: '2163330', supportedVersion: 'v1.0.0b_S', verifiedBuildId: null, currentBuildId: null, manualStatus: 'functional', override: null },
-  cloverpit: { name: 'CloverPit', appId: '3314790', supportedVersion: 'v1.4.11', verifiedBuildId: null, currentBuildId: null, manualStatus: 'functional', override: null },
-  timberborn: { name: 'Timberborn', appId: '1062090', supportedVersion: 'v1.0.13.1-b769e88-sw', verifiedBuildId: null, currentBuildId: null, manualStatus: 'functional', override: null },
-  restory: { name: 'ReStory: Chill Electronics Repairs', appId: '3812600', supportedVersion: '1.0.014r', verifiedBuildId: null, currentBuildId: null, manualStatus: 'functional', override: null },
-  'leafy-corner': { name: 'Leafy Corner', appId: '3558600', supportedVersion: 'v1.0.3(ws)', verifiedBuildId: null, currentBuildId: null, manualStatus: 'functional', override: null },
-  'bookshop-simulator': { name: 'Bookshop Simulator', appId: '3467040', supportedVersion: '1.0.1224', verifiedBuildId: null, currentBuildId: null, manualStatus: 'functional', override: null },
-  'factory-planner': { name: 'Factory Planner', appId: '3679930', supportedVersion: 'EA v1.0.11', verifiedBuildId: null, currentBuildId: null, manualStatus: 'functional', override: null },
-  'streamer-life-simulator-2': { name: 'Streamer Life Simulator 2', appId: '2890830', supportedVersion: 'Aktuální verze', verifiedBuildId: '21799183', currentBuildId: '21799183', manualStatus: 'functional', override: null },
-  'the-universim': { name: 'The Universim', appId: '352720', supportedVersion: 'v1.0.02.48225', verifiedBuildId: '16850856', currentBuildId: '16850856', manualStatus: 'functional', override: null },
-  'youtubers-life-2': { name: 'Youtubers Life 2', appId: '1493760', supportedVersion: 'v1.4.0', verifiedBuildId: '20266715', currentBuildId: '20266715', manualStatus: 'functional', override: null },
-  catmailco: { name: 'CatMailCo', appId: '4380490', supportedVersion: 'Aktuální verze', verifiedBuildId: '24261759', currentBuildId: '24261759', manualStatus: 'functional', override: null }
+  'e-shop-tycoon': { name: 'E-Shop Tycoon', appId: '4249850', supportedVersion: 'v1.0.7', verifiedBuildId: '24775292', currentBuildId: '24775292', lastSteamUpdate: '2026-08-17T11:36:55Z', manualStatus: 'functional', override: null },
+  'yet-another-zombie-survivors': { name: 'Yet Another Zombie Survivors', appId: '2163330', supportedVersion: 'v1.0.0b_S', verifiedBuildId: '24843585', currentBuildId: '24843585', lastSteamUpdate: '2026-08-20T15:46:19Z', manualStatus: 'functional', override: null },
+  cloverpit: { name: 'CloverPit', appId: '3314790', supportedVersion: 'v1.4.11', verifiedBuildId: '22785177', currentBuildId: '22785177', lastSteamUpdate: '2026-04-14T17:27:54Z', manualStatus: 'functional', override: null },
+  timberborn: { name: 'Timberborn', appId: '1062090', supportedVersion: 'v1.0.13.1-b769e88-sw', verifiedBuildId: '23107127', currentBuildId: '23107127', lastSteamUpdate: '2026-05-06T10:07:38Z', manualStatus: 'functional', override: null },
+  restory: { name: 'ReStory: Chill Electronics Repairs', appId: '3812600', supportedVersion: '1.0.014r', verifiedBuildId: '24863916', currentBuildId: '24863916', lastSteamUpdate: '2026-08-21T14:15:50Z', manualStatus: 'functional', override: null },
+  'leafy-corner': { name: 'Leafy Corner', appId: '3558600', supportedVersion: 'v1.0.3(ws)', verifiedBuildId: '24512633', currentBuildId: '24512633', lastSteamUpdate: '2026-08-02T09:48:46Z', manualStatus: 'functional', override: null },
+  'bookshop-simulator': { name: 'Bookshop Simulator', appId: '3467040', supportedVersion: '1.0.1224', verifiedBuildId: '24319622', currentBuildId: '24319622', lastSteamUpdate: '2026-07-21T17:57:46Z', manualStatus: 'functional', override: null },
+  'factory-planner': { name: 'Factory Planner', appId: '3679930', supportedVersion: 'EA v1.0.11', verifiedBuildId: '22069907', currentBuildId: '22069907', lastSteamUpdate: '2026-02-24T08:42:18Z', manualStatus: 'functional', override: null },
+  'streamer-life-simulator-2': { name: 'Streamer Life Simulator 2', appId: '2890830', supportedVersion: 'Aktuální verze', verifiedBuildId: '21799183', currentBuildId: '21799183', lastSteamUpdate: '2026-02-05T14:00:15Z', manualStatus: 'functional', override: null },
+  'the-universim': { name: 'The Universim', appId: '352720', supportedVersion: 'v1.0.02.48225', verifiedBuildId: '16850856', currentBuildId: '16850856', lastSteamUpdate: '2024-12-25T21:57:54Z', manualStatus: 'functional', override: null },
+  'youtubers-life-2': { name: 'Youtubers Life 2', appId: '1493760', supportedVersion: 'v1.4.0', verifiedBuildId: '20266715', currentBuildId: '20266715', lastSteamUpdate: '2025-10-06T08:19:20Z', manualStatus: 'functional', override: null },
+  catmailco: { name: 'CatMailCo', appId: '4380490', supportedVersion: 'Aktuální verze', verifiedBuildId: '24261759', currentBuildId: '24801860', lastSteamUpdate: '2026-08-19T08:22:53Z', manualStatus: 'functional', override: null }
 });
 
 const resolveGameDisplayStatus = game => {
@@ -137,7 +137,7 @@ const loadGameStatuses = async () => {
     }
   }
 
-  window.NIO_GAME_STATUS_PROVIDER = { type: 'embedded-fallback', automatic: false, lastCheckedAt: null };
+  window.NIO_GAME_STATUS_PROVIDER = { type: 'embedded-fallback', automatic: false, lastCheckedAt: '2026-08-25T00:00:00Z' };
   applyGameStatuses(fallbackGameStatuses);
   return fallbackGameStatuses;
 };

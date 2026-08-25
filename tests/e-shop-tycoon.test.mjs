@@ -19,6 +19,13 @@ test("E-Shop Tycoon is registered across the public site", () => {
   assert.match(databaseMigration, /'e-shop-tycoon'/);
   assert.match(databaseMigration, /alter table public\.comments/i);
   assert.match(databaseMigration, /alter table public\.game_ratings/i);
+  assert.match(databaseMigration, /insert into public\.download_totals/i);
+  assert.match(databaseMigration, /download_totals_game_slug_check_v2/i);
+  assert.match(databaseMigration, /validate constraint download_totals_game_slug_check_v2/i);
+  assert.match(databaseMigration, /on conflict \(game_slug\) do nothing/i);
+  assert.match(databaseMigration, /create function public\.register_download\(requested_game_slug text\)/i);
+  assert.match(databaseMigration, /set download_count = download_count \+ 1/i);
+  assert.match(databaseMigration, /grant execute on function public\.register_download\(text\) to anon, authenticated/i);
 });
 
 test("E-Shop Tycoon detail keeps every shared community and download hook", () => {

@@ -12,6 +12,7 @@ create table if not exists public.game_ratings (
   constraint game_ratings_pkey primary key (game_slug, user_id),
   constraint game_ratings_game_slug_check check (game_slug = any (array[
     'yet-another-zombie-survivors',
+    'e-shop-tycoon',
     'cloverpit',
     'timberborn',
     'restory',
@@ -27,6 +28,39 @@ create table if not exists public.game_ratings (
   constraint game_ratings_reaction_check check (reaction is null or reaction in (-1, 1)),
   constraint game_ratings_has_vote_check check (stars is not null or reaction is not null)
 );
+
+-- Při opakovaném spuštění rozšíří whitelist i v již existující tabulce.
+-- Dočasný constraint se nejdříve ověří, takže původní zůstane aktivní,
+-- dokud se nový seznam úspěšně nepotvrdí.
+alter table public.game_ratings
+  drop constraint if exists game_ratings_game_slug_check_v2;
+
+alter table public.game_ratings
+  add constraint game_ratings_game_slug_check_v2
+  check (game_slug = any (array[
+    'yet-another-zombie-survivors',
+    'e-shop-tycoon',
+    'cloverpit',
+    'timberborn',
+    'restory',
+    'leafy-corner',
+    'bookshop-simulator',
+    'factory-planner',
+    'streamer-life-simulator-2',
+    'the-universim',
+    'youtubers-life-2',
+    'catmailco'
+  ]::text[])) not valid;
+
+alter table public.game_ratings
+  validate constraint game_ratings_game_slug_check_v2;
+
+alter table public.game_ratings
+  drop constraint if exists game_ratings_game_slug_check;
+
+alter table public.game_ratings
+  rename constraint game_ratings_game_slug_check_v2
+  to game_ratings_game_slug_check;
 
 create index if not exists game_ratings_user_id_idx
   on public.game_ratings (user_id);

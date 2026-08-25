@@ -70,10 +70,21 @@ test("Youtubers Life 2 waits for verification after a detected build change", ()
   assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "20266716" }).key, "pending");
 });
 
-test("CatMailCo waits for verification after a detected build change", () => {
+test("CatMailCo waits for verification because Steam has a newer build", () => {
   const game = statusConfig.games.catmailco;
-  assert.equal(resolveDisplayStatus(game).key, "functional");
-  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "24261760" }).key, "pending");
+  assert.equal(game.verifiedBuildId, "24261759");
+  assert.equal(game.currentBuildId, "24801860");
+  assert.equal(resolveDisplayStatus(game).key, "pending");
+});
+
+test("every published game has complete Steam status data", () => {
+  assert.equal(Object.keys(statusConfig.games).length, 12);
+  for (const [slug, game] of Object.entries(statusConfig.games)) {
+    assert.match(game.appId, /^\d+$/, `${slug} is missing a Steam App ID`);
+    assert.match(game.verifiedBuildId, /^\d+$/, `${slug} is missing the verified build`);
+    assert.match(game.currentBuildId, /^\d+$/, `${slug} is missing the public build`);
+    assert.match(game.lastSteamUpdate, /^\d{4}-\d{2}-\d{2}T/, `${slug} is missing the Steam update date`);
+  }
 });
 
 test("CloverPit is connected to the pending compatibility state", () => {

@@ -14,6 +14,7 @@ alter table public.comments
       'bookshop-simulator',
       'catmailco',
       'cloverpit',
+      'e-shop-tycoon',
       'factory-planner',
       'leafy-corner',
       'restory',
