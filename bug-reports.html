@@ -299,6 +299,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     let currentUser = null;
     let currentProfile = null;
     let gamesBySlug = {};
+    const requestedGameSlug =
+        new URLSearchParams(window.location.search)
+            .get("game")
+            ?.trim() || "";
 
 
     async function loadGameOptions() {
@@ -332,6 +336,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             option.textContent = game.name;
             gameSelect.appendChild(option);
 
+        }
+
+        if (requestedGameSlug && gamesBySlug[requestedGameSlug]) {
+            gameSelect.value = requestedGameSlug;
         }
 
         const gamesLoaded = games.length > 0;
@@ -387,29 +395,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     }
 
+    function openReportForm({ scroll = true } = {}) {
+
+        formBox.hidden = false;
+        loginRequired.hidden = Boolean(currentUser);
+        form.style.display = "";
+
+        if (scroll) {
+            formBox.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }
+
+    }
+
 
     openButton.addEventListener("click", () => {
 
-        formBox.hidden = false;
-
-        if (!currentUser) {
-
-            loginRequired.hidden = false;
-
-            form.style.display = "none";
-
-        } else {
-
-            loginRequired.hidden = true;
-
-            form.style.display = "";
-
-        }
-
-        formBox.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
+        openReportForm();
 
     });
 
@@ -852,6 +856,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await loadGameOptions();
     await loadCurrentUser();
+
+    if (requestedGameSlug && gamesBySlug[requestedGameSlug]) {
+        gameSelect.value = requestedGameSlug;
+        openReportForm({ scroll: true });
+    }
+
     await loadReports();
 
 });

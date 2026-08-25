@@ -7,9 +7,24 @@
     "note": "TODO: Replace with a documented, reliable provider for the Steam public-branch build ID."
   },
   "games": {
+    "e-shop-tycoon": {
+      "name": "E-Shop Tycoon",
+      "appId": "4249850",
+      "supportedVersion": "v1.0.7",
+      "verifiedBuildId": null,
+      "currentBuildId": null,
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "yet-another-zombie-survivors": {
       "name": "Yet Another Zombie Survivors",
       "appId": "2163330",
+      "supportedVersion": "v1.0.0b_S",
       "verifiedBuildId": null,
       "currentBuildId": null,
       "manualStatus": "functional",
@@ -23,6 +38,7 @@
     "cloverpit": {
       "name": "CloverPit",
       "appId": "3314790",
+      "supportedVersion": "v1.4.11",
       "verifiedBuildId": null,
       "currentBuildId": null,
       "manualStatus": "functional",
@@ -36,6 +52,7 @@
     "timberborn": {
       "name": "Timberborn",
       "appId": "1062090",
+      "supportedVersion": "v1.0.13.1-b769e88-sw",
       "verifiedBuildId": null,
       "currentBuildId": null,
       "manualStatus": "functional",
@@ -49,6 +66,7 @@
     "restory": {
       "name": "ReStory: Chill Electronics Repairs",
       "appId": "3812600",
+      "supportedVersion": "1.0.014r",
       "verifiedBuildId": null,
       "currentBuildId": null,
       "manualStatus": "functional",
@@ -62,6 +80,7 @@
     "leafy-corner": {
       "name": "Leafy Corner",
       "appId": "3558600",
+      "supportedVersion": "v1.0.3(ws)",
       "verifiedBuildId": null,
       "currentBuildId": null,
       "manualStatus": "functional",
@@ -75,6 +94,7 @@
     "bookshop-simulator": {
       "name": "Bookshop Simulator",
       "appId": "3467040",
+      "supportedVersion": "1.0.1224",
       "verifiedBuildId": null,
       "currentBuildId": null,
       "manualStatus": "functional",
@@ -88,6 +108,7 @@
     "factory-planner": {
       "name": "Factory Planner",
       "appId": "3679930",
+      "supportedVersion": "EA v1.0.11",
       "verifiedBuildId": null,
       "currentBuildId": null,
       "manualStatus": "functional",
@@ -101,6 +122,7 @@
     "streamer-life-simulator-2": {
       "name": "Streamer Life Simulator 2",
       "appId": "2890830",
+      "supportedVersion": "Aktuální verze",
       "verifiedBuildId": "21799183",
       "currentBuildId": "21799183",
       "manualStatus": "functional",
@@ -114,6 +136,7 @@
     "the-universim": {
       "name": "The Universim",
       "appId": "352720",
+      "supportedVersion": "v1.0.02.48225",
       "verifiedBuildId": "16850856",
       "currentBuildId": "16850856",
       "manualStatus": "functional",
@@ -127,6 +150,7 @@
     "youtubers-life-2": {
       "name": "Youtubers Life 2",
       "appId": "1493760",
+      "supportedVersion": "v1.4.0",
       "verifiedBuildId": "20266715",
       "currentBuildId": "20266715",
       "manualStatus": "functional",
@@ -140,6 +164,7 @@
     "catmailco": {
       "name": "CatMailCo",
       "appId": "4380490",
+      "supportedVersion": "Aktuální verze",
       "verifiedBuildId": "24261759",
       "currentBuildId": "24261759",
       "manualStatus": "functional",

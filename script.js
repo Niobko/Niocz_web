@@ -71,6 +71,23 @@ const gameStatusDefinitions = {
   broken: { key: 'broken', label: 'Nefunkční / vyžaduje update', color: 'red' }
 };
 
+// Safe embedded fallback for local file previews and temporary API/JSON outages.
+// The Netlify endpoint and data/game-status.json remain the primary sources.
+const fallbackGameStatuses = Object.freeze({
+  'e-shop-tycoon': { name: 'E-Shop Tycoon', appId: '4249850', supportedVersion: 'v1.0.7', verifiedBuildId: null, currentBuildId: null, manualStatus: 'functional', override: null },
+  'yet-another-zombie-survivors': { name: 'Yet Another Zombie Survivors', appId: '2163330', supportedVersion: 'v1.0.0b_S', verifiedBuildId: null, currentBuildId: null, manualStatus: 'functional', override: null },
+  cloverpit: { name: 'CloverPit', appId: '3314790', supportedVersion: 'v1.4.11', verifiedBuildId: null, currentBuildId: null, manualStatus: 'functional', override: null },
+  timberborn: { name: 'Timberborn', appId: '1062090', supportedVersion: 'v1.0.13.1-b769e88-sw', verifiedBuildId: null, currentBuildId: null, manualStatus: 'functional', override: null },
+  restory: { name: 'ReStory: Chill Electronics Repairs', appId: '3812600', supportedVersion: '1.0.014r', verifiedBuildId: null, currentBuildId: null, manualStatus: 'functional', override: null },
+  'leafy-corner': { name: 'Leafy Corner', appId: '3558600', supportedVersion: 'v1.0.3(ws)', verifiedBuildId: null, currentBuildId: null, manualStatus: 'functional', override: null },
+  'bookshop-simulator': { name: 'Bookshop Simulator', appId: '3467040', supportedVersion: '1.0.1224', verifiedBuildId: null, currentBuildId: null, manualStatus: 'functional', override: null },
+  'factory-planner': { name: 'Factory Planner', appId: '3679930', supportedVersion: 'EA v1.0.11', verifiedBuildId: null, currentBuildId: null, manualStatus: 'functional', override: null },
+  'streamer-life-simulator-2': { name: 'Streamer Life Simulator 2', appId: '2890830', supportedVersion: 'Aktuální verze', verifiedBuildId: '21799183', currentBuildId: '21799183', manualStatus: 'functional', override: null },
+  'the-universim': { name: 'The Universim', appId: '352720', supportedVersion: 'v1.0.02.48225', verifiedBuildId: '16850856', currentBuildId: '16850856', manualStatus: 'functional', override: null },
+  'youtubers-life-2': { name: 'Youtubers Life 2', appId: '1493760', supportedVersion: 'v1.4.0', verifiedBuildId: '20266715', currentBuildId: '20266715', manualStatus: 'functional', override: null },
+  catmailco: { name: 'CatMailCo', appId: '4380490', supportedVersion: 'Aktuální verze', verifiedBuildId: '24261759', currentBuildId: '24261759', manualStatus: 'functional', override: null }
+});
+
 const resolveGameDisplayStatus = game => {
   if (game?.override && gameStatusDefinitions[game.override]) return gameStatusDefinitions[game.override];
   if (game?.manualStatus === 'broken') return gameStatusDefinitions.broken;
@@ -98,10 +115,12 @@ const applyGameStatuses = games => {
 };
 
 const loadGameStatuses = async () => {
-  const endpoints = [
-    settings.gameStatusEndpoint || '/api/game-status',
-    new URL('data/game-status.json', document.baseURI).href
-  ];
+  const endpoints = window.location.protocol === 'file:'
+    ? []
+    : [
+        settings.gameStatusEndpoint || '/api/game-status',
+        new URL('data/game-status.json', document.baseURI).href
+      ];
 
   for (const endpoint of endpoints) {
     try {
@@ -109,6 +128,7 @@ const loadGameStatuses = async () => {
       if (!response.ok) continue;
       const payload = await response.json();
       if (payload?.games) {
+        window.NIO_GAME_STATUS_PROVIDER = payload.provider || {};
         applyGameStatuses(payload.games);
         return payload.games;
       }
@@ -117,7 +137,9 @@ const loadGameStatuses = async () => {
     }
   }
 
-  return {};
+  window.NIO_GAME_STATUS_PROVIDER = { type: 'embedded-fallback', automatic: false, lastCheckedAt: null };
+  applyGameStatuses(fallbackGameStatuses);
+  return fallbackGameStatuses;
 };
 
 window.NIO_GAME_STATUSES_READY = loadGameStatuses();
@@ -132,6 +154,8 @@ const supportDialog = supportModal?.querySelector('.support-dialog');
 let supportReturnFocus = null;
 let authMode = 'login';
 let currentUser = null;
+let ownGameRating = { stars: null, reaction: null };
+let gameRatingBusy = false;
 
 const setMessage = (node, message, error = false) => {
   if (!node) return;
@@ -167,6 +191,150 @@ const closeSupport = () => {
   supportReturnFocus?.focus();
   supportReturnFocus = null;
 };
+
+const createDetailCommunityUi = () => {
+  const detailTitle = document.querySelector('.detail-title');
+  const versionBox = detailTitle?.querySelector(':scope > .version-box');
+  const downloadCard = document.querySelector('.detail-grid > .download-card');
+  if (!gameSlug || !detailTitle || !versionBox || !downloadCard) return null;
+
+  const heroSide = document.createElement('div');
+  heroSide.className = 'detail-hero-side';
+  versionBox.replaceWith(heroSide);
+
+  const rating = document.createElement('section');
+  rating.className = 'game-rating-card';
+  rating.setAttribute('aria-label', 'Hodnocení překladu');
+  rating.innerHTML = `
+    <div class="game-rating-controls">
+      <div class="rating-stars" role="group" aria-label="Hodnocení od 1 do 5 hvězdiček">
+        ${[1, 2, 3, 4, 5].map(value => `<button type="button" data-rating-control data-rating-star="${value}" aria-label="${value} z 5 hvězdiček" aria-pressed="false">★</button>`).join('')}
+      </div>
+      <span class="rating-score"><strong data-rating-average>—</strong>/5 · <span data-rating-count>0</span></span>
+      <div class="rating-reactions" role="group" aria-label="Líbí nebo nelíbí se mi překlad">
+        <button type="button" data-rating-control data-rating-reaction="1" aria-label="Líbí se mi" aria-pressed="false"><span aria-hidden="true">👍</span> <span data-like-count>0</span></button>
+        <button type="button" data-rating-control data-rating-reaction="-1" aria-label="Nelíbí se mi" aria-pressed="false"><span aria-hidden="true">👎</span> <span data-dislike-count>0</span></button>
+      </div>
+    </div>
+    <p class="rating-message" data-rating-message role="status">Načítám hodnocení…</p>`;
+  heroSide.append(rating);
+
+  const statusControl = document.createElement('div');
+  statusControl.className = 'version-status-control';
+  statusControl.dataset.statusState = 'pending';
+  statusControl.innerHTML = `
+    <span class="version-chip" data-version-trigger-version>—</span>
+    <button class="version-status-toggle" type="button" aria-expanded="false" aria-controls="version-status-panel">
+      <i aria-hidden="true"></i>
+      <span data-version-trigger-label>Načítám…</span>
+      <span class="version-toggle-chevron" aria-hidden="true">⌄</span>
+    </button>`;
+
+  const statusPanel = document.createElement('section');
+  statusPanel.className = 'version-status-panel';
+  statusPanel.id = 'version-status-panel';
+  statusPanel.hidden = true;
+  statusPanel.dataset.statusState = 'pending';
+  statusPanel.setAttribute('aria-labelledby', 'version-status-title');
+  statusPanel.innerHTML = `
+    <div class="version-status-heading">
+      <h2 id="version-status-title">Stav verze</h2>
+      <span class="status version-panel-status"><i></i><span data-version-status-label>Načítám stav…</span></span>
+    </div>
+    <dl>
+      <div><dt>Current Version</dt><dd data-current-version>—</dd></div>
+      <div><dt>Current Build</dt><dd data-current-build>—</dd></div>
+      <div><dt>Latest Build</dt><dd data-latest-build>—</dd></div>
+      <div><dt>Last Steam Update</dt><dd data-last-steam-update>—</dd></div>
+    </dl>
+    <p class="version-status-summary" data-version-status-summary>Načítám údaje o kompatibilitě…</p>
+    <a class="steamdb-link" data-steamdb-link href="https://steamdb.info/" target="_blank" rel="noopener noreferrer">Zobrazit na SteamDB <span aria-hidden="true">↗</span></a>`;
+  statusControl.append(statusPanel);
+  heroSide.append(statusControl);
+
+  const statusToggle = statusControl.querySelector('.version-status-toggle');
+  const setStatusPanelOpen = open => {
+    statusPanel.hidden = !open;
+    statusToggle.setAttribute('aria-expanded', String(open));
+  };
+  statusToggle.addEventListener('click', () => setStatusPanelOpen(statusPanel.hidden));
+  document.addEventListener('click', event => {
+    if (!statusPanel.hidden && !statusControl.contains(event.target)) setStatusPanelOpen(false);
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key !== 'Escape' || statusPanel.hidden) return;
+    setStatusPanelOpen(false);
+    statusToggle.focus();
+  });
+
+  const downloadButton = downloadCard.querySelector('[data-download]');
+  if (downloadButton) {
+    const actions = document.createElement('div');
+    actions.className = 'download-actions';
+    const reportLink = document.createElement('a');
+    reportLink.className = 'report-game-button';
+    reportLink.href = `bug-reports.html?game=${encodeURIComponent(gameSlug)}`;
+    reportLink.setAttribute('aria-label', 'Nahlásit chybu v překladu této hry');
+    reportLink.title = 'Nahlásit chybu';
+    reportLink.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4m0 1h10.5l-1.8 3 1.8 3H5"/></svg>';
+    downloadButton.before(actions);
+    actions.append(reportLink, downloadButton);
+  }
+
+  rating.querySelectorAll('[data-rating-star]').forEach(button => button.addEventListener('click', () => {
+    saveGameRating({ stars: Number(button.dataset.ratingStar) });
+  }));
+  rating.querySelectorAll('[data-rating-reaction]').forEach(button => button.addEventListener('click', () => {
+    const value = Number(button.dataset.ratingReaction);
+    saveGameRating({ reaction: ownGameRating.reaction === value ? null : value });
+  }));
+
+  return { rating, statusControl, statusPanel };
+};
+
+const formatStatusDate = value => {
+  if (!value) return '—';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '—';
+  return new Intl.DateTimeFormat('cs-CZ', { dateStyle: 'medium', timeStyle: 'short' }).format(date);
+};
+
+const updateVersionStatusPanel = game => {
+  if (!detailCommunityUi?.statusPanel) return;
+  const panel = detailCommunityUi.statusPanel;
+  const resolvedGame = game || fallbackGameStatuses[gameSlug];
+  if (!resolvedGame) return;
+
+  const status = resolveGameDisplayStatus(resolvedGame);
+  panel.dataset.statusState = status.key;
+  detailCommunityUi.statusControl.dataset.statusState = status.key;
+  panel.querySelector('[data-version-status-label]').textContent = status.label;
+  detailCommunityUi.statusControl.querySelector('[data-version-trigger-label]').textContent = status.label;
+  detailCommunityUi.statusControl.querySelector('[data-version-trigger-version]').textContent = resolvedGame.supportedVersion || 'Verze —';
+  panel.querySelector('[data-current-version]').textContent = resolvedGame.supportedVersion || '—';
+  panel.querySelector('[data-current-build]').textContent = resolvedGame.verifiedBuildId ? String(resolvedGame.verifiedBuildId) : '—';
+  panel.querySelector('[data-latest-build]').textContent = resolvedGame.currentBuildId ? String(resolvedGame.currentBuildId) : '—';
+  panel.querySelector('[data-last-steam-update]').textContent = formatStatusDate(resolvedGame.lastSteamUpdate);
+
+  const summary = status.key === 'pending'
+    ? 'Byl zjištěn nový build. Kompatibilita překladu čeká na ověření.'
+    : status.key === 'broken'
+      ? 'Překlad vyžaduje aktualizaci pro aktuální verzi hry.'
+      : resolvedGame.currentBuildId
+        ? 'Verze hry je aktuální.'
+        : 'Funkční · build zatím není evidován.';
+  panel.querySelector('[data-version-status-summary]').textContent = summary;
+  panel.querySelector('[data-steamdb-link]').href = resolvedGame.appId
+    ? `https://steamdb.info/app/${encodeURIComponent(resolvedGame.appId)}/`
+    : 'https://steamdb.info/';
+};
+
+const detailCommunityUi = createDetailCommunityUi();
+if (detailCommunityUi) {
+  window.NIO_GAME_STATUSES_READY
+    .then(games => updateVersionStatusPanel(games?.[gameSlug]))
+    .catch(() => updateVersionStatusPanel(null));
+}
 supportUi?.openButton.addEventListener('click', openSupport);
 supportModal?.querySelectorAll('[data-support-close]').forEach(button => button.addEventListener('click', closeSupport));
 supportModal?.addEventListener('keydown', event => {
@@ -291,6 +459,126 @@ function updateAuthUi(user) {
     voteNote.classList.toggle('logged-in', Boolean(user));
   }
   loadVoting();
+  loadGameRating();
+}
+
+const setGameRatingMessage = (message, error = false) => {
+  const node = detailCommunityUi?.rating.querySelector('[data-rating-message]');
+  if (!node) return;
+  node.textContent = message;
+  node.classList.toggle('error', error);
+};
+
+const setGameRatingControlsDisabled = disabled => {
+  detailCommunityUi?.rating.querySelectorAll('[data-rating-control]').forEach(button => {
+    button.disabled = disabled;
+  });
+};
+
+const renderGameRating = summary => {
+  const rating = detailCommunityUi?.rating;
+  if (!rating) return;
+  const average = summary?.rating_average;
+  rating.querySelector('[data-rating-average]').textContent = average === null || average === undefined
+    ? '—'
+    : new Intl.NumberFormat('cs-CZ', { minimumFractionDigits: 1, maximumFractionDigits: 2 }).format(Number(average));
+  rating.querySelector('[data-rating-count]').textContent = new Intl.NumberFormat('cs-CZ').format(Number(summary?.rating_count || 0));
+  rating.querySelector('[data-like-count]').textContent = new Intl.NumberFormat('cs-CZ').format(Number(summary?.like_count || 0));
+  rating.querySelector('[data-dislike-count]').textContent = new Intl.NumberFormat('cs-CZ').format(Number(summary?.dislike_count || 0));
+
+  const displayedStars = ownGameRating.stars || (average === null || average === undefined ? 0 : Math.round(Number(average)));
+  rating.querySelectorAll('[data-rating-star]').forEach(button => {
+    const value = Number(button.dataset.ratingStar);
+    button.classList.toggle('selected', value <= displayedStars);
+    button.setAttribute('aria-pressed', String(value === ownGameRating.stars));
+  });
+  rating.querySelectorAll('[data-rating-reaction]').forEach(button => {
+    const selected = Number(button.dataset.ratingReaction) === ownGameRating.reaction;
+    button.classList.toggle('selected', selected);
+    button.setAttribute('aria-pressed', String(selected));
+  });
+};
+
+async function loadGameRating(successMessage = '') {
+  if (!detailCommunityUi?.rating) return;
+  ownGameRating = { stars: null, reaction: null };
+  if (!db) {
+    setGameRatingControlsDisabled(true);
+    setGameRatingMessage('Hodnocení se zobrazí po připojení Supabase.', true);
+    return;
+  }
+
+  const { data: summaryRows, error: summaryError } = await db.rpc('get_game_rating_summary', {
+    requested_game_slug: gameSlug
+  });
+  if (summaryError) {
+    console.error('Unable to load game rating summary', summaryError);
+    setGameRatingControlsDisabled(true);
+    setGameRatingMessage('Hodnocení zatím není aktivní.', true);
+    return;
+  }
+
+  if (currentUser) {
+    const { data: ownVote, error: ownVoteError } = await db
+      .from('game_ratings')
+      .select('stars,reaction')
+      .eq('game_slug', gameSlug)
+      .eq('user_id', currentUser.id)
+      .maybeSingle();
+    if (ownVoteError) {
+      console.error('Unable to load own game rating', ownVoteError);
+      setGameRatingControlsDisabled(true);
+      setGameRatingMessage('Vaše hodnocení se nepodařilo načíst.', true);
+      return;
+    }
+    ownGameRating = {
+      stars: ownVote?.stars ? Number(ownVote.stars) : null,
+      reaction: ownVote?.reaction ? Number(ownVote.reaction) : null
+    };
+  }
+
+  const summary = Array.isArray(summaryRows) ? summaryRows[0] : summaryRows;
+  renderGameRating(summary || {});
+  setGameRatingControlsDisabled(false);
+  setGameRatingMessage(successMessage || (currentUser
+    ? 'Vaše hodnocení můžete kdykoli změnit.'
+    : 'Pro hodnocení se přihlaste.'));
+}
+
+async function saveGameRating(changes) {
+  if (!detailCommunityUi?.rating || gameRatingBusy) return;
+  if (!db) return setGameRatingMessage('Hodnocení není připojené k Supabase.', true);
+  if (!currentUser) {
+    setGameRatingMessage('Pro hodnocení se nejprve přihlaste.', true);
+    openAuth();
+    return;
+  }
+
+  const nextRating = { ...ownGameRating, ...changes };
+  gameRatingBusy = true;
+  setGameRatingControlsDisabled(true);
+  setGameRatingMessage('Ukládám hodnocení…');
+
+  const query = nextRating.stars === null && nextRating.reaction === null
+    ? db.from('game_ratings').delete().eq('game_slug', gameSlug).eq('user_id', currentUser.id)
+    : db.from('game_ratings').upsert({
+        game_slug: gameSlug,
+        user_id: currentUser.id,
+        stars: nextRating.stars,
+        reaction: nextRating.reaction
+      }, { onConflict: 'game_slug,user_id' });
+  const { error } = await query;
+  gameRatingBusy = false;
+
+  if (error) {
+    console.error('Unable to save game rating', error);
+    setGameRatingControlsDisabled(false);
+    setGameRatingMessage('Hodnocení se nepodařilo uložit.', true);
+    return;
+  }
+
+  ownGameRating = nextRating;
+  await loadGameRating('Hodnocení bylo uloženo.');
 }
 async function loadComments() {
   const list = document.querySelector('[data-comments-list]');

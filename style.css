@@ -245,6 +245,79 @@ body:has(.legal-page) .site-header .nav-wrap{
     margin-top:55px !important;
 }
 
+/* Shared detail tools: ratings, version status and report action */
+.detail-grid>.download-card{position:static;top:auto}
+.detail-title{position:relative;display:block}
+.detail-title>div:first-child{min-width:0}
+.detail-hero{overflow:visible}
+body{overflow-x:hidden}
+.detail-hero-side{position:absolute;z-index:4;right:0;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:24px;width:min(48%,540px);margin:0;flex-wrap:nowrap}
+.game-rating-card{min-width:0;margin:0;padding:0;border:0;background:none}
+.game-rating-controls{display:flex;align-items:center;gap:8px;margin:0}
+.rating-stars{display:flex;gap:1px;margin:0}
+.rating-stars button,.rating-reactions button{border:1px solid transparent;background:none;color:#627087;cursor:pointer;transition:.18s}
+.rating-stars button{padding:1px;font-size:1.18rem;line-height:1}
+.rating-stars button:hover,.rating-stars button:focus-visible,.rating-stars button.selected{color:#ffd45a;transform:translateY(-1px)}
+.rating-score{display:inline-flex;align-items:center;min-height:29px;padding:4px 10px;border-radius:999px;background:#17243a;color:#aab6c7;font-size:.67rem;font-weight:700;white-space:nowrap}
+.rating-score strong{color:#e5eefb;font-size:.75rem}
+.rating-reactions{display:flex;gap:5px}
+.rating-reactions button{min-width:41px;padding:4px 7px;border-color:#2a394e;border-radius:7px;background:#0a1019;color:#c8d2df;font-size:.66rem;font-weight:800}
+.rating-reactions button:hover,.rating-reactions button:focus-visible,.rating-reactions button.selected{border-color:var(--blue-light);background:#14243a;color:#fff}
+.rating-stars button:disabled,.rating-reactions button:disabled{cursor:not-allowed;opacity:.5;transform:none}
+.rating-message{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.version-status-control{position:relative;display:flex;align-items:center;gap:6px}
+.version-chip,.version-status-toggle{min-height:31px;border-radius:8px;font-size:.67rem;font-weight:800;line-height:1;white-space:nowrap}
+.version-chip{display:inline-flex;align-items:center;max-width:180px;padding:6px 10px;overflow:hidden;border:1px solid rgba(75,214,155,.34);background:rgba(75,214,155,.12);color:var(--green);text-overflow:ellipsis}
+.version-status-toggle{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border:1px solid currentColor;background:#0a1716;color:var(--green);cursor:pointer;transition:.18s}
+.version-status-toggle:hover,.version-status-toggle:focus-visible,.version-status-toggle[aria-expanded="true"]{background:#10231f;box-shadow:0 0 18px rgba(75,214,155,.12)}
+.version-status-toggle i{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 9px currentColor}
+.version-toggle-chevron{font-size:.72rem;transition:transform .18s}
+.version-status-toggle[aria-expanded="true"] .version-toggle-chevron{transform:rotate(180deg)}
+.version-status-control[data-status-state="pending"] .version-chip,.version-status-control[data-status-state="pending"] .version-status-toggle{color:#f0a44b;border-color:rgba(240,164,75,.5)}
+.version-status-control[data-status-state="broken"] .version-chip,.version-status-control[data-status-state="broken"] .version-status-toggle{color:#ff6572;border-color:rgba(255,101,114,.5)}
+.version-status-panel{position:absolute;z-index:30;top:calc(100% + 9px);right:0;width:min(320px,calc(100vw - 28px));margin:0;padding:15px;border:1px solid #2b3a50;border-radius:11px;background:#111a2a;box-shadow:0 20px 48px rgba(0,0,0,.48)}
+.version-status-panel[hidden]{display:none}
+.version-status-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.version-status-heading h2{margin:0;font-size:.78rem;letter-spacing:-.01em}
+.version-panel-status{flex:0 0 auto}
+.version-panel-status.status{font-size:.52rem}
+.version-status-panel[data-status-state="functional"] .version-panel-status{color:var(--green)}
+.version-status-panel[data-status-state="pending"] .version-panel-status{color:#f0a44b}
+.version-status-panel[data-status-state="broken"] .version-panel-status{color:#ff6572}
+.version-status-panel dl{margin:10px 0 0;border-block:1px solid #2b3a50}
+.version-status-panel dl div{display:flex;align-items:center;justify-content:space-between;gap:18px;min-width:0;padding:5px 0}
+.version-status-panel dt{color:var(--muted);font-size:.64rem}
+.version-status-panel dd{margin:0;overflow-wrap:anywhere;color:#fff;font-size:.64rem;font-weight:800;text-align:right}
+.version-status-panel dd[data-latest-build]{color:var(--green)}
+.version-status-summary{margin:8px 0 0;color:var(--green);font-size:.58rem;line-height:1.35}
+.version-status-panel[data-status-state="pending"] .version-status-summary{color:#f0a44b}
+.version-status-panel[data-status-state="broken"] .version-status-summary{color:#ff6572}
+.steamdb-link{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:10px;padding:7px 10px;border-radius:7px;background:#25334a;color:#dbe5f2;font-size:.62rem;font-weight:700}
+.steamdb-link:hover,.steamdb-link:focus-visible{background:#31435f;color:#fff}
+.download-actions{display:grid;grid-template-columns:48px minmax(0,1fr);gap:10px}
+.download-actions .button{min-width:0;padding-inline:12px}
+.report-game-button{display:grid;place-items:center;width:48px;min-height:46px;border:1px solid #34445b;border-radius:10px;background:#111927;color:#d7e4f3;transition:.2s}
+.report-game-button:hover,.report-game-button:focus-visible{border-color:#ff8585;background:#25151a;color:#ff9a9a;transform:translateY(-2px)}
+.report-game-button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+@media(max-width:1150px){
+    .detail-hero-side{position:relative;right:auto;bottom:auto;justify-content:flex-start;width:100%;margin-top:20px;flex-wrap:wrap}
+}
+
+@media(max-width:800px){
+    .detail-hero-side{gap:12px}
+}
+
+@media(max-width:520px){
+    .detail-hero-side{gap:9px}
+    .game-rating-controls{flex-wrap:wrap}
+    .version-status-panel{left:0;right:auto}
+}
+
+@media(max-width:360px){
+    .rating-reactions{display:none}
+}
+
 /* Expandable contact form */
 .contact-actions{
     width:min(100%,640px);
