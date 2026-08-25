@@ -74,6 +74,7 @@ const gameStatusDefinitions = {
 // Safe embedded fallback for local file previews and temporary API/JSON outages.
 // The Netlify endpoint and data/game-status.json remain the primary sources.
 const fallbackGameStatuses = Object.freeze({
+  'alchemy-factory': { name: 'Alchemy Factory', appId: '3669570', supportedVersion: 'v0.5.4539', verifiedBuildId: '23962166', currentBuildId: '23962166', lastSteamUpdate: '2026-06-29T08:20:17Z', manualStatus: 'functional', override: null },
   'e-shop-tycoon': { name: 'E-Shop Tycoon', appId: '4249850', supportedVersion: 'v1.0.7', verifiedBuildId: '24775292', currentBuildId: '24775292', lastSteamUpdate: '2026-08-17T11:36:55Z', manualStatus: 'functional', override: null },
   'yet-another-zombie-survivors': { name: 'Yet Another Zombie Survivors', appId: '2163330', supportedVersion: 'v1.0.0b_S', verifiedBuildId: '24843585', currentBuildId: '24843585', lastSteamUpdate: '2026-08-20T15:46:19Z', manualStatus: 'functional', override: null },
   cloverpit: { name: 'CloverPit', appId: '3314790', supportedVersion: 'v1.4.11', verifiedBuildId: '22785177', currentBuildId: '22785177', lastSteamUpdate: '2026-04-14T17:27:54Z', manualStatus: 'functional', override: null },
@@ -88,12 +89,49 @@ const fallbackGameStatuses = Object.freeze({
   catmailco: { name: 'CatMailCo', appId: '4380490', supportedVersion: 'Aktuální verze', verifiedBuildId: '24261759', currentBuildId: '24801860', lastSteamUpdate: '2026-08-19T08:22:53Z', manualStatus: 'functional', override: null }
 });
 
+let activeGameStatuses = fallbackGameStatuses;
+let activeGameStatusOverrides = {};
+
+const normalizeComparableValue = value => {
+  if (value === null || value === undefined) return null;
+  const normalized = String(value).trim();
+  return normalized || null;
+};
+
+const normalizeGameStatusOverride = row => {
+  if (!row || !gameStatusDefinitions[row.status]) return null;
+  return {
+    status: row.status,
+    verifiedBuildId: normalizeComparableValue(row.verified_build ?? row.verifiedBuildId),
+    verifiedVersion: normalizeComparableValue(row.verified_version ?? row.verifiedVersion),
+    updatedAt: row.updated_at ?? row.updatedAt ?? null
+  };
+};
+
 const resolveGameDisplayStatus = game => {
+  const statusOverride = normalizeGameStatusOverride(game?.statusOverride);
+  if (statusOverride) {
+    if (statusOverride.status === 'pending') return gameStatusDefinitions.pending;
+    if (statusOverride.status === 'broken') return gameStatusDefinitions.broken;
+
+    const currentBuildId = normalizeComparableValue(game?.currentBuildId);
+    if (currentBuildId && statusOverride.verifiedBuildId !== currentBuildId) {
+      return gameStatusDefinitions.pending;
+    }
+
+    const currentVersion = normalizeComparableValue(game?.currentVersion ?? game?.latestVersion);
+    if (!currentBuildId && currentVersion && statusOverride.verifiedVersion && currentVersion !== statusOverride.verifiedVersion) {
+      return gameStatusDefinitions.pending;
+    }
+
+    return gameStatusDefinitions.functional;
+  }
+
   if (game?.override && gameStatusDefinitions[game.override]) return gameStatusDefinitions[game.override];
   if (game?.manualStatus === 'broken') return gameStatusDefinitions.broken;
 
-  const verifiedBuildId = game?.verifiedBuildId ? String(game.verifiedBuildId) : null;
-  const currentBuildId = game?.currentBuildId ? String(game.currentBuildId) : null;
+  const verifiedBuildId = normalizeComparableValue(game?.verifiedBuildId);
+  const currentBuildId = normalizeComparableValue(game?.currentBuildId);
   if (currentBuildId && (!verifiedBuildId || verifiedBuildId !== currentBuildId)) {
     return gameStatusDefinitions.pending;
   }
@@ -102,6 +140,7 @@ const resolveGameDisplayStatus = game => {
 };
 
 const applyGameStatuses = games => {
+  if (games) activeGameStatuses = games;
   document.querySelectorAll('[data-game-status]').forEach(node => {
     const game = games?.[node.dataset.gameStatus];
     if (!game) return;
@@ -129,7 +168,6 @@ const loadGameStatuses = async () => {
       const payload = await response.json();
       if (payload?.games) {
         window.NIO_GAME_STATUS_PROVIDER = payload.provider || {};
-        applyGameStatuses(payload.games);
         return payload.games;
       }
     } catch {
@@ -138,14 +176,44 @@ const loadGameStatuses = async () => {
   }
 
   window.NIO_GAME_STATUS_PROVIDER = { type: 'embedded-fallback', automatic: false, lastCheckedAt: '2026-08-25T00:00:00Z' };
-  applyGameStatuses(fallbackGameStatuses);
   return fallbackGameStatuses;
 };
-
-window.NIO_GAME_STATUSES_READY = loadGameStatuses();
 const configured = settings.supabaseUrl?.startsWith('https://') && !settings.supabaseAnonKey?.startsWith('DOPLNTE_');
 const db = configured && window.supabase ? window.supabase.createClient(settings.supabaseUrl, settings.supabaseAnonKey) : null;
 window.NIO_SUPABASE_CLIENT = db;
+
+const loadGameStatusOverrides = async () => {
+  if (!db) return {};
+  const { data, error } = await db
+    .from('game_status_overrides')
+    .select('game_slug,status,verified_build,verified_version,updated_at');
+  if (error) {
+    console.warn('Game status overrides are not available yet', error);
+    return {};
+  }
+
+  return Object.fromEntries((data || [])
+    .map(row => [row.game_slug, normalizeGameStatusOverride(row)])
+    .filter(([, override]) => Boolean(override)));
+};
+
+const mergeGameStatusOverrides = (games, overrides) => Object.fromEntries(
+  Object.entries(games || {}).map(([slug, game]) => [slug, {
+    ...game,
+    statusOverride: overrides?.[slug] || null
+  }])
+);
+
+const loadCombinedGameStatuses = async () => {
+  const [games, overrides] = await Promise.all([loadGameStatuses(), loadGameStatusOverrides()]);
+  activeGameStatusOverrides = overrides;
+  activeGameStatuses = mergeGameStatusOverrides(games, overrides);
+  applyGameStatuses(activeGameStatuses);
+  return activeGameStatuses;
+};
+
+applyGameStatuses(fallbackGameStatuses);
+window.NIO_GAME_STATUSES_READY = loadCombinedGameStatuses();
 const gameSlug = document.body.dataset.game?.trim() || '';
 const authModal = document.querySelector('[data-auth-modal]');
 const authForm = document.querySelector('[data-auth-form]');
@@ -156,6 +224,8 @@ let authMode = 'login';
 let currentUser = null;
 let ownGameRating = { stars: null, reaction: null };
 let gameRatingBusy = false;
+let canManageGameStatuses = false;
+let gameStatusSaveBusy = false;
 
 const setMessage = (node, message, error = false) => {
   if (!node) return;
@@ -249,22 +319,57 @@ const createDetailCommunityUi = () => {
     </dl>
     <p class="version-status-summary" data-version-status-summary>Načítám údaje o kompatibilitě…</p>
     <a class="steamdb-link" data-steamdb-link href="https://steamdb.info/" target="_blank" rel="noopener noreferrer">Zobrazit na SteamDB <span aria-hidden="true">↗</span></a>`;
+
+  const adminStatusEditor = document.createElement('div');
+  adminStatusEditor.className = 'game-status-admin-editor';
+  adminStatusEditor.dataset.gameStatusAdmin = '';
+  adminStatusEditor.hidden = true;
+  adminStatusEditor.innerHTML = `
+    <button class="game-status-admin-toggle" type="button" aria-expanded="false" aria-controls="game-status-admin-menu" aria-label="Změnit stav překladu" title="Změnit stav překladu">
+      <span aria-hidden="true">⌄</span>
+    </button>
+    <div class="game-status-admin-menu" id="game-status-admin-menu" role="menu" aria-label="Změnit stav překladu" hidden>
+      <strong>Změnit stav</strong>
+      ${Object.values(gameStatusDefinitions).map(status => `
+        <button type="button" role="menuitemradio" aria-checked="false" data-admin-game-status="${status.key}">
+          <i data-status-color="${status.color}" aria-hidden="true"></i>
+          <span>${status.label}</span>
+        </button>`).join('')}
+      <p class="game-status-admin-message" data-admin-game-status-message role="status"></p>
+    </div>`;
+  statusControl.append(adminStatusEditor);
   statusControl.append(statusPanel);
   heroSide.append(statusControl);
 
   const statusToggle = statusControl.querySelector('.version-status-toggle');
+  const adminStatusToggle = adminStatusEditor.querySelector('.game-status-admin-toggle');
+  const adminStatusMenu = adminStatusEditor.querySelector('.game-status-admin-menu');
   const setStatusPanelOpen = open => {
     statusPanel.hidden = !open;
     statusToggle.setAttribute('aria-expanded', String(open));
   };
+  const setAdminStatusMenuOpen = open => {
+    adminStatusMenu.hidden = !open;
+    adminStatusToggle.setAttribute('aria-expanded', String(open));
+  };
   statusToggle.addEventListener('click', () => setStatusPanelOpen(statusPanel.hidden));
+  adminStatusToggle.addEventListener('click', () => setAdminStatusMenuOpen(adminStatusMenu.hidden));
+  adminStatusMenu.querySelectorAll('[data-admin-game-status]').forEach(button => {
+    button.addEventListener('click', () => saveGameStatusOverride(button.dataset.adminGameStatus));
+  });
   document.addEventListener('click', event => {
     if (!statusPanel.hidden && !statusControl.contains(event.target)) setStatusPanelOpen(false);
+    if (!adminStatusMenu.hidden && !adminStatusEditor.contains(event.target)) setAdminStatusMenuOpen(false);
   });
   document.addEventListener('keydown', event => {
-    if (event.key !== 'Escape' || statusPanel.hidden) return;
-    setStatusPanelOpen(false);
-    statusToggle.focus();
+    if (event.key !== 'Escape') return;
+    if (!adminStatusMenu.hidden) {
+      setAdminStatusMenuOpen(false);
+      adminStatusToggle.focus();
+    } else if (!statusPanel.hidden) {
+      setStatusPanelOpen(false);
+      statusToggle.focus();
+    }
   });
 
   const downloadButton = downloadCard.querySelector('[data-download]');
@@ -289,7 +394,7 @@ const createDetailCommunityUi = () => {
     saveGameRating({ reaction: ownGameRating.reaction === value ? null : value });
   }));
 
-  return { rating, statusControl, statusPanel };
+  return { rating, statusControl, statusPanel, adminStatusEditor, adminStatusMenu, setAdminStatusMenuOpen };
 };
 
 const formatStatusDate = value => {
@@ -306,15 +411,22 @@ const updateVersionStatusPanel = game => {
   if (!resolvedGame) return;
 
   const status = resolveGameDisplayStatus(resolvedGame);
+  const statusOverride = normalizeGameStatusOverride(resolvedGame.statusOverride);
+  const verifiedBuildId = statusOverride?.verifiedBuildId || normalizeComparableValue(resolvedGame.verifiedBuildId);
   panel.dataset.statusState = status.key;
   detailCommunityUi.statusControl.dataset.statusState = status.key;
   panel.querySelector('[data-version-status-label]').textContent = status.label;
   detailCommunityUi.statusControl.querySelector('[data-version-trigger-label]').textContent = status.label;
   detailCommunityUi.statusControl.querySelector('[data-version-trigger-version]').textContent = resolvedGame.supportedVersion || 'Verze —';
   panel.querySelector('[data-current-version]').textContent = resolvedGame.supportedVersion || '—';
-  panel.querySelector('[data-current-build]').textContent = resolvedGame.verifiedBuildId ? String(resolvedGame.verifiedBuildId) : '—';
+  panel.querySelector('[data-current-build]').textContent = verifiedBuildId || '—';
   panel.querySelector('[data-latest-build]').textContent = resolvedGame.currentBuildId ? String(resolvedGame.currentBuildId) : '—';
   panel.querySelector('[data-last-steam-update]').textContent = formatStatusDate(resolvedGame.lastSteamUpdate);
+  detailCommunityUi.adminStatusMenu.querySelectorAll('[data-admin-game-status]').forEach(button => {
+    const selected = button.dataset.adminGameStatus === status.key;
+    button.classList.toggle('selected', selected);
+    button.setAttribute('aria-checked', String(selected));
+  });
 
   const summary = status.key === 'pending'
     ? 'Byl zjištěn nový build. Kompatibilita překladu čeká na ověření.'
@@ -330,6 +442,84 @@ const updateVersionStatusPanel = game => {
 };
 
 const detailCommunityUi = createDetailCommunityUi();
+
+const setGameStatusAdminMessage = (message, error = false) => {
+  const node = detailCommunityUi?.adminStatusMenu.querySelector('[data-admin-game-status-message]');
+  if (!node) return;
+  node.textContent = message;
+  node.classList.toggle('error', error);
+};
+
+const setGameStatusAdminBusy = busy => {
+  gameStatusSaveBusy = busy;
+  detailCommunityUi?.adminStatusEditor.querySelectorAll('button').forEach(button => {
+    button.disabled = busy;
+  });
+};
+
+async function refreshGameStatusAdminPermission() {
+  canManageGameStatuses = false;
+  if (!detailCommunityUi?.adminStatusEditor) return;
+  detailCommunityUi.adminStatusEditor.hidden = true;
+  detailCommunityUi.setAdminStatusMenuOpen(false);
+  setGameStatusAdminMessage('');
+  if (!db || !currentUser || !gameSlug) return;
+
+  const checkedUserId = currentUser.id;
+  const { data, error } = await db.rpc('is_game_status_admin');
+  if (currentUser?.id !== checkedUserId) return;
+  if (error) {
+    console.warn('Unable to verify game status administrator', error);
+    return;
+  }
+
+  canManageGameStatuses = data === true;
+  detailCommunityUi.adminStatusEditor.hidden = !canManageGameStatuses;
+}
+
+async function saveGameStatusOverride(statusKey) {
+  if (!detailCommunityUi || gameStatusSaveBusy || !gameStatusDefinitions[statusKey]) return;
+  if (!db || !currentUser || !canManageGameStatuses) {
+    setGameStatusAdminMessage('Pro změnu stavu je nutné přihlášení správce.', true);
+    return;
+  }
+
+  const game = activeGameStatuses[gameSlug] || fallbackGameStatuses[gameSlug];
+  if (!game) return setGameStatusAdminMessage('Hru se nepodařilo najít.', true);
+
+  setGameStatusAdminBusy(true);
+  setGameStatusAdminMessage('Ukládám…');
+  const { data, error } = await db.rpc('set_game_status_override', {
+    requested_game_slug: gameSlug,
+    requested_status: statusKey,
+    requested_current_build: normalizeComparableValue(game.currentBuildId),
+    requested_current_version: normalizeComparableValue(game.currentVersion ?? game.latestVersion ?? game.supportedVersion)
+  });
+  setGameStatusAdminBusy(false);
+
+  if (error) {
+    console.error('Unable to save game status override', error);
+    setGameStatusAdminMessage('Stav se nepodařilo uložit. Zkontrolujte Supabase nastavení.', true);
+    return;
+  }
+
+  const savedRow = Array.isArray(data) ? data[0] : data;
+  const savedOverride = normalizeGameStatusOverride(savedRow || {
+    status: statusKey,
+    verified_build: statusKey === 'functional' ? game.currentBuildId : game.statusOverride?.verifiedBuildId,
+    verified_version: statusKey === 'functional' ? (game.currentVersion ?? game.latestVersion ?? game.supportedVersion) : game.statusOverride?.verifiedVersion,
+    updated_at: new Date().toISOString()
+  });
+  activeGameStatusOverrides = { ...activeGameStatusOverrides, [gameSlug]: savedOverride };
+  activeGameStatuses = {
+    ...activeGameStatuses,
+    [gameSlug]: { ...game, statusOverride: savedOverride }
+  };
+  applyGameStatuses(activeGameStatuses);
+  updateVersionStatusPanel(activeGameStatuses[gameSlug]);
+  setGameStatusAdminMessage('Stav byl uložen.');
+}
+
 if (detailCommunityUi) {
   window.NIO_GAME_STATUSES_READY
     .then(games => updateVersionStatusPanel(games?.[gameSlug]))
@@ -458,6 +648,7 @@ function updateAuthUi(user) {
     voteNote.textContent = user ? 'Jste přihlášeni – můžete hlasovat.' : 'Přihlaste se, abyste mohli hlasovat.';
     voteNote.classList.toggle('logged-in', Boolean(user));
   }
+  refreshGameStatusAdminPermission();
   loadVoting();
   loadGameRating();
 }

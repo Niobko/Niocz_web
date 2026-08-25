@@ -7,6 +7,21 @@
     "note": "Steam public-branch snapshot checked against SteamDB on 25 August 2026."
   },
   "games": {
+    "alchemy-factory": {
+      "name": "Alchemy Factory",
+      "appId": "3669570",
+      "supportedVersion": "v0.5.4539",
+      "verifiedBuildId": "23962166",
+      "currentBuildId": "23962166",
+      "lastSteamUpdate": "2026-06-29T08:20:17Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "e-shop-tycoon": {
       "name": "E-Shop Tycoon",
       "appId": "4249850",

@@ -8,7 +8,7 @@ const bugReportsPage = readFileSync(new URL("bug-reports.html", root), "utf8");
 const sharedScript = readFileSync(new URL("script.js", root), "utf8");
 
 test("bug report games come from the shared game status registry", () => {
-  assert.match(sharedScript, /window\.NIO_GAME_STATUSES_READY\s*=\s*loadGameStatuses\(\)/);
+  assert.match(sharedScript, /window\.NIO_GAME_STATUSES_READY\s*=\s*loadCombinedGameStatuses\(\)/);
   assert.match(bugReportsPage, /window\.NIO_GAME_STATUSES_READY/);
   assert.match(bugReportsPage, /Object\.entries\(gamesBySlug\)/);
   assert.doesNotMatch(bugReportsPage, /<option\s+value="leafy-corner"/);

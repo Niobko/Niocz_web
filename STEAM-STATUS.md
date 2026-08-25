@@ -10,7 +10,21 @@ Anonymní SteamCMD dokáže příkazem `app_info_print` načíst metadata veřej
 
 TODO: automatický provider zapnout až po výběru dokumentovaného a spolehlivého zdroje. Provider musí aktualizovat pouze `currentBuildId` a `provider.lastCheckedAt`; stav se potom vypočítá automaticky.
 
-## Ruční aktualizace
+## Ověření překladu přímo na webu
+
+Soubor `SUPABASE-GAME-STATUS-ADMIN.sql` přidává centrální tabulku `game_status_overrides`, samostatnou roli `profiles.is_admin`, RLS a dvě zabezpečené RPC funkce. Po spuštění migrace a jednorázovém označení účtu správce se přihlášenému správci vedle stavu zobrazí malá šipka. Běžní návštěvníci žádné ovládání neuvidí.
+
+Správce může vybrat:
+
+- `Funkční` — uloží se aktuální `currentBuildId` jako ověřený build. Pokud provider později vrátí jiný build, web znovu automaticky zobrazí „Čeká na ověření“.
+- `Čeká na ověření` — stav zůstane oranžový do dalšího rozhodnutí správce.
+- `Nefunkční / vyžaduje update` — stav bude červený.
+
+Zápis nejde provést přímým požadavkem z konzole: klient má k tabulce pouze právo čtení a změnu provádí `set_game_status_override` až po serverové kontrole `profiles.is_admin`. Frontendový skrytý dropdown je jen uživatelské rozhraní, nikoli bezpečnostní ochrana.
+
+Pokud není build pro některou hru dostupný, použije se dosavadní bezpečný manuální stav. `verified_version` se při označení funkčního překladu ukládá jako doplňující údaj.
+
+## Záložní ruční aktualizace v repozitáři
 
 Každá hra má `appId`, `verifiedBuildId`, `currentBuildId`, `lastSteamUpdate`, `manualStatus`, `override` a `displayStatus`.
 
@@ -20,7 +34,7 @@ Každá hra má `appId`, `verifiedBuildId`, `currentBuildId`, `lastSteamUpdate`,
 - `lastSteamUpdate` — datum a čas posledního nasazení veřejného Steam buildu v ISO 8601, například `2026-08-19T08:22:53Z`.
 - `override` může být `functional`, `pending`, `broken` nebo `null`; neprázdná hodnota má nejvyšší prioritu.
 
-Po ověření kompatibility nastavte `verifiedBuildId` na hodnotu `currentBuildId`, ponechte `manualStatus` jako `functional`, nastavte `override` na `null` a upravte `displayStatus` na zelený funkční stav. Potom commitněte změnu do nasazované větve.
+Tento postup je potřeba pouze před aktivací Supabase migrace nebo při výpadku databáze. Po ověření kompatibility nastavte `verifiedBuildId` na hodnotu `currentBuildId`, ponechte `manualStatus` jako `functional`, nastavte `override` na `null` a upravte `displayStatus` na zelený funkční stav. Potom commitněte změnu do nasazované větve.
 
 Při další ruční kontrole změňte pouze `currentBuildId`, `lastSteamUpdate` a `provider.lastCheckedAt`. Pokud se veřejný build změnil, `verifiedBuildId` ponechte beze změny, dokud překlad ve hře znovu neotestujete. Web mezitím automaticky ukáže oranžové „Čeká na ověření“.
 

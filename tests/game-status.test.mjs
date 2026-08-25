@@ -40,6 +40,32 @@ test("override has priority", () => {
   }).key, "functional");
 });
 
+test("a Supabase functional override is valid only for its verified build", () => {
+  const verifiedGame = {
+    verifiedBuildId: "100",
+    currentBuildId: "101",
+    manualStatus: "functional",
+    statusOverride: { status: "functional", verifiedBuildId: "101" }
+  };
+  assert.equal(resolveDisplayStatus(verifiedGame).key, "functional");
+  assert.equal(resolveDisplayStatus({ ...verifiedGame, currentBuildId: "102" }).key, "pending");
+});
+
+test("Supabase pending and broken overrides remain explicit", () => {
+  const game = { verifiedBuildId: "100", currentBuildId: "100", manualStatus: "functional" };
+  assert.equal(resolveDisplayStatus({ ...game, statusOverride: { status: "pending" } }).key, "pending");
+  assert.equal(resolveDisplayStatus({ ...game, statusOverride: { status: "broken" } }).key, "broken");
+});
+
+test("a functional override keeps the safe fallback when no build is available", () => {
+  assert.equal(resolveDisplayStatus({
+    verifiedBuildId: null,
+    currentBuildId: null,
+    manualStatus: "broken",
+    statusOverride: { status: "functional", verifiedBuildId: null }
+  }).key, "functional");
+});
+
 test("missing build IDs preserve the safe manual state", () => {
   const payload = buildStatusPayload({
     schemaVersion: 1,
@@ -78,13 +104,21 @@ test("CatMailCo waits for verification because Steam has a newer build", () => {
 });
 
 test("every published game has complete Steam status data", () => {
-  assert.equal(Object.keys(statusConfig.games).length, 12);
+  assert.equal(Object.keys(statusConfig.games).length, 13);
   for (const [slug, game] of Object.entries(statusConfig.games)) {
     assert.match(game.appId, /^\d+$/, `${slug} is missing a Steam App ID`);
     assert.match(game.verifiedBuildId, /^\d+$/, `${slug} is missing the verified build`);
     assert.match(game.currentBuildId, /^\d+$/, `${slug} is missing the public build`);
     assert.match(game.lastSteamUpdate, /^\d{4}-\d{2}-\d{2}T/, `${slug} is missing the Steam update date`);
   }
+});
+
+test("Alchemy Factory is connected to the pending compatibility state", () => {
+  const game = statusConfig.games["alchemy-factory"];
+  assert.equal(game.appId, "3669570");
+  assert.equal(game.supportedVersion, "v0.5.4539");
+  assert.equal(resolveDisplayStatus(game).key, "functional");
+  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "23962167" }).key, "pending");
 });
 
 test("CloverPit is connected to the pending compatibility state", () => {

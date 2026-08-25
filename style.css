@@ -248,7 +248,8 @@ body:has(.legal-page) .site-header .nav-wrap{
 /* Shared detail tools: ratings, version status and report action */
 .detail-grid>.download-card{position:static;top:auto}
 .detail-title{position:relative;display:block}
-.detail-title>div:first-child{min-width:0}
+.detail-title>div:first-child,.detail-main{min-width:0}
+.detail-main{grid-template-columns:minmax(0,1fr)}
 .detail-hero{overflow:visible}
 body{overflow-x:hidden}
 .detail-hero-side{position:absolute;z-index:4;right:0;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:24px;width:min(48%,540px);margin:0;flex-wrap:nowrap}
@@ -275,6 +276,24 @@ body{overflow-x:hidden}
 .version-status-toggle[aria-expanded="true"] .version-toggle-chevron{transform:rotate(180deg)}
 .version-status-control[data-status-state="pending"] .version-chip,.version-status-control[data-status-state="pending"] .version-status-toggle{color:#f0a44b;border-color:rgba(240,164,75,.5)}
 .version-status-control[data-status-state="broken"] .version-chip,.version-status-control[data-status-state="broken"] .version-status-toggle{color:#ff6572;border-color:rgba(255,101,114,.5)}
+.game-status-admin-editor{position:relative;align-self:stretch}
+.game-status-admin-editor[hidden]{display:none}
+.game-status-admin-toggle{display:grid;place-items:center;width:31px;height:31px;padding:0;border:1px solid #42617e;border-radius:8px;background:#122236;color:#9bcfff;cursor:pointer;transition:.18s}
+.game-status-admin-toggle:hover,.game-status-admin-toggle:focus-visible,.game-status-admin-toggle[aria-expanded="true"]{border-color:var(--blue-light);background:#19314d;color:#fff;box-shadow:0 0 18px rgba(73,164,255,.15)}
+.game-status-admin-toggle span{font-size:.8rem;transition:transform .18s}
+.game-status-admin-toggle[aria-expanded="true"] span{transform:rotate(180deg)}
+.game-status-admin-menu{position:absolute;z-index:40;top:calc(100% + 9px);right:0;width:265px;padding:10px;border:1px solid #344963;border-radius:11px;background:#111a2a;box-shadow:0 20px 48px rgba(0,0,0,.5)}
+.game-status-admin-menu[hidden]{display:none}
+.game-status-admin-menu>strong{display:block;padding:2px 7px 8px;color:#aebbd0;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase}
+.game-status-admin-menu>button{display:flex;align-items:center;gap:9px;width:100%;padding:9px 10px;border:0;border-radius:7px;background:transparent;color:#dfe8f5;font-size:.69rem;font-weight:750;text-align:left;cursor:pointer}
+.game-status-admin-menu>button:hover,.game-status-admin-menu>button:focus-visible,.game-status-admin-menu>button.selected{background:#1a2b42;color:#fff}
+.game-status-admin-menu>button:disabled{cursor:wait;opacity:.58}
+.game-status-admin-menu i{width:8px;height:8px;flex:0 0 auto;border-radius:50%;background:currentColor;box-shadow:0 0 9px currentColor}
+.game-status-admin-menu i[data-status-color="green"]{color:var(--green)}
+.game-status-admin-menu i[data-status-color="orange"]{color:#f0a44b}
+.game-status-admin-menu i[data-status-color="red"]{color:#ff6572}
+.game-status-admin-message{min-height:1.2em;margin:7px 7px 1px;color:var(--green);font-size:.62rem;line-height:1.35}
+.game-status-admin-message.error{color:#ff8585}
 .version-status-panel{position:absolute;z-index:30;top:calc(100% + 9px);right:0;width:min(320px,calc(100vw - 28px));margin:0;padding:15px;border:1px solid #2b3a50;border-radius:11px;background:#111a2a;box-shadow:0 20px 48px rgba(0,0,0,.48)}
 .version-status-panel[hidden]{display:none}
 .version-status-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -306,12 +325,14 @@ body{overflow-x:hidden}
 
 @media(max-width:800px){
     .detail-hero-side{gap:12px}
+    .detail-grid{grid-template-columns:minmax(0,1fr)}
 }
 
 @media(max-width:520px){
     .detail-hero-side{gap:9px}
     .game-rating-controls{flex-wrap:wrap}
     .version-status-panel{left:0;right:auto}
+    .game-status-admin-menu{left:auto;right:0;width:min(265px,calc(100vw - 28px))}
 }
 
 @media(max-width:360px){

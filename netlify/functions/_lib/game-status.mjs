@@ -11,6 +11,24 @@ const cleanBuildId = value => {
 };
 
 export const resolveDisplayStatus = game => {
+  const statusOverride = game.statusOverride;
+  if (statusOverride && STATUSES[statusOverride.status]) {
+    if (statusOverride.status === "pending") return STATUSES.pending;
+    if (statusOverride.status === "broken") return STATUSES.broken;
+
+    const currentBuildId = cleanBuildId(game.currentBuildId);
+    const verifiedOverrideBuildId = cleanBuildId(statusOverride.verifiedBuildId ?? statusOverride.verified_build);
+    if (currentBuildId && currentBuildId !== verifiedOverrideBuildId) return STATUSES.pending;
+
+    const currentVersion = game.currentVersion ?? game.latestVersion;
+    const verifiedVersion = statusOverride.verifiedVersion ?? statusOverride.verified_version;
+    if (!currentBuildId && currentVersion && verifiedVersion && String(currentVersion) !== String(verifiedVersion)) {
+      return STATUSES.pending;
+    }
+
+    return STATUSES.functional;
+  }
+
   if (game.override && STATUSES[game.override]) return STATUSES[game.override];
   if (game.manualStatus === "broken") return STATUSES.broken;
 
