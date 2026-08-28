@@ -3,10 +3,40 @@
   "provider": {
     "type": "manual-steamdb-snapshot",
     "automatic": false,
-    "lastCheckedAt": "2026-08-25T00:00:00Z",
-    "note": "Steam public-branch snapshot checked against SteamDB on 25 August 2026."
+    "lastCheckedAt": "2026-08-28T12:00:00Z",
+    "note": "Steam public-branch snapshot checked against SteamDB on 28 August 2026."
   },
   "games": {
+    "hearth-and-hamlet": {
+      "name": "Hearth and Hamlet",
+      "appId": "4315040",
+      "supportedVersion": "v1.0.04",
+      "verifiedBuildId": "24970582",
+      "currentBuildId": "24970582",
+      "lastSteamUpdate": "2026-08-27T12:51:07Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
+    "kynseed": {
+      "name": "Kynseed",
+      "appId": "758870",
+      "supportedVersion": "v1.3",
+      "verifiedBuildId": "24006355",
+      "currentBuildId": "24006355",
+      "lastSteamUpdate": "2026-07-01T17:15:53Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "alchemy-factory": {
       "name": "Alchemy Factory",
       "appId": "3669570",

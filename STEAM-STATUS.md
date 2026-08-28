@@ -6,13 +6,15 @@ Web nyní používá jeden kontrolní soubor `data/game-status.json`. Netlify ho
 
 Oficiální Steamworks metoda [`ISteamApps/GetAppBuilds`](https://partner.steamgames.com/doc/webapi/ISteamApps#GetAppBuilds) vyžaduje publisher API klíč vlastníka dané hry. Takový klíč se pro cizí hry nedá bezpečně ani oprávněně použít.
 
-Anonymní SteamCMD dokáže příkazem `app_info_print` načíst metadata veřejné větve, ale není to dokumentované stabilní API pro webovou automatizaci a existují hlášené výpadky vracení app info. Proto web nepoužívá neověřený proxy endpoint ani automatický SteamDB scraping. Aktuální hodnoty jsou ručně ověřený snímek veřejných Steam větví ze SteamDB k 25. 8. 2026.
+Anonymní SteamCMD dokáže příkazem `app_info_print` načíst metadata veřejné větve, ale není to dokumentované stabilní API pro webovou automatizaci a existují hlášené výpadky vracení app info. Proto web nepoužívá neověřený proxy endpoint ani automatický SteamDB scraping. Aktuální hodnoty jsou ručně ověřený snímek veřejných Steam větví ze SteamDB k 28. 8. 2026.
 
 TODO: automatický provider zapnout až po výběru dokumentovaného a spolehlivého zdroje. Provider musí aktualizovat pouze `currentBuildId` a `provider.lastCheckedAt`; stav se potom vypočítá automaticky.
 
 ## Ověření překladu přímo na webu
 
 Soubor `SUPABASE-GAME-STATUS-ADMIN.sql` přidává centrální tabulku `game_status_overrides`, samostatnou roli `profiles.is_admin`, RLS a dvě zabezpečené RPC funkce. Po spuštění migrace a jednorázovém označení účtu správce se přihlášenému správci vedle stavu zobrazí malá šipka. Běžní návštěvníci žádné ovládání neuvidí.
+
+Pro nové hry Hearth and Hamlet a Kynseed spusťte také `SUPABASE-HEARTH-AND-KYNSEED.sql`. Migrace rozšíří povolené slugy komentářů, hlášení chyb, hodnocení a počítadla stažení a založí oba řádky počítadel. Tabulka `game_status_overrides` používá obecnou validaci bezpečného slugu, takže pro tyto dvě hry nepotřebuje další whitelist.
 
 Správce může vybrat:
 

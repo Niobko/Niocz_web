@@ -74,6 +74,8 @@ const gameStatusDefinitions = {
 // Safe embedded fallback for local file previews and temporary API/JSON outages.
 // The Netlify endpoint and data/game-status.json remain the primary sources.
 const fallbackGameStatuses = Object.freeze({
+  'hearth-and-hamlet': { name: 'Hearth and Hamlet', appId: '4315040', supportedVersion: 'v1.0.04', verifiedBuildId: '24970582', currentBuildId: '24970582', lastSteamUpdate: '2026-08-27T12:51:07Z', manualStatus: 'functional', override: null },
+  kynseed: { name: 'Kynseed', appId: '758870', supportedVersion: 'v1.3', verifiedBuildId: '24006355', currentBuildId: '24006355', lastSteamUpdate: '2026-07-01T17:15:53Z', manualStatus: 'functional', override: null },
   'alchemy-factory': { name: 'Alchemy Factory', appId: '3669570', supportedVersion: 'v0.5.4539', verifiedBuildId: '23962166', currentBuildId: '23962166', lastSteamUpdate: '2026-06-29T08:20:17Z', manualStatus: 'functional', override: null },
   'e-shop-tycoon': { name: 'E-Shop Tycoon', appId: '4249850', supportedVersion: 'v1.0.7', verifiedBuildId: '24775292', currentBuildId: '24775292', lastSteamUpdate: '2026-08-17T11:36:55Z', manualStatus: 'functional', override: null },
   'yet-another-zombie-survivors': { name: 'Yet Another Zombie Survivors', appId: '2163330', supportedVersion: 'v1.0.0b_S', verifiedBuildId: '24843585', currentBuildId: '24843585', lastSteamUpdate: '2026-08-20T15:46:19Z', manualStatus: 'functional', override: null },
@@ -175,7 +177,7 @@ const loadGameStatuses = async () => {
     }
   }
 
-  window.NIO_GAME_STATUS_PROVIDER = { type: 'embedded-fallback', automatic: false, lastCheckedAt: '2026-08-25T00:00:00Z' };
+  window.NIO_GAME_STATUS_PROVIDER = { type: 'embedded-fallback', automatic: false, lastCheckedAt: '2026-08-28T12:00:00Z' };
   return fallbackGameStatuses;
 };
 const configured = settings.supabaseUrl?.startsWith('https://') && !settings.supabaseAnonKey?.startsWith('DOPLNTE_');
