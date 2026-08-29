@@ -1,4 +1,4 @@
--- NioCZ LOC: Hearth and Hamlet + Kynseed
+-- NioCZ LOC: PowerWash Simulator 2
 -- Spusťte celý soubor jednou v Supabase -> SQL Editor -> Run.
 -- Migrace rozšíří povolené slugy pro komentáře, hlášení chyb,
 -- hodnocení a počítadlo stažení. Je bezpečné ji spustit opakovaně.
@@ -6,10 +6,10 @@
 begin;
 
 alter table public.comments
-  drop constraint if exists comments_game_slug_check_v3;
+  drop constraint if exists comments_game_slug_check_v4;
 
 alter table public.comments
-  add constraint comments_game_slug_check_v3
+  add constraint comments_game_slug_check_v4
   check (game_slug in (
     'alchemy-factory',
     'bookshop-simulator',
@@ -19,8 +19,8 @@ alter table public.comments
     'factory-planner',
     'hearth-and-hamlet',
     'kynseed',
-    'powerwash-simulator-2',
     'leafy-corner',
+    'powerwash-simulator-2',
     'restory',
     'streamer-life-simulator-2',
     'the-universim',
@@ -30,20 +30,20 @@ alter table public.comments
   )) not valid;
 
 alter table public.comments
-  validate constraint comments_game_slug_check_v3;
+  validate constraint comments_game_slug_check_v4;
 
 alter table public.comments
   drop constraint if exists comments_game_slug_check;
 
 alter table public.comments
-  rename constraint comments_game_slug_check_v3
+  rename constraint comments_game_slug_check_v4
   to comments_game_slug_check;
 
 alter table public.bug_reports
-  drop constraint if exists bug_reports_game_slug_check_v2;
+  drop constraint if exists bug_reports_game_slug_check_v3;
 
 alter table public.bug_reports
-  add constraint bug_reports_game_slug_check_v2
+  add constraint bug_reports_game_slug_check_v3
   check (game_slug in (
     'alchemy-factory',
     'bookshop-simulator',
@@ -53,8 +53,8 @@ alter table public.bug_reports
     'factory-planner',
     'hearth-and-hamlet',
     'kynseed',
-    'powerwash-simulator-2',
     'leafy-corner',
+    'powerwash-simulator-2',
     'restory',
     'streamer-life-simulator-2',
     'the-universim',
@@ -64,20 +64,20 @@ alter table public.bug_reports
   )) not valid;
 
 alter table public.bug_reports
-  validate constraint bug_reports_game_slug_check_v2;
+  validate constraint bug_reports_game_slug_check_v3;
 
 alter table public.bug_reports
   drop constraint if exists bug_reports_game_slug_check;
 
 alter table public.bug_reports
-  rename constraint bug_reports_game_slug_check_v2
+  rename constraint bug_reports_game_slug_check_v3
   to bug_reports_game_slug_check;
 
 alter table public.game_ratings
-  drop constraint if exists game_ratings_game_slug_check_v3;
+  drop constraint if exists game_ratings_game_slug_check_v4;
 
 alter table public.game_ratings
-  add constraint game_ratings_game_slug_check_v3
+  add constraint game_ratings_game_slug_check_v4
   check (game_slug = any (array[
     'alchemy-factory',
     'bookshop-simulator',
@@ -87,8 +87,8 @@ alter table public.game_ratings
     'factory-planner',
     'hearth-and-hamlet',
     'kynseed',
-    'powerwash-simulator-2',
     'leafy-corner',
+    'powerwash-simulator-2',
     'restory',
     'streamer-life-simulator-2',
     'the-universim',
@@ -98,20 +98,20 @@ alter table public.game_ratings
   ]::text[])) not valid;
 
 alter table public.game_ratings
-  validate constraint game_ratings_game_slug_check_v3;
+  validate constraint game_ratings_game_slug_check_v4;
 
 alter table public.game_ratings
   drop constraint if exists game_ratings_game_slug_check;
 
 alter table public.game_ratings
-  rename constraint game_ratings_game_slug_check_v3
+  rename constraint game_ratings_game_slug_check_v4
   to game_ratings_game_slug_check;
 
 alter table public.download_totals
-  drop constraint if exists download_totals_game_slug_check_v3;
+  drop constraint if exists download_totals_game_slug_check_v4;
 
 alter table public.download_totals
-  add constraint download_totals_game_slug_check_v3
+  add constraint download_totals_game_slug_check_v4
   check (game_slug in (
     'alchemy-factory',
     'bookshop-simulator',
@@ -121,8 +121,8 @@ alter table public.download_totals
     'factory-planner',
     'hearth-and-hamlet',
     'kynseed',
-    'powerwash-simulator-2',
     'leafy-corner',
+    'powerwash-simulator-2',
     'restory',
     'streamer-life-simulator-2',
     'the-universim',
@@ -132,19 +132,17 @@ alter table public.download_totals
   )) not valid;
 
 alter table public.download_totals
-  validate constraint download_totals_game_slug_check_v3;
+  validate constraint download_totals_game_slug_check_v4;
 
 alter table public.download_totals
   drop constraint if exists download_totals_game_slug_check;
 
 alter table public.download_totals
-  rename constraint download_totals_game_slug_check_v3
+  rename constraint download_totals_game_slug_check_v4
   to download_totals_game_slug_check;
 
 insert into public.download_totals (game_slug, download_count)
-values
-  ('hearth-and-hamlet', 0),
-  ('kynseed', 0)
+values ('powerwash-simulator-2', 0)
 on conflict (game_slug) do nothing;
 
 create or replace function public.register_download(requested_game_slug text)

@@ -245,6 +245,11 @@ body:has(.legal-page) .site-header .nav-wrap{
     margin-top:55px !important;
 }
 
+/* Decorative detail glow must not widen narrow mobile viewports. */
+@media(max-width:800px){
+    .detail-hero .hero-glow{right:0;max-width:100%}
+}
+
 /* Shared detail tools: ratings, version status and report action */
 .detail-grid>.download-card{position:static;top:auto}
 .detail-title{position:relative;display:block}

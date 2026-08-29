@@ -3,10 +3,25 @@
   "provider": {
     "type": "manual-steamdb-snapshot",
     "automatic": false,
-    "lastCheckedAt": "2026-08-28T12:00:00Z",
-    "note": "Steam public-branch snapshot checked against SteamDB on 28 August 2026."
+    "lastCheckedAt": "2026-08-29T00:00:00Z",
+    "note": "Steam public-branch snapshot checked against SteamDB through 29 August 2026."
   },
   "games": {
+    "powerwash-simulator-2": {
+      "name": "PowerWash Simulator 2",
+      "appId": "2968420",
+      "supportedVersion": "v1.3.0",
+      "verifiedBuildId": "23737596",
+      "currentBuildId": "23737596",
+      "lastSteamUpdate": "2026-07-16T13:48:18Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "hearth-and-hamlet": {
       "name": "Hearth and Hamlet",
       "appId": "4315040",

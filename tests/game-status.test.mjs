@@ -104,7 +104,7 @@ test("CatMailCo waits for verification because Steam has a newer build", () => {
 });
 
 test("every published game has complete Steam status data", () => {
-  assert.equal(Object.keys(statusConfig.games).length, 15);
+  assert.equal(Object.keys(statusConfig.games).length, 16);
   for (const [slug, game] of Object.entries(statusConfig.games)) {
     assert.match(game.appId, /^\d+$/, `${slug} is missing a Steam App ID`);
     assert.match(game.verifiedBuildId, /^\d+$/, `${slug} is missing the verified build`);

@@ -14,6 +14,7 @@ alter table public.comments
       'alchemy-factory',
       'hearth-and-hamlet',
       'kynseed',
+      'powerwash-simulator-2',
       'bookshop-simulator',
       'catmailco',
       'cloverpit',
