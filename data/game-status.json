@@ -85,10 +85,10 @@
     "yet-another-zombie-survivors": {
       "name": "Yet Another Zombie Survivors",
       "appId": "2163330",
-      "supportedVersion": "v1.0.0b_S",
-      "verifiedBuildId": "24843585",
-      "currentBuildId": "24843585",
-      "lastSteamUpdate": "2026-08-20T15:46:19Z",
+      "supportedVersion": "v1.0.0c2_S",
+      "verifiedBuildId": "24969189",
+      "currentBuildId": "24969189",
+      "lastSteamUpdate": "2026-08-27T11:20:11Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
