@@ -99,8 +99,25 @@ test("Youtubers Life 2 waits for verification after a detected build change", ()
 test("CatMailCo waits for verification because Steam has a newer build", () => {
   const game = statusConfig.games.catmailco;
   assert.equal(game.verifiedBuildId, "24261759");
-  assert.equal(game.currentBuildId, "24801860");
+  assert.equal(game.currentBuildId, "24865609");
   assert.equal(resolveDisplayStatus(game).key, "pending");
+});
+
+test("every build changed by the live Steam check waits for verification", () => {
+  const changedBuilds = {
+    "hearth-and-hamlet": "25004659",
+    "e-shop-tycoon": "24971980",
+    restory: "24885009",
+    "bookshop-simulator": "24788751",
+    catmailco: "24865609"
+  };
+
+  for (const [slug, currentBuildId] of Object.entries(changedBuilds)) {
+    const game = statusConfig.games[slug];
+    assert.equal(game.currentBuildId, currentBuildId);
+    assert.notEqual(game.verifiedBuildId, game.currentBuildId);
+    assert.equal(resolveDisplayStatus(game).key, "pending");
+  }
 });
 
 test("every published game has complete Steam status data", () => {

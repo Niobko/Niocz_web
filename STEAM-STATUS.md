@@ -1,14 +1,12 @@
 # Stav kompatibility překladů
 
-Web nyní používá jeden kontrolní soubor `data/game-status.json`. Netlify ho zpřístupní přes serverovou funkci `/api/game-status`; na čistě statickém hostingu frontend bezpečně přejde přímo na JSON. Ve frontendu není žádný tajný klíč.
+Web používá `data/game-status.json` jako konfiguraci a bezpečný statický fallback. Netlify funkce `/api/game-status` k němu připojí živý snapshot veřejných Steam větví uložený v Netlify Blobs. Na čistě statickém hostingu frontend bezpečně přejde přímo na JSON. Ve frontendu není žádný tajný klíč.
 
-## Proč zatím není zapnutá automatická kontrola
+## Automatická hodinová kontrola
 
-Oficiální Steamworks metoda [`ISteamApps/GetAppBuilds`](https://partner.steamgames.com/doc/webapi/ISteamApps#GetAppBuilds) vyžaduje publisher API klíč vlastníka dané hry. Takový klíč se pro cizí hry nedá bezpečně ani oprávněně použít.
+Funkce `steam-build-check` se spouští přes Netlify každou hodinu (`@hourly`). Přihlásí se anonymně přímo ke Steam PICS backendu a jedním požadavkem načte app-info pro každý `appId` v konfiguraci. Z veřejné větve čte `buildid` a `timeupdated`; nepoužívá SteamDB scraping ani cacheovaný proxy endpoint.
 
-Anonymní SteamCMD dokáže příkazem `app_info_print` načíst metadata veřejné větve, ale není to dokumentované stabilní API pro webovou automatizaci a existují hlášené výpadky vracení app info. Proto web nepoužívá neověřený proxy endpoint ani automatický SteamDB scraping. Aktuální hodnoty jsou ručně ověřený snímek veřejných Steam větví ze SteamDB k 28. 8. 2026.
-
-TODO: automatický provider zapnout až po výběru dokumentovaného a spolehlivého zdroje. Provider musí aktualizovat pouze `currentBuildId` a `provider.lastCheckedAt`; stav se potom vypočítá automaticky.
+Výsledek je trvale uložený v Netlify Blobs a přežije další deploy. Když jedna hra dočasně nevrátí metadata, předchozí známá hodnota se zachová jen pro ni a ostatní hry se normálně aktualizují. Pokud snapshot chybí nebo je starší než 75 minut, `/api/game-status` se ho pokusí obnovit i při požadavku návštěvníka. Odpověď API i frontendový fetch mají vypnutou HTTP cache.
 
 ## Ověření překladu přímo na webu
 
@@ -38,9 +36,9 @@ Každá hra má `appId`, `verifiedBuildId`, `currentBuildId`, `lastSteamUpdate`,
 
 Tento postup je potřeba pouze před aktivací Supabase migrace nebo při výpadku databáze. Po ověření kompatibility nastavte `verifiedBuildId` na hodnotu `currentBuildId`, ponechte `manualStatus` jako `functional`, nastavte `override` na `null` a upravte `displayStatus` na zelený funkční stav. Potom commitněte změnu do nasazované větve.
 
-Při další ruční kontrole změňte pouze `currentBuildId`, `lastSteamUpdate` a `provider.lastCheckedAt`. Pokud se veřejný build změnil, `verifiedBuildId` ponechte beze změny, dokud překlad ve hře znovu neotestujete. Web mezitím automaticky ukáže oranžové „Čeká na ověření“.
+Automatická kontrola mění pouze živé `currentBuildId`, `lastSteamUpdate` a čas kontroly. `verifiedBuildId` v fallbacku ani `verified_build` v Supabase nemění. Pokud se veřejný build změnil, web proto automaticky ukáže oranžové „Čeká na ověření“, dokud správce nepotvrdí nový build jako funkční.
 
 ## Nasazení
 
-Netlify načte `netlify.toml` automaticky. Není potřeba nastavit žádnou proměnnou prostředí ani tajný klíč. Na GitHub Pages funguje statický fallback z `data/game-status.json`; automatický serverový přepočet je dostupný pouze na Netlify.
+Netlify načte `netlify.toml` automaticky, nainstaluje závislosti z `package.json` a naplánuje `steam-build-check` na začátek každé hodiny. Není potřeba nastavit žádnou proměnnou prostředí ani tajný klíč. Na GitHub Pages funguje statický fallback z `data/game-status.json`; automatická kontrola je dostupná pouze na Netlify.
 

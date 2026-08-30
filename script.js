@@ -74,23 +74,23 @@ const gameStatusDefinitions = {
 // Safe embedded fallback for local file previews and temporary API/JSON outages.
 // The Netlify endpoint and data/game-status.json remain the primary sources.
 const fallbackGameStatuses = Object.freeze({
-  warhounds: { name: 'Warhounds', appId: '3929470', supportedVersion: 'v1.0.1', verifiedBuildId: '24907599', currentBuildId: '24907599', lastSteamUpdate: '2026-08-24T13:39:19Z', manualStatus: 'functional', override: null },
+  warhounds: { name: 'Warhounds', appId: '3929470', supportedVersion: 'v1.0.1', verifiedBuildId: '24907599', currentBuildId: '24907599', lastSteamUpdate: '2026-08-24T15:26:01Z', manualStatus: 'functional', override: null },
   'powerwash-simulator-2': { name: 'PowerWash Simulator 2', appId: '2968420', supportedVersion: 'v1.3.0', verifiedBuildId: '23737596', currentBuildId: '23737596', lastSteamUpdate: '2026-07-16T13:48:18Z', manualStatus: 'functional', override: null },
-  'hearth-and-hamlet': { name: 'Hearth and Hamlet', appId: '4315040', supportedVersion: 'v1.0.04', verifiedBuildId: '24970582', currentBuildId: '24970582', lastSteamUpdate: '2026-08-27T12:51:07Z', manualStatus: 'functional', override: null },
+  'hearth-and-hamlet': { name: 'Hearth and Hamlet', appId: '4315040', supportedVersion: 'v1.0.04', verifiedBuildId: '24970582', currentBuildId: '25004659', lastSteamUpdate: '2026-08-29T03:54:15Z', manualStatus: 'functional', override: null },
   kynseed: { name: 'Kynseed', appId: '758870', supportedVersion: 'v1.3', verifiedBuildId: '24006355', currentBuildId: '24006355', lastSteamUpdate: '2026-07-01T17:15:53Z', manualStatus: 'functional', override: null },
   'alchemy-factory': { name: 'Alchemy Factory', appId: '3669570', supportedVersion: 'v0.5.4539', verifiedBuildId: '23962166', currentBuildId: '23962166', lastSteamUpdate: '2026-06-29T08:20:17Z', manualStatus: 'functional', override: null },
-  'e-shop-tycoon': { name: 'E-Shop Tycoon', appId: '4249850', supportedVersion: 'v1.0.7', verifiedBuildId: '24775292', currentBuildId: '24775292', lastSteamUpdate: '2026-08-17T11:36:55Z', manualStatus: 'functional', override: null },
+  'e-shop-tycoon': { name: 'E-Shop Tycoon', appId: '4249850', supportedVersion: 'v1.0.7', verifiedBuildId: '24775292', currentBuildId: '24971980', lastSteamUpdate: '2026-08-27T14:58:52Z', manualStatus: 'functional', override: null },
   'yet-another-zombie-survivors': { name: 'Yet Another Zombie Survivors', appId: '2163330', supportedVersion: 'v1.0.0c2_S', verifiedBuildId: '24969189', currentBuildId: '24969189', lastSteamUpdate: '2026-08-27T11:20:11Z', manualStatus: 'functional', override: null },
   cloverpit: { name: 'CloverPit', appId: '3314790', supportedVersion: 'v1.4.11', verifiedBuildId: '22785177', currentBuildId: '22785177', lastSteamUpdate: '2026-04-14T17:27:54Z', manualStatus: 'functional', override: null },
   timberborn: { name: 'Timberborn', appId: '1062090', supportedVersion: 'v1.0.13.1-b769e88-sw', verifiedBuildId: '23107127', currentBuildId: '23107127', lastSteamUpdate: '2026-05-06T10:07:38Z', manualStatus: 'functional', override: null },
-  restory: { name: 'ReStory: Chill Electronics Repairs', appId: '3812600', supportedVersion: '1.0.015R', verifiedBuildId: '24863916', currentBuildId: '24863916', lastSteamUpdate: '2026-08-21T14:15:50Z', manualStatus: 'functional', override: null },
+  restory: { name: 'ReStory: Chill Electronics Repairs', appId: '3812600', supportedVersion: '1.0.015R', verifiedBuildId: '24863916', currentBuildId: '24885009', lastSteamUpdate: '2026-08-22T23:14:40Z', manualStatus: 'functional', override: null },
   'leafy-corner': { name: 'Leafy Corner', appId: '3558600', supportedVersion: 'v1.0.3(ws)', verifiedBuildId: '24512633', currentBuildId: '24512633', lastSteamUpdate: '2026-08-02T09:48:46Z', manualStatus: 'functional', override: null },
-  'bookshop-simulator': { name: 'Bookshop Simulator', appId: '3467040', supportedVersion: '1.0.1224', verifiedBuildId: '24319622', currentBuildId: '24319622', lastSteamUpdate: '2026-07-21T17:57:46Z', manualStatus: 'functional', override: null },
+  'bookshop-simulator': { name: 'Bookshop Simulator', appId: '3467040', supportedVersion: '1.0.1224', verifiedBuildId: '24319622', currentBuildId: '24788751', lastSteamUpdate: '2026-08-18T03:26:43Z', manualStatus: 'functional', override: null },
   'factory-planner': { name: 'Factory Planner', appId: '3679930', supportedVersion: 'EA v1.0.11', verifiedBuildId: '22069907', currentBuildId: '22069907', lastSteamUpdate: '2026-02-24T08:42:18Z', manualStatus: 'functional', override: null },
   'streamer-life-simulator-2': { name: 'Streamer Life Simulator 2', appId: '2890830', supportedVersion: 'Aktuální verze', verifiedBuildId: '21799183', currentBuildId: '21799183', lastSteamUpdate: '2026-02-05T14:00:15Z', manualStatus: 'functional', override: null },
   'the-universim': { name: 'The Universim', appId: '352720', supportedVersion: 'v1.0.02.48225', verifiedBuildId: '16850856', currentBuildId: '16850856', lastSteamUpdate: '2024-12-25T21:57:54Z', manualStatus: 'functional', override: null },
   'youtubers-life-2': { name: 'Youtubers Life 2', appId: '1493760', supportedVersion: 'v1.4.0', verifiedBuildId: '20266715', currentBuildId: '20266715', lastSteamUpdate: '2025-10-06T08:19:20Z', manualStatus: 'functional', override: null },
-  catmailco: { name: 'CatMailCo', appId: '4380490', supportedVersion: 'Aktuální verze', verifiedBuildId: '24261759', currentBuildId: '24801860', lastSteamUpdate: '2026-08-19T08:22:53Z', manualStatus: 'functional', override: null }
+  catmailco: { name: 'CatMailCo', appId: '4380490', supportedVersion: 'Aktuální verze', verifiedBuildId: '24261759', currentBuildId: '24865609', lastSteamUpdate: '2026-08-21T15:49:55Z', manualStatus: 'functional', override: null }
 });
 
 let activeGameStatuses = fallbackGameStatuses;
@@ -167,7 +167,7 @@ const loadGameStatuses = async () => {
 
   for (const endpoint of endpoints) {
     try {
-      const response = await fetch(endpoint, { headers: { Accept: 'application/json' } });
+      const response = await fetch(endpoint, { cache: 'no-store', headers: { Accept: 'application/json' } });
       if (!response.ok) continue;
       const payload = await response.json();
       if (payload?.games) {

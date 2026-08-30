@@ -1,10 +1,11 @@
 {
   "schemaVersion": 1,
   "provider": {
-    "type": "manual-steamdb-snapshot",
-    "automatic": false,
-    "lastCheckedAt": "2026-08-30T00:00:00Z",
-    "note": "Steam public-branch snapshot checked through 30 August 2026."
+    "type": "steam-pics-public-branch",
+    "automatic": true,
+    "schedule": "@hourly",
+    "lastCheckedAt": "2026-08-30T01:59:23Z",
+    "note": "Netlify checks every configured Steam public branch hourly; this file is the safe static fallback."
   },
   "games": {
     "warhounds": {
@@ -13,7 +14,7 @@
       "supportedVersion": "v1.0.1",
       "verifiedBuildId": "24907599",
       "currentBuildId": "24907599",
-      "lastSteamUpdate": "2026-08-24T13:39:19Z",
+      "lastSteamUpdate": "2026-08-24T15:26:01Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
@@ -42,14 +43,14 @@
       "appId": "4315040",
       "supportedVersion": "v1.0.04",
       "verifiedBuildId": "24970582",
-      "currentBuildId": "24970582",
-      "lastSteamUpdate": "2026-08-27T12:51:07Z",
+      "currentBuildId": "25004659",
+      "lastSteamUpdate": "2026-08-29T03:54:15Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
-        "key": "functional",
-        "label": "Funkční",
-        "color": "green"
+        "key": "pending",
+        "label": "Čeká na ověření",
+        "color": "orange"
       }
     },
     "kynseed": {
@@ -87,14 +88,14 @@
       "appId": "4249850",
       "supportedVersion": "v1.0.7",
       "verifiedBuildId": "24775292",
-      "currentBuildId": "24775292",
-      "lastSteamUpdate": "2026-08-17T11:36:55Z",
+      "currentBuildId": "24971980",
+      "lastSteamUpdate": "2026-08-27T14:58:52Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
-        "key": "functional",
-        "label": "Funkční",
-        "color": "green"
+        "key": "pending",
+        "label": "Čeká na ověření",
+        "color": "orange"
       }
     },
     "yet-another-zombie-survivors": {
@@ -147,14 +148,14 @@
       "appId": "3812600",
       "supportedVersion": "1.0.015R",
       "verifiedBuildId": "24863916",
-      "currentBuildId": "24863916",
-      "lastSteamUpdate": "2026-08-21T14:15:50Z",
+      "currentBuildId": "24885009",
+      "lastSteamUpdate": "2026-08-22T23:14:40Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
-        "key": "functional",
-        "label": "Funkční",
-        "color": "green"
+        "key": "pending",
+        "label": "Čeká na ověření",
+        "color": "orange"
       }
     },
     "leafy-corner": {
@@ -177,14 +178,14 @@
       "appId": "3467040",
       "supportedVersion": "1.0.1224",
       "verifiedBuildId": "24319622",
-      "currentBuildId": "24319622",
-      "lastSteamUpdate": "2026-07-21T17:57:46Z",
+      "currentBuildId": "24788751",
+      "lastSteamUpdate": "2026-08-18T03:26:43Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
-        "key": "functional",
-        "label": "Funkční",
-        "color": "green"
+        "key": "pending",
+        "label": "Čeká na ověření",
+        "color": "orange"
       }
     },
     "factory-planner": {
@@ -252,14 +253,14 @@
       "appId": "4380490",
       "supportedVersion": "Aktuální verze",
       "verifiedBuildId": "24261759",
-      "currentBuildId": "24801860",
-      "lastSteamUpdate": "2026-08-19T08:22:53Z",
+      "currentBuildId": "24865609",
+      "lastSteamUpdate": "2026-08-21T15:49:55Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
-        "key": "functional",
-        "label": "Funkční",
-        "color": "green"
+        "key": "pending",
+        "label": "Čeká na ověření",
+        "color": "orange"
       }
     }
   }
