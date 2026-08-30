@@ -16,19 +16,26 @@ const jsonHeaders = {
   "netlify-cdn-cache-control": "no-store"
 };
 
-export const handler = async () => {
+export const isManualRefreshRequest = event => {
+  const value = String(event?.queryStringParameters?.refresh || "").toLowerCase();
+  return value === "1" || value === "true";
+};
+
+export const handler = async (event = {}) => {
   try {
     const configPath = path.join(process.cwd(), "data", "game-status.json");
     const config = JSON.parse(await readFile(configPath, "utf8"));
+    const forceRefresh = isManualRefreshRequest(event);
     let snapshot = null;
 
     try {
       const store = getStore(STEAM_BUILD_STORE);
       snapshot = await store.get(STEAM_BUILD_KEY, { type: "json" });
-      if (!isSteamSnapshotFresh(snapshot)) {
+      if (forceRefresh || !isSteamSnapshotFresh(snapshot)) {
         snapshot = await refreshSteamBuildSnapshot(config.games, store, { previous: snapshot });
       }
     } catch (error) {
+      if (forceRefresh) throw error;
       console.warn("Live Steam build data is unavailable; using the checked-in fallback", error);
     }
 

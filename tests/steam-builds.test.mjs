@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { EventEmitter } from "node:events";
 import { readFileSync } from "node:fs";
+import { isManualRefreshRequest } from "../netlify/functions/game-status.mjs";
 import { resolveDisplayStatus } from "../netlify/functions/_lib/game-status.mjs";
 import {
   applySteamSnapshot,
@@ -135,6 +136,13 @@ test("snapshots are considered stale after the hourly schedule grace period", ()
 test("Netlify schedules the Steam checker hourly", () => {
   const netlifyConfig = readFileSync(new URL("netlify.toml", root), "utf8");
   assert.match(netlifyConfig, /\[functions\."steam-build-check"\]\s+schedule = "@hourly"/);
+});
+
+test("only an explicit query parameter forces a manual Steam refresh", () => {
+  assert.equal(isManualRefreshRequest({ queryStringParameters: { refresh: "1" } }), true);
+  assert.equal(isManualRefreshRequest({ queryStringParameters: { refresh: "true" } }), true);
+  assert.equal(isManualRefreshRequest({ queryStringParameters: { refresh: "0" } }), false);
+  assert.equal(isManualRefreshRequest({}), false);
 });
 
 test("the UI shows verified, latest and Steam update values from their correct fields", () => {

@@ -303,6 +303,14 @@ body{overflow-x:hidden}
 .version-status-panel[hidden]{display:none}
 .version-status-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .version-status-heading h2{margin:0;font-size:.78rem;letter-spacing:-.01em}
+.version-status-heading-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:0}
+.version-status-refresh{display:grid;place-items:center;width:27px;height:27px;flex:0 0 auto;padding:0;border:1px solid #3b506b;border-radius:50%;background:#18253a;color:#b8c8dc;cursor:pointer;transition:border-color .18s,background .18s,color .18s,box-shadow .18s,opacity .18s}
+.version-status-refresh:hover,.version-status-refresh:focus-visible{border-color:var(--blue-light);background:#203552;color:#fff;box-shadow:0 0 16px rgba(73,164,255,.18)}
+.version-status-refresh:disabled{cursor:wait;opacity:.68}
+.version-status-refresh svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.version-status-refresh[aria-busy="true"] svg{animation:version-refresh-spin .75s linear infinite}
+@keyframes version-refresh-spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.version-status-refresh[aria-busy="true"] svg{animation-duration:1.5s}}
 .version-panel-status{flex:0 0 auto}
 .version-panel-status.status{font-size:.52rem}
 .version-status-panel[data-status-state="functional"] .version-panel-status{color:var(--green)}
@@ -316,6 +324,7 @@ body{overflow-x:hidden}
 .version-status-summary{margin:8px 0 0;color:var(--green);font-size:.58rem;line-height:1.35}
 .version-status-panel[data-status-state="pending"] .version-status-summary{color:#f0a44b}
 .version-status-panel[data-status-state="broken"] .version-status-summary{color:#ff6572}
+.version-status-panel .version-status-summary[data-refresh-error="true"]{color:#ff8585}
 .steamdb-link{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:10px;padding:7px 10px;border-radius:7px;background:#25334a;color:#dbe5f2;font-size:.62rem;font-weight:700}
 .steamdb-link:hover,.steamdb-link:focus-visible{background:#31435f;color:#fff}
 .download-actions{display:grid;grid-template-columns:48px minmax(0,1fr);gap:10px}

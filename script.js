@@ -157,26 +157,43 @@ const applyGameStatuses = games => {
   });
 };
 
-const loadGameStatuses = async () => {
+const addManualRefreshParameter = endpoint => {
+  const url = new URL(endpoint, document.baseURI);
+  url.searchParams.set('refresh', '1');
+  return url.href;
+};
+
+const loadGameStatuses = async ({ forceSteamRefresh = false } = {}) => {
+  const apiEndpoint = settings.gameStatusEndpoint || '/api/game-status';
   const endpoints = window.location.protocol === 'file:'
     ? []
     : [
-        settings.gameStatusEndpoint || '/api/game-status',
-        new URL('data/game-status.json', document.baseURI).href
+        forceSteamRefresh ? addManualRefreshParameter(apiEndpoint) : apiEndpoint,
+        ...(forceSteamRefresh ? [] : [new URL('data/game-status.json', document.baseURI).href])
       ];
+  let lastError = null;
 
   for (const endpoint of endpoints) {
     try {
       const response = await fetch(endpoint, { cache: 'no-store', headers: { Accept: 'application/json' } });
-      if (!response.ok) continue;
+      if (!response.ok) {
+        lastError = new Error(`Game status request failed with status ${response.status}.`);
+        continue;
+      }
       const payload = await response.json();
       if (payload?.games) {
         window.NIO_GAME_STATUS_PROVIDER = payload.provider || {};
         return payload.games;
       }
-    } catch {
+      lastError = new Error('Game status response did not contain any games.');
+    } catch (error) {
+      lastError = error;
       // Keep the server-rendered safe status and try the static JSON fallback.
     }
+  }
+
+  if (forceSteamRefresh) {
+    throw lastError || new Error('Manual Steam build refresh is unavailable in this preview.');
   }
 
   window.NIO_GAME_STATUS_PROVIDER = { type: 'embedded-fallback', automatic: false, lastCheckedAt: '2026-08-30T00:00:00Z' };
@@ -230,6 +247,7 @@ let ownGameRating = { stars: null, reaction: null };
 let gameRatingBusy = false;
 let canManageGameStatuses = false;
 let gameStatusSaveBusy = false;
+let gameStatusRefreshBusy = false;
 
 const setMessage = (node, message, error = false) => {
   if (!node) return;
@@ -313,7 +331,17 @@ const createDetailCommunityUi = () => {
   statusPanel.innerHTML = `
     <div class="version-status-heading">
       <h2 id="version-status-title">Stav verze</h2>
-      <span class="status version-panel-status"><i></i><span data-version-status-label>Načítám stav…</span></span>
+      <div class="version-status-heading-actions">
+        <button class="version-status-refresh" type="button" data-version-refresh aria-label="Ručně zkontrolovat aktuální Steam build" title="Zkontrolovat aktuální Steam build">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 7v5h-5"></path>
+            <path d="M4 17v-5h5"></path>
+            <path d="M6.1 8.5A7 7 0 0 1 18.8 7L20 9"></path>
+            <path d="M17.9 15.5A7 7 0 0 1 5.2 17L4 15"></path>
+          </svg>
+        </button>
+        <span class="status version-panel-status"><i></i><span data-version-status-label>Načítám stav…</span></span>
+      </div>
     </div>
     <dl>
       <div><dt>Current Version</dt><dd data-current-version>—</dd></div>
@@ -321,7 +349,7 @@ const createDetailCommunityUi = () => {
       <div><dt>Latest Build</dt><dd data-latest-build>—</dd></div>
       <div><dt>Last Steam Update</dt><dd data-last-steam-update>—</dd></div>
     </dl>
-    <p class="version-status-summary" data-version-status-summary>Načítám údaje o kompatibilitě…</p>
+    <p class="version-status-summary" data-version-status-summary role="status" aria-live="polite">Načítám údaje o kompatibilitě…</p>
     <a class="steamdb-link" data-steamdb-link href="https://steamdb.info/" target="_blank" rel="noopener noreferrer">Zobrazit na SteamDB <span aria-hidden="true">↗</span></a>`;
 
   const adminStatusEditor = document.createElement('div');
@@ -346,6 +374,7 @@ const createDetailCommunityUi = () => {
   heroSide.append(statusControl);
 
   const statusToggle = statusControl.querySelector('.version-status-toggle');
+  const refreshButton = statusPanel.querySelector('[data-version-refresh]');
   const adminStatusToggle = adminStatusEditor.querySelector('.game-status-admin-toggle');
   const adminStatusMenu = adminStatusEditor.querySelector('.game-status-admin-menu');
   const setStatusPanelOpen = open => {
@@ -357,6 +386,7 @@ const createDetailCommunityUi = () => {
     adminStatusToggle.setAttribute('aria-expanded', String(open));
   };
   statusToggle.addEventListener('click', () => setStatusPanelOpen(statusPanel.hidden));
+  refreshButton.addEventListener('click', refreshCurrentGameStatus);
   adminStatusToggle.addEventListener('click', () => setAdminStatusMenuOpen(adminStatusMenu.hidden));
   adminStatusMenu.querySelectorAll('[data-admin-game-status]').forEach(button => {
     button.addEventListener('click', () => saveGameStatusOverride(button.dataset.adminGameStatus));
@@ -398,7 +428,7 @@ const createDetailCommunityUi = () => {
     saveGameRating({ reaction: ownGameRating.reaction === value ? null : value });
   }));
 
-  return { rating, statusControl, statusPanel, adminStatusEditor, adminStatusMenu, setAdminStatusMenuOpen };
+  return { rating, statusControl, statusPanel, refreshButton, adminStatusEditor, adminStatusMenu, setAdminStatusMenuOpen };
 };
 
 const formatStatusDate = value => {
@@ -439,13 +469,50 @@ const updateVersionStatusPanel = game => {
       : resolvedGame.currentBuildId
         ? 'Verze hry je aktuální.'
         : 'Funkční · build zatím není evidován.';
-  panel.querySelector('[data-version-status-summary]').textContent = summary;
+  const summaryNode = panel.querySelector('[data-version-status-summary]');
+  summaryNode.textContent = summary;
+  summaryNode.dataset.refreshError = 'false';
   panel.querySelector('[data-steamdb-link]').href = resolvedGame.appId
     ? `https://steamdb.info/app/${encodeURIComponent(resolvedGame.appId)}/`
     : 'https://steamdb.info/';
 };
 
 const detailCommunityUi = createDetailCommunityUi();
+
+const setGameStatusRefreshBusy = busy => {
+  gameStatusRefreshBusy = busy;
+  const refreshButton = detailCommunityUi?.refreshButton;
+  if (!refreshButton) return;
+  refreshButton.disabled = busy;
+  refreshButton.setAttribute('aria-busy', String(busy));
+  refreshButton.title = busy ? 'Kontroluji aktuální Steam build…' : 'Zkontrolovat aktuální Steam build';
+};
+
+const setGameStatusRefreshMessage = (message, error = false) => {
+  const node = detailCommunityUi?.statusPanel.querySelector('[data-version-status-summary]');
+  if (!node) return;
+  node.textContent = message;
+  node.dataset.refreshError = String(error);
+};
+
+async function refreshCurrentGameStatus() {
+  if (!detailCommunityUi || !gameSlug || gameStatusRefreshBusy) return;
+
+  setGameStatusRefreshBusy(true);
+  setGameStatusRefreshMessage('Kontroluji aktuální Steam build…');
+  try {
+    await window.NIO_GAME_STATUSES_READY.catch(() => null);
+    const games = await loadGameStatuses({ forceSteamRefresh: true });
+    activeGameStatuses = mergeGameStatusOverrides(games, activeGameStatusOverrides);
+    applyGameStatuses(activeGameStatuses);
+    updateVersionStatusPanel(activeGameStatuses[gameSlug]);
+  } catch (error) {
+    console.error('Unable to refresh the Steam build manually', error);
+    setGameStatusRefreshMessage('Ruční kontrolu se nepodařilo dokončit. Zkuste to prosím znovu.', true);
+  } finally {
+    setGameStatusRefreshBusy(false);
+  }
+}
 
 const setGameStatusAdminMessage = (message, error = false) => {
   const node = detailCommunityUi?.adminStatusMenu.querySelector('[data-admin-game-status-message]');

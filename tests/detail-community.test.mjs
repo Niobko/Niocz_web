@@ -23,6 +23,10 @@ test("all current game details receive the shared report, rating and version too
   assert.match(script, /bug-reports\.html\?game=\$\{encodeURIComponent\(gameSlug\)\}/);
   assert.match(script, /className = 'game-rating-card'/);
   assert.match(script, /className = 'version-status-panel'/);
+  assert.match(script, /data-version-refresh/);
+  assert.match(script, /loadGameStatuses\(\{ forceSteamRefresh: true \}\)/);
+  assert.match(script, /refreshButton\.disabled = busy/);
+  assert.match(styles, /version-status-refresh\[aria-busy="true"\] svg/);
   assert.match(script, /versionBox\.replaceWith\(heroSide\)/);
   assert.match(script, /heroSide\.append\(rating\)/);
   assert.match(script, /statusPanel\.hidden = true/);
