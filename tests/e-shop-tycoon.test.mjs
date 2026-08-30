@@ -15,7 +15,7 @@ test("E-Shop Tycoon is registered across the public site", () => {
   assert.match(translations, /data-game-status="e-shop-tycoon"/);
   assert.match(sitemap, /https:\/\/nioczloc\.com\/e-shop-tycoon\.html/);
   assert.equal(status.games["e-shop-tycoon"].appId, "4249850");
-  assert.equal(status.games["e-shop-tycoon"].supportedVersion, "v1.0.7");
+  assert.equal(status.games["e-shop-tycoon"].supportedVersion, "v1.0.8-17ec132");
   assert.match(databaseMigration, /'e-shop-tycoon'/);
   assert.match(databaseMigration, /alter table public\.comments/i);
   assert.match(databaseMigration, /alter table public\.game_ratings/i);
@@ -33,7 +33,7 @@ test("E-Shop Tycoon detail keeps every shared community and download hook", () =
   assert.match(detail, /data-comments-list/);
   assert.match(detail, /data-download data-game="e-shop-tycoon"/);
   assert.match(detail, /data-download-count/);
-  assert.match(detail, /E-Shop\.Tycoon\.NioCZ\.v\.0\.1\.zip/);
+  assert.match(detail, /E-Shop\.Tycoon\.NioCZ\.v\.0\.2\.zip/);
   assert.match(detail, /EShopNioCZ_P\.pak/);
 });
 

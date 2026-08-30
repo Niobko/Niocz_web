@@ -41,7 +41,7 @@
     "hearth-and-hamlet": {
       "name": "Hearth and Hamlet",
       "appId": "4315040",
-      "supportedVersion": "v1.0.04",
+      "supportedVersion": "v1.0.06",
       "verifiedBuildId": "24970582",
       "currentBuildId": "25004659",
       "lastSteamUpdate": "2026-08-29T03:54:15Z",
@@ -86,7 +86,7 @@
     "e-shop-tycoon": {
       "name": "E-Shop Tycoon",
       "appId": "4249850",
-      "supportedVersion": "v1.0.7",
+      "supportedVersion": "v1.0.8-17ec132",
       "verifiedBuildId": "24775292",
       "currentBuildId": "24971980",
       "lastSteamUpdate": "2026-08-27T14:58:52Z",
@@ -176,7 +176,7 @@
     "bookshop-simulator": {
       "name": "Bookshop Simulator",
       "appId": "3467040",
-      "supportedVersion": "1.0.1224",
+      "supportedVersion": "v1.0.1233",
       "verifiedBuildId": "24319622",
       "currentBuildId": "24788751",
       "lastSteamUpdate": "2026-08-18T03:26:43Z",
@@ -251,7 +251,7 @@
     "catmailco": {
       "name": "CatMailCo",
       "appId": "4380490",
-      "supportedVersion": "Aktuální verze",
+      "supportedVersion": "patch 6",
       "verifiedBuildId": "24261759",
       "currentBuildId": "24865609",
       "lastSteamUpdate": "2026-08-21T15:49:55Z",
