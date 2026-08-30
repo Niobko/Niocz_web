@@ -157,19 +157,53 @@ const applyGameStatuses = games => {
   });
 };
 
-const addManualRefreshParameter = endpoint => {
-  const url = new URL(endpoint, document.baseURI);
-  url.searchParams.set('refresh', '1');
-  return url.href;
-};
-
-const loadGameStatuses = async ({ forceSteamRefresh = false } = {}) => {
+const loadGameStatuses = async ({ forceSteamRefresh = false, gameSlug: requestedGameSlug = '' } = {}) => {
   const apiEndpoint = settings.gameStatusEndpoint || '/api/game-status';
+
+  if (forceSteamRefresh) {
+    if (window.location.protocol === 'file:') {
+      throw new Error('Ruční kontrola funguje pouze na nasazeném webu přes Netlify.');
+    }
+    if (!requestedGameSlug) {
+      throw new Error('Pro ruční kontrolu nebyla vybrána žádná hra.');
+    }
+
+    let response;
+    try {
+      response = await fetch(apiEndpoint, {
+        method: 'POST',
+        cache: 'no-store',
+        credentials: 'same-origin',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ gameSlug: requestedGameSlug })
+      });
+    } catch {
+      throw new Error('Server ruční kontroly není dostupný. Zkontrolujte připojení a zkuste to znovu.');
+    }
+
+    const payload = await response.json().catch(() => null);
+    if (!response.ok) {
+      throw new Error(payload?.error || `Server ruční kontroly vrátil chybu HTTP ${response.status}.`);
+    }
+    if (payload?.refresh?.fresh !== true || payload.refresh.gameSlug !== requestedGameSlug) {
+      throw new Error('Server nepotvrdil čerstvou kontrolu Steam buildu. Obnovte stránku a zkuste to znovu.');
+    }
+    if (!payload?.games?.[requestedGameSlug]) {
+      throw new Error('Steam kontrola nevrátila údaje pro tuto hru.');
+    }
+
+    window.NIO_GAME_STATUS_PROVIDER = payload.provider || {};
+    return payload.games;
+  }
+
   const endpoints = window.location.protocol === 'file:'
     ? []
     : [
-        forceSteamRefresh ? addManualRefreshParameter(apiEndpoint) : apiEndpoint,
-        ...(forceSteamRefresh ? [] : [new URL('data/game-status.json', document.baseURI).href])
+        apiEndpoint,
+        new URL('data/game-status.json', document.baseURI).href
       ];
   let lastError = null;
 
@@ -190,10 +224,6 @@ const loadGameStatuses = async ({ forceSteamRefresh = false } = {}) => {
       lastError = error;
       // Keep the server-rendered safe status and try the static JSON fallback.
     }
-  }
-
-  if (forceSteamRefresh) {
-    throw lastError || new Error('Manual Steam build refresh is unavailable in this preview.');
   }
 
   window.NIO_GAME_STATUS_PROVIDER = { type: 'embedded-fallback', automatic: false, lastCheckedAt: '2026-08-30T00:00:00Z' };
@@ -502,13 +532,13 @@ async function refreshCurrentGameStatus() {
   setGameStatusRefreshMessage('Kontroluji aktuální Steam build…');
   try {
     await window.NIO_GAME_STATUSES_READY.catch(() => null);
-    const games = await loadGameStatuses({ forceSteamRefresh: true });
+    const games = await loadGameStatuses({ forceSteamRefresh: true, gameSlug });
     activeGameStatuses = mergeGameStatusOverrides(games, activeGameStatusOverrides);
     applyGameStatuses(activeGameStatuses);
     updateVersionStatusPanel(activeGameStatuses[gameSlug]);
   } catch (error) {
     console.error('Unable to refresh the Steam build manually', error);
-    setGameStatusRefreshMessage('Ruční kontrolu se nepodařilo dokončit. Zkuste to prosím znovu.', true);
+    setGameStatusRefreshMessage(error?.message || 'Ruční kontrolu se nepodařilo dokončit.', true);
   } finally {
     setGameStatusRefreshBusy(false);
   }

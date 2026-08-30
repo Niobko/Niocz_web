@@ -1,7 +1,17 @@
 export const STEAM_PROVIDER_TYPE = "steam-pics-public-branch";
+export const STEAMCMD_PROVIDER_TYPE = "steamcmd-http-public-branch";
 export const STEAM_BUILD_STORE = "nio-game-status";
 export const STEAM_BUILD_KEY = "steam-public-builds-v1";
 export const DEFAULT_SNAPSHOT_MAX_AGE_MS = 75 * 60 * 1000;
+const STEAMCMD_API_BASE = "https://api.steamcmd.net/v1/info/";
+
+export class SteamBuildError extends Error {
+  constructor(code, message, options = {}) {
+    super(message, options);
+    this.name = "SteamBuildError";
+    this.code = code;
+  }
+}
 
 const cleanBuildId = value => {
   if (value === null || value === undefined || value === "") return null;
@@ -28,6 +38,110 @@ export const parsePublicBranch = appInfo => {
   return {
     currentBuildId,
     lastSteamUpdate: unixSecondsToIsoDate(branch?.timeupdated)
+  };
+};
+
+const requestSteamCmdAppInfo = async (appId, options = {}) => {
+  const fetchImpl = options.fetchImpl ?? globalThis.fetch;
+  if (typeof fetchImpl !== "function") {
+    throw new SteamBuildError("STEAM_UNAVAILABLE", "HTTPS fetch is not available in this runtime.");
+  }
+
+  const controller = new AbortController();
+  const timeoutMs = options.timeoutMs ?? 8_000;
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  const url = new URL(encodeURIComponent(appId), STEAMCMD_API_BASE);
+  url.searchParams.set("_", String(options.cacheBuster ?? Date.now()));
+
+  try {
+    const response = await fetchImpl(url, {
+      cache: "no-store",
+      signal: controller.signal,
+      headers: {
+        Accept: "application/json",
+        "Cache-Control": "no-cache"
+      }
+    });
+    if (!response.ok) {
+      throw new SteamBuildError(
+        "STEAM_UNAVAILABLE",
+        `Steam app-info returned HTTP ${response.status}.`
+      );
+    }
+
+    const payload = await response.json();
+    if (payload?.status !== "success") {
+      throw new SteamBuildError("STEAM_UNAVAILABLE", "Steam app-info returned an unsuccessful response.");
+    }
+
+    const appInfo = payload?.data?.[String(appId)];
+    if (!appInfo) {
+      throw new SteamBuildError("STEAM_NO_BUILD", "Steam app-info did not contain the requested game.");
+    }
+    return appInfo;
+  } catch (error) {
+    if (error instanceof SteamBuildError) throw error;
+    if (error?.name === "AbortError") {
+      throw new SteamBuildError(
+        "STEAM_TIMEOUT",
+        `Steam app-info timed out after ${timeoutMs} ms.`,
+        { cause: error }
+      );
+    }
+    throw new SteamBuildError("STEAM_UNAVAILABLE", "Steam app-info request failed.", { cause: error });
+  } finally {
+    clearTimeout(timeout);
+  }
+};
+
+export const fetchSteamCmdBuildSnapshot = async (games, options = {}) => {
+  const entries = Object.entries(games || {});
+  if (!entries.length) throw new SteamBuildError("STEAM_NO_BUILD", "No game was selected for the Steam check.");
+
+  const checkedAt = toIsoDate(options.now?.() ?? new Date());
+  const snapshotGames = {};
+  const errors = {};
+  let firstError = null;
+
+  await Promise.all(entries.map(async ([slug, game]) => {
+    const appId = cleanBuildId(game?.appId);
+    if (!appId) {
+      const error = new SteamBuildError("STEAM_NO_BUILD", `Game ${slug} has no valid Steam App ID.`);
+      firstError ??= error;
+      errors[slug] = error.message;
+      return;
+    }
+
+    try {
+      const appInfo = await requestSteamCmdAppInfo(appId, options);
+      const parsed = parsePublicBranch(appInfo);
+      if (!parsed) {
+        throw new SteamBuildError("STEAM_NO_BUILD", "Steam did not return public-branch build metadata.");
+      }
+      snapshotGames[slug] = {
+        appId,
+        currentBuildId: parsed.currentBuildId,
+        lastSteamUpdate: parsed.lastSteamUpdate ?? checkedAt,
+        checkedAt
+      };
+    } catch (error) {
+      firstError ??= error;
+      errors[slug] = error?.message || "Steam app-info request failed.";
+    }
+  }));
+
+  if (!Object.keys(snapshotGames).length) {
+    throw firstError instanceof Error
+      ? firstError
+      : new SteamBuildError("STEAM_NO_BUILD", "Steam returned no usable public-branch build metadata.");
+  }
+
+  return {
+    schemaVersion: 1,
+    provider: STEAMCMD_PROVIDER_TYPE,
+    lastCheckedAt: checkedAt,
+    games: snapshotGames,
+    errors
   };
 };
 
@@ -144,7 +258,7 @@ export const mergeSteamSnapshots = (configuredGames, previous, fresh) => {
   }
   return {
     schemaVersion: 1,
-    provider: STEAM_PROVIDER_TYPE,
+    provider: fresh?.provider ?? previous?.provider ?? STEAM_PROVIDER_TYPE,
     lastCheckedAt: toIsoDate(fresh?.lastCheckedAt) ?? toIsoDate(previous?.lastCheckedAt),
     games,
     errors: fresh?.errors || {}
@@ -169,7 +283,7 @@ export const applySteamSnapshot = (config, snapshot) => {
     ...config,
     provider: {
       ...config.provider,
-      type: STEAM_PROVIDER_TYPE,
+      type: snapshot?.provider ?? STEAM_PROVIDER_TYPE,
       automatic: true,
       schedule: "@hourly",
       lastCheckedAt: toIsoDate(snapshot?.lastCheckedAt) ?? config.provider?.lastCheckedAt ?? null,
@@ -192,4 +306,3 @@ export const refreshSteamBuildSnapshot = async (configuredGames, store, options 
   await store.setJSON(STEAM_BUILD_KEY, merged);
   return merged;
 };
-

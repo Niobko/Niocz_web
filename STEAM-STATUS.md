@@ -8,6 +8,12 @@ Funkce `steam-build-check` se spouští přes Netlify každou hodinu (`@hourly`)
 
 Výsledek je trvale uložený v Netlify Blobs a přežije další deploy. Když jedna hra dočasně nevrátí metadata, předchozí známá hodnota se zachová jen pro ni a ostatní hry se normálně aktualizují. Pokud snapshot chybí nebo je starší než 75 minut, `/api/game-status` se ho pokusí obnovit i při požadavku návštěvníka. Odpověď API i frontendový fetch mají vypnutou HTTP cache.
 
+## Ruční okamžitá kontrola
+
+Tlačítko v panelu „Stav verze“ posílá na `/api/game-status` JSON `POST` s bezpečně ověřeným slugem právě otevřené hry. Funkce přes HTTPS načte aktuální veřejný build pouze této hry, používá `no-store`, cache-busting parametr a osmivteřinový timeout. Úspěšná odpověď obsahuje `refresh.fresh: true`; frontend bez tohoto potvrzení data nepřijme jako výsledek ruční kontroly.
+
+Uložení čerstvého buildu do Netlify Blobs je pouze doplňkové. Výpadek Blob úložiště proto už nezmění úspěšnou Steam kontrolu na chybu 500. Ruční kontrola zároveň neposouvá čas celého hodinového snapshotu, takže nemůže zabránit běžné automatické kontrole ostatních her. Neplatná hra, timeout a nedostupné Steam app-info vracejí samostatné chybové kódy a konkrétní české hlášky.
+
 ## Ověření překladu přímo na webu
 
 Soubor `SUPABASE-GAME-STATUS-ADMIN.sql` přidává centrální tabulku `game_status_overrides`, samostatnou roli `profiles.is_admin`, RLS a dvě zabezpečené RPC funkce. Po spuštění migrace a jednorázovém označení účtu správce se přihlášenému správci vedle stavu zobrazí malá šipka. Běžní návštěvníci žádné ovládání neuvidí.
