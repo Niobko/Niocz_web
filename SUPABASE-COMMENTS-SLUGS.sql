@@ -25,6 +25,7 @@ alter table public.comments
       'streamer-life-simulator-2',
       'the-universim',
       'timberborn',
+      'warhounds',
       'yet-another-zombie-survivors',
       'youtubers-life-2'
     )

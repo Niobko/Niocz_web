@@ -104,7 +104,7 @@ test("CatMailCo waits for verification because Steam has a newer build", () => {
 });
 
 test("every published game has complete Steam status data", () => {
-  assert.equal(Object.keys(statusConfig.games).length, 16);
+  assert.equal(Object.keys(statusConfig.games).length, 17);
   for (const [slug, game] of Object.entries(statusConfig.games)) {
     assert.match(game.appId, /^\d+$/, `${slug} is missing a Steam App ID`);
     assert.match(game.verifiedBuildId, /^\d+$/, `${slug} is missing the verified build`);
@@ -143,5 +143,15 @@ test("Yet Another Zombie Survivors is connected to the pending compatibility sta
   assert.equal(game.currentBuildId, "24969189");
   assert.equal(resolveDisplayStatus(game).key, "functional");
   assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "101" }).key, "pending");
+});
+
+test("Warhounds is connected to the pending compatibility state", () => {
+  const game = statusConfig.games.warhounds;
+  assert.equal(game.appId, "3929470");
+  assert.equal(game.supportedVersion, "v1.0.1");
+  assert.equal(game.verifiedBuildId, "24907599");
+  assert.equal(game.currentBuildId, "24907599");
+  assert.equal(resolveDisplayStatus(game).key, "functional");
+  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "24907600" }).key, "pending");
 });
 

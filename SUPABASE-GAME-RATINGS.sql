@@ -26,7 +26,8 @@ create table if not exists public.game_ratings (
     'streamer-life-simulator-2',
     'the-universim',
     'youtubers-life-2',
-    'catmailco'
+    'catmailco',
+    'warhounds'
   ]::text[])),
   constraint game_ratings_stars_check check (stars is null or stars between 1 and 5),
   constraint game_ratings_reaction_check check (reaction is null or reaction in (-1, 1)),
@@ -57,7 +58,8 @@ alter table public.game_ratings
     'streamer-life-simulator-2',
     'the-universim',
     'youtubers-life-2',
-    'catmailco'
+    'catmailco',
+    'warhounds'
   ]::text[])) not valid;
 
 alter table public.game_ratings

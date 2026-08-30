@@ -74,6 +74,7 @@ const gameStatusDefinitions = {
 // Safe embedded fallback for local file previews and temporary API/JSON outages.
 // The Netlify endpoint and data/game-status.json remain the primary sources.
 const fallbackGameStatuses = Object.freeze({
+  warhounds: { name: 'Warhounds', appId: '3929470', supportedVersion: 'v1.0.1', verifiedBuildId: '24907599', currentBuildId: '24907599', lastSteamUpdate: '2026-08-24T13:39:19Z', manualStatus: 'functional', override: null },
   'powerwash-simulator-2': { name: 'PowerWash Simulator 2', appId: '2968420', supportedVersion: 'v1.3.0', verifiedBuildId: '23737596', currentBuildId: '23737596', lastSteamUpdate: '2026-07-16T13:48:18Z', manualStatus: 'functional', override: null },
   'hearth-and-hamlet': { name: 'Hearth and Hamlet', appId: '4315040', supportedVersion: 'v1.0.04', verifiedBuildId: '24970582', currentBuildId: '24970582', lastSteamUpdate: '2026-08-27T12:51:07Z', manualStatus: 'functional', override: null },
   kynseed: { name: 'Kynseed', appId: '758870', supportedVersion: 'v1.3', verifiedBuildId: '24006355', currentBuildId: '24006355', lastSteamUpdate: '2026-07-01T17:15:53Z', manualStatus: 'functional', override: null },
@@ -178,7 +179,7 @@ const loadGameStatuses = async () => {
     }
   }
 
-  window.NIO_GAME_STATUS_PROVIDER = { type: 'embedded-fallback', automatic: false, lastCheckedAt: '2026-08-29T00:00:00Z' };
+  window.NIO_GAME_STATUS_PROVIDER = { type: 'embedded-fallback', automatic: false, lastCheckedAt: '2026-08-30T00:00:00Z' };
   return fallbackGameStatuses;
 };
 const configured = settings.supabaseUrl?.startsWith('https://') && !settings.supabaseAnonKey?.startsWith('DOPLNTE_');

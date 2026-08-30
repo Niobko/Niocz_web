@@ -3,10 +3,25 @@
   "provider": {
     "type": "manual-steamdb-snapshot",
     "automatic": false,
-    "lastCheckedAt": "2026-08-29T00:00:00Z",
-    "note": "Steam public-branch snapshot checked against SteamDB through 29 August 2026."
+    "lastCheckedAt": "2026-08-30T00:00:00Z",
+    "note": "Steam public-branch snapshot checked through 30 August 2026."
   },
   "games": {
+    "warhounds": {
+      "name": "Warhounds",
+      "appId": "3929470",
+      "supportedVersion": "v1.0.1",
+      "verifiedBuildId": "24907599",
+      "currentBuildId": "24907599",
+      "lastSteamUpdate": "2026-08-24T13:39:19Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "powerwash-simulator-2": {
       "name": "PowerWash Simulator 2",
       "appId": "2968420",
