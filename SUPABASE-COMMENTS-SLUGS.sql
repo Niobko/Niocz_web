@@ -23,6 +23,7 @@ alter table public.comments
       'leafy-corner',
       'restory',
       'streamer-life-simulator-2',
+      'the-spell-brigade',
       'the-universim',
       'timberborn',
       'warhounds',

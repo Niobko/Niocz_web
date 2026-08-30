@@ -8,6 +8,21 @@
     "note": "Netlify checks every configured Steam public branch hourly; this file is the safe static fallback."
   },
   "games": {
+    "the-spell-brigade": {
+      "name": "The Spell Brigade",
+      "appId": "2904000",
+      "supportedVersion": "v1.6.17718",
+      "verifiedBuildId": "24087913",
+      "currentBuildId": "24087913",
+      "lastSteamUpdate": "2026-07-08T12:24:22Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "warhounds": {
       "name": "Warhounds",
       "appId": "3929470",
