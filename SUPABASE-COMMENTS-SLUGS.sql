@@ -21,6 +21,7 @@ alter table public.comments
       'e-shop-tycoon',
       'factory-planner',
       'leafy-corner',
+      'parcel-simulator',
       'restory',
       'streamer-life-simulator-2',
       'the-spell-brigade',

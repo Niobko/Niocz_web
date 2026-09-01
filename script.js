@@ -74,6 +74,7 @@ const gameStatusDefinitions = {
 // Safe embedded fallback for local file previews and temporary API/JSON outages.
 // The Netlify endpoint and data/game-status.json remain the primary sources.
 const fallbackGameStatuses = Object.freeze({
+  'parcel-simulator': { name: 'Parcel Simulator', appId: '2424010', supportedVersion: 'v2.0.1.3', verifiedBuildId: '24535906', currentBuildId: '24535906', lastSteamUpdate: '2026-08-04T08:56:15Z', manualStatus: 'functional', override: null },
   'the-spell-brigade': { name: 'The Spell Brigade', appId: '2904000', supportedVersion: 'v1.6.17718', verifiedBuildId: '24087913', currentBuildId: '24087913', lastSteamUpdate: '2026-07-08T12:24:22Z', manualStatus: 'functional', override: null },
   warhounds: { name: 'Warhounds', appId: '3929470', supportedVersion: 'v1.0.1', verifiedBuildId: '24907599', currentBuildId: '24907599', lastSteamUpdate: '2026-08-24T15:26:01Z', manualStatus: 'functional', override: null },
   'powerwash-simulator-2': { name: 'PowerWash Simulator 2', appId: '2968420', supportedVersion: 'v1.3.0', verifiedBuildId: '23737596', currentBuildId: '23737596', lastSteamUpdate: '2026-07-16T13:48:18Z', manualStatus: 'functional', override: null },

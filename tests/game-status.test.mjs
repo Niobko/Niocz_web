@@ -121,13 +121,23 @@ test("every build changed by the live Steam check waits for verification", () =>
 });
 
 test("every published game has complete Steam status data", () => {
-  assert.equal(Object.keys(statusConfig.games).length, 18);
+  assert.equal(Object.keys(statusConfig.games).length, 19);
   for (const [slug, game] of Object.entries(statusConfig.games)) {
     assert.match(game.appId, /^\d+$/, `${slug} is missing a Steam App ID`);
     assert.match(game.verifiedBuildId, /^\d+$/, `${slug} is missing the verified build`);
     assert.match(game.currentBuildId, /^\d+$/, `${slug} is missing the public build`);
     assert.match(game.lastSteamUpdate, /^\d{4}-\d{2}-\d{2}T/, `${slug} is missing the Steam update date`);
   }
+});
+
+test("Parcel Simulator is connected to the pending compatibility state", () => {
+  const game = statusConfig.games["parcel-simulator"];
+  assert.equal(game.appId, "2424010");
+  assert.equal(game.supportedVersion, "v2.0.1.3");
+  assert.equal(game.verifiedBuildId, "24535906");
+  assert.equal(game.currentBuildId, "24535906");
+  assert.equal(resolveDisplayStatus(game).key, "functional");
+  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "24535907" }).key, "pending");
 });
 
 test("Alchemy Factory is connected to the pending compatibility state", () => {

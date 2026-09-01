@@ -8,6 +8,21 @@
     "note": "Netlify checks every configured Steam public branch hourly; this file is the safe static fallback."
   },
   "games": {
+    "parcel-simulator": {
+      "name": "Parcel Simulator",
+      "appId": "2424010",
+      "supportedVersion": "v2.0.1.3",
+      "verifiedBuildId": "24535906",
+      "currentBuildId": "24535906",
+      "lastSteamUpdate": "2026-08-04T08:56:15Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "the-spell-brigade": {
       "name": "The Spell Brigade",
       "appId": "2904000",
