@@ -12,6 +12,7 @@ alter table public.comments
   check (
     game_slug in (
       'alchemy-factory',
+      'breathedge-2',
       'hearth-and-hamlet',
       'kynseed',
       'powerwash-simulator-2',
