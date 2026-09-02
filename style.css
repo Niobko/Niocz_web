@@ -542,6 +542,10 @@ body{overflow-x:hidden}
     .in-progress-grid{grid-template-columns:1fr}
     .latest-games{padding:22px}
     .in-progress{padding:22px}
+
+    /* The news list is taller than a mobile viewport, so a 12% reveal
+       threshold can never be reached once the cards collapse into columns. */
+    .news-section .latest-games.reveal{opacity:1;transform:none;transition:none}
 }
 
 @media(max-width:540px){
