@@ -433,7 +433,17 @@ body{overflow-x:hidden}
 
 @media(max-width:1100px){.translation-card-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:800px){.translations-page{padding-top:130px}.translation-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:560px){.translation-card-grid{grid-template-columns:1fr}.translation-card-body{min-height:135px}.translations-page .translation-card h2{min-height:auto}}
+@media(max-width:560px){
+    .translations-page{overflow-x:clip}
+    .translation-card-grid{width:100%;grid-template-columns:minmax(0,1fr)}
+    .translation-card{width:100%;max-width:100%}
+    .translation-card-cover{aspect-ratio:16/9}
+    .translation-card-body{min-height:135px}
+    .translations-page .translation-card h2{min-height:auto}
+
+    /* Mobile cards must not depend on IntersectionObserver to be readable. */
+    .translations-page .reveal{opacity:1;transform:none;transition:none}
+}
 
 /* Launch status, translation dates and homepage news */
 .launch-notice{
