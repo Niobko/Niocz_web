@@ -12,7 +12,7 @@ const sitemap = read("sitemap.xml");
 const script = read("script.js");
 const styles = read("style.css");
 const status = JSON.parse(read("data/game-status.json"));
-const migration = read("SUPABASE-HEARTH-AND-KYNSEED.sql");
+const migration = read("SQL EDITOR/SUPABASE-HEARTH-AND-KYNSEED.sql");
 
 test("both games are registered across the public site", () => {
   for (const [slug, page] of [["hearth-and-hamlet", "hearth-and-hamlet.html"], ["kynseed", "kynseed.html"]]) {

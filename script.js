@@ -74,6 +74,8 @@ const gameStatusDefinitions = {
 // Safe embedded fallback for local file previews and temporary API/JSON outages.
 // The Netlify endpoint and data/game-status.json remain the primary sources.
 const fallbackGameStatuses = Object.freeze({
+  'vacation-cafe-simulator': { name: 'Vacation Cafe Simulator', appId: '3196440', supportedVersion: 'v1.0.3', verifiedBuildId: '24974484', currentBuildId: '24974484', lastSteamUpdate: '2026-08-27T15:53:42Z', manualStatus: 'functional', override: null },
+  bombanana: { name: 'BOMBANANA', appId: '4656000', supportedVersion: 'v1.0.0', verifiedBuildId: '25068266', currentBuildId: '25068266', lastSteamUpdate: '2026-09-01T22:50:36Z', manualStatus: 'functional', override: null },
   'breathedge-2': { name: 'Breathedge 2', appId: '2412960', supportedVersion: 'v0.8.5', verifiedBuildId: '25077518', currentBuildId: '25077518', lastSteamUpdate: '2026-09-02T14:14:49Z', manualStatus: 'functional', override: null },
   'parcel-simulator': { name: 'Parcel Simulator', appId: '2424010', supportedVersion: 'v2.0.1.3', verifiedBuildId: '24535906', currentBuildId: '24535906', lastSteamUpdate: '2026-08-04T08:56:15Z', manualStatus: 'functional', override: null },
   'the-spell-brigade': { name: 'The Spell Brigade', appId: '2904000', supportedVersion: 'v1.6.17718', verifiedBuildId: '24087913', currentBuildId: '24087913', lastSteamUpdate: '2026-07-08T12:24:22Z', manualStatus: 'functional', override: null },
@@ -98,6 +100,8 @@ const fallbackGameStatuses = Object.freeze({
 
 let activeGameStatuses = fallbackGameStatuses;
 let activeGameStatusOverrides = {};
+let gameStatusesReady = false;
+const downloadButtonDefaults = new WeakMap();
 
 const normalizeComparableValue = value => {
   if (value === null || value === undefined) return null;
@@ -146,6 +150,47 @@ const resolveGameDisplayStatus = game => {
   return gameStatusDefinitions[game?.manualStatus] || game?.displayStatus || gameStatusDefinitions.functional;
 };
 
+const updateDownloadAvailability = (button, status, ready = true) => {
+  if (!button) return;
+  if (!downloadButtonDefaults.has(button)) {
+    downloadButtonDefaults.set(button, {
+      href: button.getAttribute('href'),
+      html: button.innerHTML,
+      ariaLabel: button.getAttribute('aria-label'),
+      tabIndex: button.getAttribute('tabindex'),
+      title: button.getAttribute('title')
+    });
+  }
+
+  const defaults = downloadButtonDefaults.get(button);
+  const enabled = ready && status?.key === 'functional';
+  button.dataset.downloadState = ready ? (status?.key || 'unknown') : 'loading';
+  button.classList.toggle('download-disabled', !enabled);
+
+  if (enabled) {
+    if (defaults.href === null) button.removeAttribute('href');
+    else button.setAttribute('href', defaults.href);
+    button.innerHTML = defaults.html;
+    if (defaults.ariaLabel === null) button.removeAttribute('aria-label');
+    else button.setAttribute('aria-label', defaults.ariaLabel);
+    if (defaults.tabIndex === null) button.removeAttribute('tabindex');
+    else button.setAttribute('tabindex', defaults.tabIndex);
+    if (defaults.title === null) button.removeAttribute('title');
+    else button.setAttribute('title', defaults.title);
+    button.removeAttribute('aria-disabled');
+    return;
+  }
+
+  const statusLabel = status?.label || 'stav se ověřuje';
+  const pausedLabel = ready ? 'Stahování dočasně pozastaveno' : 'Ověřuji dostupnost…';
+  button.removeAttribute('href');
+  button.textContent = pausedLabel;
+  button.setAttribute('aria-disabled', 'true');
+  button.setAttribute('tabindex', '-1');
+  button.setAttribute('aria-label', `${pausedLabel}. Stav překladu: ${statusLabel}.`);
+  button.title = `Stav překladu: ${statusLabel}`;
+};
+
 const applyGameStatuses = games => {
   if (games) activeGameStatuses = games;
   document.querySelectorAll('[data-game-status]').forEach(node => {
@@ -157,6 +202,11 @@ const applyGameStatuses = games => {
     node.setAttribute('aria-label', `Stav překladu: ${status.label}`);
     const label = node.querySelector('[data-game-status-label]');
     if (label) label.textContent = status.label;
+  });
+  document.querySelectorAll('[data-download]').forEach(button => {
+    const slug = button.dataset.game?.trim() || document.body.dataset.game?.trim();
+    const game = games?.[slug];
+    updateDownloadAvailability(button, game ? resolveGameDisplayStatus(game) : null, gameStatusesReady && Boolean(game));
   });
 };
 
@@ -262,6 +312,7 @@ const loadCombinedGameStatuses = async () => {
   const [games, overrides] = await Promise.all([loadGameStatuses(), loadGameStatusOverrides()]);
   activeGameStatusOverrides = overrides;
   activeGameStatuses = mergeGameStatusOverrides(games, overrides);
+  gameStatusesReady = true;
   applyGameStatuses(activeGameStatuses);
   return activeGameStatuses;
 };
@@ -926,9 +977,21 @@ async function loadDownloadCount() {
   output.textContent = new Intl.NumberFormat('cs-CZ').format(data?.download_count || 0);
 }
 document.querySelector('[data-download]')?.addEventListener('click', async event => {
+  const button = event.currentTarget;
+  const game = activeGameStatuses[gameSlug] || fallbackGameStatuses[gameSlug];
+  const status = game ? resolveGameDisplayStatus(game) : null;
+  const downloadAllowed = gameStatusesReady
+    && status?.key === 'functional'
+    && button.dataset.downloadState === 'functional'
+    && button.hasAttribute('href');
+  if (!downloadAllowed) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    return;
+  }
   if (!db) return;
   event.preventDefault();
-  const target = event.currentTarget.href;
+  const target = button.href;
   await db.rpc('register_download', { requested_game_slug: gameSlug });
   window.location.href = target;
 });

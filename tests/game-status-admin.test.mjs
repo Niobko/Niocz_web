@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 const root = new URL("../", import.meta.url);
 const script = readFileSync(new URL("script.js", root), "utf8");
 const styles = readFileSync(new URL("style.css", root), "utf8");
-const sql = readFileSync(new URL("SUPABASE-GAME-STATUS-ADMIN.sql", root), "utf8");
+const sql = readFileSync(new URL("SQL EDITOR/SUPABASE-GAME-STATUS-ADMIN.sql", root), "utf8");
 const statusConfig = JSON.parse(readFileSync(new URL("data/game-status.json", root), "utf8"));
 
 test("frontend combines public overrides with every configured game", () => {

@@ -8,7 +8,7 @@ const index = readFileSync(new URL("index.html", root), "utf8");
 const translations = readFileSync(new URL("preklady.html", root), "utf8");
 const sitemap = readFileSync(new URL("sitemap.xml", root), "utf8");
 const status = JSON.parse(readFileSync(new URL("data/game-status.json", root), "utf8"));
-const databaseMigration = readFileSync(new URL("SUPABASE-E-SHOP-TYCOON.sql", root), "utf8");
+const databaseMigration = readFileSync(new URL("SQL EDITOR/SUPABASE-E-SHOP-TYCOON.sql", root), "utf8");
 
 test("E-Shop Tycoon is registered across the public site", () => {
   assert.match(index, /href="e-shop-tycoon\.html"/);

@@ -8,6 +8,36 @@
     "note": "Netlify checks every configured Steam public branch hourly; this file is the safe static fallback."
   },
   "games": {
+    "vacation-cafe-simulator": {
+      "name": "Vacation Cafe Simulator",
+      "appId": "3196440",
+      "supportedVersion": "v1.0.3",
+      "verifiedBuildId": "24974484",
+      "currentBuildId": "24974484",
+      "lastSteamUpdate": "2026-08-27T15:53:42Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
+    "bombanana": {
+      "name": "BOMBANANA",
+      "appId": "4656000",
+      "supportedVersion": "v1.0.0",
+      "verifiedBuildId": "25068266",
+      "currentBuildId": "25068266",
+      "lastSteamUpdate": "2026-09-01T22:50:36Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "breathedge-2": {
       "name": "Breathedge 2",
       "appId": "2412960",

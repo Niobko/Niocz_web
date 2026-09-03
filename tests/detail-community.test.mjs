@@ -7,7 +7,7 @@ const statusConfig = JSON.parse(readFileSync(new URL("data/game-status.json", ro
 const script = readFileSync(new URL("script.js", root), "utf8");
 const styles = readFileSync(new URL("style.css", root), "utf8");
 const bugReports = readFileSync(new URL("bug-reports.html", root), "utf8");
-const ratingsSql = readFileSync(new URL("SUPABASE-GAME-RATINGS.sql", root), "utf8");
+const ratingsSql = readFileSync(new URL("SQL EDITOR/SUPABASE-GAME-RATINGS.sql", root), "utf8");
 const index = readFileSync(new URL("index.html", root), "utf8");
 
 const detailPages = readdirSync(root)

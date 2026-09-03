@@ -11,7 +11,7 @@ const script = readFileSync(new URL("script.js", root), "utf8");
 const styles = readFileSync(new URL("style.css", root), "utf8");
 const imageStyles = readFileSync(new URL("image.css", root), "utf8");
 const status = JSON.parse(readFileSync(new URL("data/game-status.json", root), "utf8"));
-const databaseMigration = readFileSync(new URL("SUPABASE-ALCHEMY-FACTORY.sql", root), "utf8");
+const databaseMigration = readFileSync(new URL("SQL EDITOR/SUPABASE-ALCHEMY-FACTORY.sql", root), "utf8");
 
 test("Alchemy Factory is registered across the public site", () => {
   assert.match(index, /href="alchemy-factory\.html"/);

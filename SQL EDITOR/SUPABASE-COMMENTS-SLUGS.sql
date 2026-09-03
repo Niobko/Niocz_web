@@ -12,6 +12,7 @@ alter table public.comments
   check (
     game_slug in (
       'alchemy-factory',
+      'bombanana',
       'breathedge-2',
       'hearth-and-hamlet',
       'kynseed',
@@ -28,6 +29,7 @@ alter table public.comments
       'the-spell-brigade',
       'the-universim',
       'timberborn',
+      'vacation-cafe-simulator',
       'warhounds',
       'yet-another-zombie-survivors',
       'youtubers-life-2'

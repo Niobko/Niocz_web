@@ -5,7 +5,7 @@ import { readFileSync, readdirSync } from "node:fs";
 const root = new URL("../", import.meta.url);
 const statusConfig = JSON.parse(readFileSync(new URL("data/game-status.json", root), "utf8"));
 const script = readFileSync(new URL("script.js", root), "utf8");
-const sql = readFileSync(new URL("SUPABASE-COMMENTS-SLUGS.sql", root), "utf8");
+const sql = readFileSync(new URL("SQL EDITOR/SUPABASE-COMMENTS-SLUGS.sql", root), "utf8");
 
 const detailPages = readdirSync(root)
   .filter(file => file.endsWith(".html"))

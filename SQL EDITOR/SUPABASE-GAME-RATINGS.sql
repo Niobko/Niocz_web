@@ -12,6 +12,7 @@ create table if not exists public.game_ratings (
   constraint game_ratings_pkey primary key (game_slug, user_id),
   constraint game_ratings_game_slug_check check (game_slug = any (array[
     'alchemy-factory',
+    'bombanana',
     'breathedge-2',
     'hearth-and-hamlet',
     'kynseed',
@@ -30,6 +31,7 @@ create table if not exists public.game_ratings (
     'the-universim',
     'youtubers-life-2',
     'catmailco',
+    'vacation-cafe-simulator',
     'warhounds'
   ]::text[])),
   constraint game_ratings_stars_check check (stars is null or stars between 1 and 5),
@@ -47,6 +49,7 @@ alter table public.game_ratings
   add constraint game_ratings_game_slug_check_v2
   check (game_slug = any (array[
     'alchemy-factory',
+    'bombanana',
     'breathedge-2',
     'hearth-and-hamlet',
     'kynseed',
@@ -65,6 +68,7 @@ alter table public.game_ratings
     'the-universim',
     'youtubers-life-2',
     'catmailco',
+    'vacation-cafe-simulator',
     'warhounds'
   ]::text[])) not valid;
 

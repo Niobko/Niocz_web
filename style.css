@@ -329,6 +329,8 @@ body{overflow-x:hidden}
 .steamdb-link:hover,.steamdb-link:focus-visible{background:#31435f;color:#fff}
 .download-actions{display:grid;grid-template-columns:48px minmax(0,1fr);gap:10px}
 .download-actions .button{min-width:0;padding-inline:12px}
+.download-actions [data-download][aria-disabled="true"]{border-color:#303a48;background:#1a222d;color:#7f8a99;box-shadow:none;cursor:not-allowed;opacity:.78;pointer-events:none;transform:none}
+.download-actions [data-download][aria-disabled="true"]:hover,.download-actions [data-download][aria-disabled="true"]:focus-visible{border-color:#303a48;background:#1a222d;color:#7f8a99;box-shadow:none;transform:none}
 .report-game-button{display:grid;place-items:center;width:48px;min-height:46px;border:1px solid #34445b;border-radius:10px;background:#111927;color:#d7e4f3;transition:.2s}
 .report-game-button:hover,.report-game-button:focus-visible{border-color:#ff8585;background:#25151a;color:#ff9a9a;transform:translateY(-2px)}
 .report-game-button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}

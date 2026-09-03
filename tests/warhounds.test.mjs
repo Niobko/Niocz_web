@@ -9,9 +9,9 @@ const index = read("index.html");
 const translations = read("preklady.html");
 const sitemap = read("sitemap.xml");
 const script = read("script.js");
-const commentsSql = read("SUPABASE-COMMENTS-SLUGS.sql");
-const ratingsSql = read("SUPABASE-GAME-RATINGS.sql");
-const migrationSql = read("SUPABASE-WARHOUNDS.sql");
+const commentsSql = read("SQL EDITOR/SUPABASE-COMMENTS-SLUGS.sql");
+const ratingsSql = read("SQL EDITOR/SUPABASE-GAME-RATINGS.sql");
+const migrationSql = read("SQL EDITOR/SUPABASE-WARHOUNDS.sql");
 const status = JSON.parse(read("data/game-status.json"));
 
 test("Warhounds is registered across the public site", () => {

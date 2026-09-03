@@ -11,7 +11,7 @@ const sitemap = read("sitemap.xml");
 const script = read("script.js");
 const styles = read("style.css");
 const status = JSON.parse(read("data/game-status.json"));
-const migration = read("SUPABASE-POWERWASH-SIMULATOR-2.sql");
+const migration = read("SQL EDITOR/SUPABASE-POWERWASH-SIMULATOR-2.sql");
 
 test("PowerWash Simulator 2 is registered across the site", () => {
   for (const html of [index, translations]) {

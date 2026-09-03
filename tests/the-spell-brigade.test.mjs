@@ -11,9 +11,9 @@ const translations = read("preklady.html");
 const sitemap = read("sitemap.xml");
 const script = read("script.js");
 const status = JSON.parse(read("data/game-status.json"));
-const migration = read("SUPABASE-THE-SPELL-BRIGADE.sql");
-const commentsMigration = read("SUPABASE-COMMENTS-SLUGS.sql");
-const ratingsMigration = read("SUPABASE-GAME-RATINGS.sql");
+const migration = read("SQL EDITOR/SUPABASE-THE-SPELL-BRIGADE.sql");
+const commentsMigration = read("SQL EDITOR/SUPABASE-COMMENTS-SLUGS.sql");
+const ratingsMigration = read("SQL EDITOR/SUPABASE-GAME-RATINGS.sql");
 
 test("The Spell Brigade is registered consistently across the site", () => {
   for (const html of [index, translations]) {
