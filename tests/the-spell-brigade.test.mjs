@@ -28,7 +28,7 @@ test("The Spell Brigade is registered consistently across the site", () => {
   const game = status.games["the-spell-brigade"];
   assert.equal(game.name, "The Spell Brigade");
   assert.equal(game.appId, "2904000");
-  assert.equal(game.supportedVersion, "v1.6.17718");
+  assert.equal(game.supportedVersion, "v1.1.2.19558");
   assert.equal(game.verifiedBuildId, "24087913");
   assert.equal(game.currentBuildId, "24087913");
   assert.equal(resolveDisplayStatus(game).key, "functional");
@@ -44,7 +44,7 @@ test("detail uses the requested SEO, content and shared feature hooks", () => {
   assert.match(detail, /data-comments-list/);
   assert.match(detail, /data-download data-game="the-spell-brigade"/);
   assert.match(detail, /data-download-count/);
-  assert.match(detail, /The\.Spell\.Brigade_NioCZ_v0\.1\.zip/);
+  assert.match(detail, /The\.Spell\.Brigade_NioCZ_v0\.2\.zip/);
   assert.match(detail, /0\.72 MB/);
   assert.match(detail, /30\. 8\. 2026/);
   assert.match(detail, /Kontrola ve hře<\/span><b>80 %/);

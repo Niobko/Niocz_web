@@ -26,7 +26,7 @@
     "vacation-cafe-simulator": {
       "name": "Vacation Cafe Simulator",
       "appId": "3196440",
-      "supportedVersion": "v1.0.3",
+      "supportedVersion": "v1.0.4",
       "verifiedBuildId": "24974484",
       "currentBuildId": "24974484",
       "lastSteamUpdate": "2026-08-27T15:53:42Z",
@@ -41,7 +41,7 @@
     "bombanana": {
       "name": "BOMBANANA",
       "appId": "4656000",
-      "supportedVersion": "v1.0.0",
+      "supportedVersion": "v1.0.1",
       "verifiedBuildId": "25068266",
       "currentBuildId": "25068266",
       "lastSteamUpdate": "2026-09-01T22:50:36Z",
@@ -86,7 +86,7 @@
     "the-spell-brigade": {
       "name": "The Spell Brigade",
       "appId": "2904000",
-      "supportedVersion": "v1.6.17718",
+      "supportedVersion": "v1.1.2.19558",
       "verifiedBuildId": "24087913",
       "currentBuildId": "24087913",
       "lastSteamUpdate": "2026-07-08T12:24:22Z",

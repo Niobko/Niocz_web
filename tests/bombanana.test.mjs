@@ -29,7 +29,7 @@ test("BOMBANANA is registered consistently across the site", () => {
   const game = status.games.bombanana;
   assert.equal(game.name, "BOMBANANA");
   assert.equal(game.appId, "4656000");
-  assert.equal(game.supportedVersion, "v1.0.0");
+  assert.equal(game.supportedVersion, "v1.0.1");
   assert.equal(game.verifiedBuildId, "25068266");
   assert.equal(game.currentBuildId, "25068266");
   assert.equal(resolveDisplayStatus(game).key, "functional");
@@ -45,7 +45,7 @@ test("detail uses the requested SEO, Czech content and shared feature hooks", ()
   assert.match(detail, /data-comments-list/);
   assert.match(detail, /data-download data-game="bombanana"/);
   assert.match(detail, /data-download-count/);
-  assert.match(detail, /BOMBANANA_NioCZ_v0\.1\.zip/);
+  assert.match(detail, /BOMBANANA_NioCZ_v0\.2\.zip/);
   assert.match(detail, /0\.28 MB/);
   assert.match(detail, /3\. 9\. 2026/);
   assert.match(detail, /Kontrola ve hře<\/span><b>100 %/);
