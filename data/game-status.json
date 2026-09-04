@@ -8,6 +8,21 @@
     "note": "Netlify checks every configured Steam public branch hourly; this file is the safe static fallback."
   },
   "games": {
+    "sleeping-dogs": {
+      "name": "Sleeping Dogs",
+      "appId": "307690",
+      "supportedVersion": "v1.0",
+      "verifiedBuildId": "979344",
+      "currentBuildId": "979344",
+      "lastSteamUpdate": "2016-03-31T09:22:31Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "vacation-cafe-simulator": {
       "name": "Vacation Cafe Simulator",
       "appId": "3196440",

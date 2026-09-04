@@ -25,6 +25,7 @@ alter table public.comments
       'leafy-corner',
       'parcel-simulator',
       'restory',
+      'sleeping-dogs',
       'streamer-life-simulator-2',
       'the-spell-brigade',
       'the-universim',

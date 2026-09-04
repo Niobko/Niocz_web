@@ -74,6 +74,7 @@ const gameStatusDefinitions = {
 // Safe embedded fallback for local file previews and temporary API/JSON outages.
 // The Netlify endpoint and data/game-status.json remain the primary sources.
 const fallbackGameStatuses = Object.freeze({
+  'sleeping-dogs': { name: 'Sleeping Dogs', appId: '307690', supportedVersion: 'v1.0', verifiedBuildId: '979344', currentBuildId: '979344', lastSteamUpdate: '2016-03-31T09:22:31Z', manualStatus: 'functional', override: null },
   'vacation-cafe-simulator': { name: 'Vacation Cafe Simulator', appId: '3196440', supportedVersion: 'v1.0.3', verifiedBuildId: '24974484', currentBuildId: '24974484', lastSteamUpdate: '2026-08-27T15:53:42Z', manualStatus: 'functional', override: null },
   bombanana: { name: 'BOMBANANA', appId: '4656000', supportedVersion: 'v1.0.0', verifiedBuildId: '25068266', currentBuildId: '25068266', lastSteamUpdate: '2026-09-01T22:50:36Z', manualStatus: 'functional', override: null },
   'breathedge-2': { name: 'Breathedge 2', appId: '2412960', supportedVersion: 'v0.8.5', verifiedBuildId: '25077518', currentBuildId: '25077518', lastSteamUpdate: '2026-09-02T14:14:49Z', manualStatus: 'functional', override: null },
