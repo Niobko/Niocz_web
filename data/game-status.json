@@ -8,6 +8,21 @@
     "note": "Netlify checks every configured Steam public branch hourly; this file is the safe static fallback."
   },
   "games": {
+    "kingdom-rush-vengeance": {
+      "name": "Kingdom Rush Vengeance",
+      "appId": "1367550",
+      "supportedVersion": "v1.16.4.0",
+      "verifiedBuildId": "22944017",
+      "currentBuildId": "22944017",
+      "lastSteamUpdate": "2026-04-24T16:09:16Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "sleeping-dogs": {
       "name": "Sleeping Dogs",
       "appId": "307690",

@@ -18,7 +18,7 @@ Uložení čerstvého buildu do Netlify Blobs je pouze doplňkové. Výpadek Blo
 
 Soubor `SUPABASE-GAME-STATUS-ADMIN.sql` přidává centrální tabulku `game_status_overrides`, samostatnou roli `profiles.is_admin`, RLS a dvě zabezpečené RPC funkce. Po spuštění migrace a jednorázovém označení účtu správce se přihlášenému správci vedle stavu zobrazí malá šipka. Běžní návštěvníci žádné ovládání neuvidí.
 
-Pro nové hry Hearth and Hamlet a Kynseed spusťte také `SUPABASE-HEARTH-AND-KYNSEED.sql`. Pro PowerWash Simulator 2 spusťte `SUPABASE-POWERWASH-SIMULATOR-2.sql`, pro The Spell Brigade `SUPABASE-THE-SPELL-BRIGADE.sql` a pro Parcel Simulator `SUPABASE-PARCEL-SIMULATOR.sql`. Migrace rozšíří povolené slugy komentářů, hlášení chyb, hodnocení a počítadla stažení a založí příslušné řádky počítadel. Tabulka `game_status_overrides` používá obecnou validaci bezpečného slugu, takže pro nové hry nepotřebuje další whitelist.
+Pro nové hry Hearth and Hamlet a Kynseed spusťte také `SUPABASE-HEARTH-AND-KYNSEED.sql`. Pro PowerWash Simulator 2 spusťte `SUPABASE-POWERWASH-SIMULATOR-2.sql`, pro The Spell Brigade `SUPABASE-THE-SPELL-BRIGADE.sql`, pro Parcel Simulator `SUPABASE-PARCEL-SIMULATOR.sql` a pro Kingdom Rush Vengeance `SUPABASE-KINGDOM-RUSH-VENGEANCE.sql`. Migrace rozšíří povolené slugy komentářů, hlášení chyb, hodnocení a počítadla stažení a založí příslušné řádky počítadel. Tabulka `game_status_overrides` používá obecnou validaci bezpečného slugu, takže pro nové hry nepotřebuje další whitelist.
 
 Správce může vybrat:
 

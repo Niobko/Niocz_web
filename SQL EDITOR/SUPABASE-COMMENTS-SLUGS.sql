@@ -15,6 +15,7 @@ alter table public.comments
       'bombanana',
       'breathedge-2',
       'hearth-and-hamlet',
+      'kingdom-rush-vengeance',
       'kynseed',
       'powerwash-simulator-2',
       'bookshop-simulator',
