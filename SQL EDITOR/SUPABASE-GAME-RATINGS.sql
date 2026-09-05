@@ -12,6 +12,7 @@ create table if not exists public.game_ratings (
   constraint game_ratings_pkey primary key (game_slug, user_id),
   constraint game_ratings_game_slug_check check (game_slug = any (array[
     'alchemy-factory',
+      'arms-of-god',
     'bombanana',
     'breathedge-2',
     'hearth-and-hamlet',
@@ -51,6 +52,7 @@ alter table public.game_ratings
   add constraint game_ratings_game_slug_check_v2
   check (game_slug = any (array[
     'alchemy-factory',
+      'arms-of-god',
     'bombanana',
     'breathedge-2',
     'hearth-and-hamlet',

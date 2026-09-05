@@ -121,7 +121,7 @@ test("every build changed by the live Steam check waits for verification", () =>
 });
 
 test("every published game has complete Steam status data", () => {
-  assert.equal(Object.keys(statusConfig.games).length, 24);
+  assert.equal(Object.keys(statusConfig.games).length, 25);
   for (const [slug, game] of Object.entries(statusConfig.games)) {
     assert.match(game.appId, /^\d+$/, `${slug} is missing a Steam App ID`);
     assert.match(game.verifiedBuildId, /^\d+$/, `${slug} is missing the verified build`);
@@ -181,4 +181,3 @@ test("Warhounds is connected to the pending compatibility state", () => {
   assert.equal(resolveDisplayStatus(game).key, "functional");
   assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "24907600" }).key, "pending");
 });
-

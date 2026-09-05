@@ -8,6 +8,21 @@
     "note": "Netlify checks every configured Steam public branch hourly; this file is the safe static fallback."
   },
   "games": {
+    "arms-of-god": {
+      "name": "Arms of God",
+      "appId": "3100310",
+      "supportedVersion": "v0.601",
+      "verifiedBuildId": "25020984",
+      "currentBuildId": "25020984",
+      "lastSteamUpdate": "2026-08-30T14:45:37Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "kingdom-rush-vengeance": {
       "name": "Kingdom Rush Vengeance",
       "appId": "1367550",
@@ -370,4 +385,3 @@
     }
   }
 }
-

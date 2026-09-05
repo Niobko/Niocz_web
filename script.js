@@ -74,6 +74,7 @@ const gameStatusDefinitions = {
 // Safe embedded fallback for local file previews and temporary API/JSON outages.
 // The Netlify endpoint and data/game-status.json remain the primary sources.
 const fallbackGameStatuses = Object.freeze({
+  'arms-of-god': { name: 'Arms of God', appId: '3100310', supportedVersion: 'v0.601', verifiedBuildId: '25020984', currentBuildId: '25020984', lastSteamUpdate: '2026-08-30T14:45:37Z', manualStatus: 'functional', override: null },
   'kingdom-rush-vengeance': { name: 'Kingdom Rush Vengeance', appId: '1367550', supportedVersion: 'v1.16.4.0', verifiedBuildId: '22944017', currentBuildId: '22944017', lastSteamUpdate: '2026-04-24T16:09:16Z', manualStatus: 'functional', override: null },
   'sleeping-dogs': { name: 'Sleeping Dogs', appId: '307690', supportedVersion: 'v1.0', verifiedBuildId: '979344', currentBuildId: '979344', lastSteamUpdate: '2016-03-31T09:22:31Z', manualStatus: 'functional', override: null },
   'vacation-cafe-simulator': { name: 'Vacation Cafe Simulator', appId: '3196440', supportedVersion: 'v1.0.4', verifiedBuildId: '24974484', currentBuildId: '24974484', lastSteamUpdate: '2026-08-27T15:53:42Z', manualStatus: 'functional', override: null },
@@ -1172,4 +1173,3 @@ async function toggleVote(requestId, voted, button, feedback) {
 }
 
 loadVoting();
-
