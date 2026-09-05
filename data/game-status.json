@@ -56,7 +56,7 @@
     "vacation-cafe-simulator": {
       "name": "Vacation Cafe Simulator",
       "appId": "3196440",
-      "supportedVersion": "v1.0.4",
+      "supportedVersion": "1.0.5",
       "verifiedBuildId": "24974484",
       "currentBuildId": "24974484",
       "lastSteamUpdate": "2026-08-27T15:53:42Z",
@@ -86,7 +86,7 @@
     "breathedge-2": {
       "name": "Breathedge 2",
       "appId": "2412960",
-      "supportedVersion": "v0.8.5",
+      "supportedVersion": "v0.8.7",
       "verifiedBuildId": "25077518",
       "currentBuildId": "25077518",
       "lastSteamUpdate": "2026-09-02T14:14:49Z",
