@@ -24,9 +24,9 @@ test("both games are registered across the public site", () => {
   }
 
   assert.equal(status.games["hearth-and-hamlet"].appId, "4315040");
-  assert.equal(status.games["hearth-and-hamlet"].supportedVersion, "v1.0.06");
-  assert.equal(status.games["hearth-and-hamlet"].verifiedBuildId, "24970582");
-  assert.equal(status.games["hearth-and-hamlet"].currentBuildId, "25004659");
+  assert.equal(status.games["hearth-and-hamlet"].supportedVersion, "v1.0.07");
+  assert.equal(status.games["hearth-and-hamlet"].verifiedBuildId, "25141547");
+  assert.equal(status.games["hearth-and-hamlet"].currentBuildId, "25141547");
   assert.equal(status.games.kynseed.appId, "758870");
   assert.equal(status.games.kynseed.supportedVersion, "v1.3");
   assert.equal(status.games.kynseed.currentBuildId, "24006355");

@@ -105,7 +105,6 @@ test("CatMailCo waits for verification because Steam has a newer build", () => {
 
 test("every build changed by the live Steam check waits for verification", () => {
   const changedBuilds = {
-    "hearth-and-hamlet": "25004659",
     "e-shop-tycoon": "24971980",
     restory: "24885009",
     "bookshop-simulator": "24788751",
@@ -121,9 +120,16 @@ test("every build changed by the live Steam check waits for verification", () =>
 });
 
 test("every published game has complete Steam status data", () => {
-  assert.equal(Object.keys(statusConfig.games).length, 25);
+  assert.equal(Object.keys(statusConfig.games).length, 26);
   for (const [slug, game] of Object.entries(statusConfig.games)) {
     assert.match(game.appId, /^\d+$/, `${slug} is missing a Steam App ID`);
+    if (slug === 'prince-of-persia-the-lost-crown') {
+      assert.equal(game.verifiedBuildId, null);
+      assert.equal(game.currentBuildId, null);
+      assert.equal(resolveDisplayStatus(game).key, 'functional');
+      assert.equal(resolveDisplayStatus({...game, currentBuildId: '123'}).key, 'pending');
+      continue;
+    }
     assert.match(game.verifiedBuildId, /^\d+$/, `${slug} is missing the verified build`);
     assert.match(game.currentBuildId, /^\d+$/, `${slug} is missing the public build`);
     assert.match(game.lastSteamUpdate, /^\d{4}-\d{2}-\d{2}T/, `${slug} is missing the Steam update date`);
@@ -180,4 +186,12 @@ test("Warhounds is connected to the pending compatibility state", () => {
   assert.equal(game.currentBuildId, "24907599");
   assert.equal(resolveDisplayStatus(game).key, "functional");
   assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "24907600" }).key, "pending");
+});
+
+test("Hearth and Hamlet is functional for the verified build and pending for a newer build", () => {
+  const game = statusConfig.games["hearth-and-hamlet"];
+  assert.equal(game.verifiedBuildId, "25141547");
+  assert.equal(game.currentBuildId, "25141547");
+  assert.equal(resolveDisplayStatus(game).key, "functional");
+  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "25141548" }).key, "pending");
 });
