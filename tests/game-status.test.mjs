@@ -123,7 +123,7 @@ test("every published game has complete Steam status data", () => {
   assert.equal(Object.keys(statusConfig.games).length, 27);
   for (const [slug, game] of Object.entries(statusConfig.games)) {
     assert.match(game.appId, /^\d+$/, `${slug} is missing a Steam App ID`);
-    if (slug === 'alchemy-factory') {
+    if (slug === 'alchemy-factory' || slug === 'timberborn') {
       assert.equal(game.verifiedBuildId, null);
       assert.equal(resolveDisplayStatus(game).key, 'pending');
     } else {
@@ -162,7 +162,9 @@ test("CloverPit is connected to the pending compatibility state", () => {
 test("Timberborn is connected to the pending compatibility state", () => {
   const game = statusConfig.games.timberborn;
   assert.equal(game.appId, "1062090");
-  assert.equal(resolveDisplayStatus(game).key, "functional");
+  assert.equal(game.supportedVersion, "v1.1.2.4-52e959e-SW");
+  assert.equal(resolveDisplayStatus(game).key, "pending");
+  assert.equal(resolveDisplayStatus({ ...game, verifiedBuildId: game.currentBuildId }).key, "functional");
   assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "101" }).key, "pending");
 });
 
