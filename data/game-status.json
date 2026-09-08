@@ -8,13 +8,28 @@
     "note": "Netlify checks every configured Steam public branch hourly; this file is the safe static fallback."
   },
   "games": {
+    "shapez-2": {
+      "name": "Shapez-2",
+      "appId": "2162800",
+      "supportedVersion": "v1.2.0-rc3",
+      "verifiedBuildId": "24668948",
+      "currentBuildId": "24668948",
+      "lastSteamUpdate": "2026-08-13T12:24:59Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "prince-of-persia-the-lost-crown": {
       "name": "Prince of Persia The Lost Crown",
       "appId": "2751000",
       "supportedVersion": "v1.4.3",
-      "verifiedBuildId": null,
-      "currentBuildId": null,
-      "lastSteamUpdate": null,
+      "verifiedBuildId": "17528300",
+      "currentBuildId": "17528300",
+      "lastSteamUpdate": "2025-03-10T09:25:29Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
@@ -206,16 +221,16 @@
     "alchemy-factory": {
       "name": "Alchemy Factory",
       "appId": "3669570",
-      "supportedVersion": "v0.5.4539",
-      "verifiedBuildId": "23962166",
-      "currentBuildId": "23962166",
-      "lastSteamUpdate": "2026-06-29T08:20:17Z",
+      "supportedVersion": "v1.0.4894",
+      "verifiedBuildId": null,
+      "currentBuildId": "25191104",
+      "lastSteamUpdate": "2026-09-08T16:28:10.000Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
-        "key": "functional",
-        "label": "Funkční",
-        "color": "green"
+        "key": "pending",
+        "label": "Čeká na ověření",
+        "color": "orange"
       }
     },
     "e-shop-tycoon": {

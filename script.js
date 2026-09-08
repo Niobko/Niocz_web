@@ -74,7 +74,8 @@ const gameStatusDefinitions = {
 // Safe embedded fallback for local file previews and temporary API/JSON outages.
 // The Netlify endpoint and data/game-status.json remain the primary sources.
 const fallbackGameStatuses = Object.freeze({
-  "prince-of-persia-the-lost-crown": {"name":"Prince of Persia The Lost Crown","appId":"2751000","supportedVersion":"v1.4.3","verifiedBuildId":null,"currentBuildId":null,"lastSteamUpdate":null,"manualStatus":"functional","override":null},
+  "shapez-2": {"name":"Shapez-2","appId":"2162800","supportedVersion":"v1.2.0-rc3","verifiedBuildId":"24668948","currentBuildId":"24668948","lastSteamUpdate":"2026-08-13T12:24:59Z","manualStatus":"functional","override":null},
+  "prince-of-persia-the-lost-crown": {"name":"Prince of Persia The Lost Crown","appId":"2751000","supportedVersion":"v1.4.3","verifiedBuildId":"17528300","currentBuildId":"17528300","lastSteamUpdate":"2025-03-10T09:25:29Z","manualStatus":"functional","override":null},
   'arms-of-god': { name: 'Arms of God', appId: '3100310', supportedVersion: 'v0.601', verifiedBuildId: '25020984', currentBuildId: '25020984', lastSteamUpdate: '2026-08-30T14:45:37Z', manualStatus: 'functional', override: null },
   'kingdom-rush-vengeance': { name: 'Kingdom Rush Vengeance', appId: '1367550', supportedVersion: 'v1.16.4.0', verifiedBuildId: '22944017', currentBuildId: '22944017', lastSteamUpdate: '2026-04-24T16:09:16Z', manualStatus: 'functional', override: null },
   'sleeping-dogs': { name: 'Sleeping Dogs', appId: '307690', supportedVersion: 'v1.0', verifiedBuildId: '979344', currentBuildId: '979344', lastSteamUpdate: '2016-03-31T09:22:31Z', manualStatus: 'functional', override: null },
@@ -87,7 +88,7 @@ const fallbackGameStatuses = Object.freeze({
   'powerwash-simulator-2': { name: 'PowerWash Simulator 2', appId: '2968420', supportedVersion: 'v1.3.0', verifiedBuildId: '23737596', currentBuildId: '23737596', lastSteamUpdate: '2026-07-16T13:48:18Z', manualStatus: 'functional', override: null },
   'hearth-and-hamlet': { name: 'Hearth and Hamlet', appId: '4315040', supportedVersion: 'v1.0.07', verifiedBuildId: '25141547', currentBuildId: '25141547', lastSteamUpdate: '2026-08-29T03:54:15Z', manualStatus: 'functional', override: null },
   kynseed: { name: 'Kynseed', appId: '758870', supportedVersion: 'v1.3', verifiedBuildId: '24006355', currentBuildId: '24006355', lastSteamUpdate: '2026-07-01T17:15:53Z', manualStatus: 'functional', override: null },
-  'alchemy-factory': { name: 'Alchemy Factory', appId: '3669570', supportedVersion: 'v0.5.4539', verifiedBuildId: '23962166', currentBuildId: '23962166', lastSteamUpdate: '2026-06-29T08:20:17Z', manualStatus: 'functional', override: null },
+  'alchemy-factory': { name: 'Alchemy Factory', appId: '3669570', supportedVersion: 'v1.0.4894', verifiedBuildId: null, currentBuildId: '25191104', lastSteamUpdate: '2026-09-08T16:28:10.000Z', manualStatus: 'functional', override: null },
   'e-shop-tycoon': { name: 'E-Shop Tycoon', appId: '4249850', supportedVersion: 'v1.0.8-17ec132', verifiedBuildId: '24775292', currentBuildId: '24971980', lastSteamUpdate: '2026-08-27T14:58:52Z', manualStatus: 'functional', override: null },
   'yet-another-zombie-survivors': { name: 'Yet Another Zombie Survivors', appId: '2163330', supportedVersion: 'v1.0.0c2_S', verifiedBuildId: '24969189', currentBuildId: '24969189', lastSteamUpdate: '2026-08-27T11:20:11Z', manualStatus: 'functional', override: null },
   cloverpit: { name: 'CloverPit', appId: '3314790', supportedVersion: 'v1.4.11', verifiedBuildId: '22785177', currentBuildId: '22785177', lastSteamUpdate: '2026-04-14T17:27:54Z', manualStatus: 'functional', override: null },

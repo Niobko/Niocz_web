@@ -120,17 +120,15 @@ test("every build changed by the live Steam check waits for verification", () =>
 });
 
 test("every published game has complete Steam status data", () => {
-  assert.equal(Object.keys(statusConfig.games).length, 26);
+  assert.equal(Object.keys(statusConfig.games).length, 27);
   for (const [slug, game] of Object.entries(statusConfig.games)) {
     assert.match(game.appId, /^\d+$/, `${slug} is missing a Steam App ID`);
-    if (slug === 'prince-of-persia-the-lost-crown') {
+    if (slug === 'alchemy-factory') {
       assert.equal(game.verifiedBuildId, null);
-      assert.equal(game.currentBuildId, null);
-      assert.equal(resolveDisplayStatus(game).key, 'functional');
-      assert.equal(resolveDisplayStatus({...game, currentBuildId: '123'}).key, 'pending');
-      continue;
+      assert.equal(resolveDisplayStatus(game).key, 'pending');
+    } else {
+      assert.match(game.verifiedBuildId, /^\d+$/, `${slug} is missing the verified build`);
     }
-    assert.match(game.verifiedBuildId, /^\d+$/, `${slug} is missing the verified build`);
     assert.match(game.currentBuildId, /^\d+$/, `${slug} is missing the public build`);
     assert.match(game.lastSteamUpdate, /^\d{4}-\d{2}-\d{2}T/, `${slug} is missing the Steam update date`);
   }
@@ -149,9 +147,9 @@ test("Parcel Simulator is connected to the pending compatibility state", () => {
 test("Alchemy Factory is connected to the pending compatibility state", () => {
   const game = statusConfig.games["alchemy-factory"];
   assert.equal(game.appId, "3669570");
-  assert.equal(game.supportedVersion, "v0.5.4539");
-  assert.equal(resolveDisplayStatus(game).key, "functional");
-  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "23962167" }).key, "pending");
+  assert.equal(game.supportedVersion, "v1.0.4894");
+  assert.equal(resolveDisplayStatus(game).key, "pending");
+  assert.equal(resolveDisplayStatus({ ...game, verifiedBuildId: "25191104" }).key, "functional");
 });
 
 test("CloverPit is connected to the pending compatibility state", () => {

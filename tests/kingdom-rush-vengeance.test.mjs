@@ -22,7 +22,7 @@ test("Kingdom Rush Vengeance is registered consistently across the site", () => 
     assert.match(html, /assets\/Kingdom Rush Vengeance\/Kings_hl\.jpg/);
   }
 
-  assert.match(index, /26 překladů/);
+  assert.ok(index.includes(Object.keys(status.games).length + " překladů"));
   assert.match(sitemap, /https:\/\/nioczloc\.com\/kingdom-rush-vengeance\.html/);
   assert.match(script, /'kingdom-rush-vengeance': \{ name: 'Kingdom Rush Vengeance'/);
 
