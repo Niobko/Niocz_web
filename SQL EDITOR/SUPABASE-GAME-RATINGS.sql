@@ -13,6 +13,7 @@ create table if not exists public.game_ratings (
   constraint game_ratings_game_slug_check check (game_slug = any (array[
     'alchemy-factory',
       'arms-of-god',
+      'astroneer',
       'shapez-2',
       'prince-of-persia-the-lost-crown',
     'bombanana',
@@ -55,6 +56,7 @@ alter table public.game_ratings
   check (game_slug = any (array[
     'alchemy-factory',
       'arms-of-god',
+      'astroneer',
       'shapez-2',
       'prince-of-persia-the-lost-crown',
     'bombanana',

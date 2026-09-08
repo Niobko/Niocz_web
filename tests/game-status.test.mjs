@@ -120,7 +120,7 @@ test("every build changed by the live Steam check waits for verification", () =>
 });
 
 test("every published game has complete Steam status data", () => {
-  assert.equal(Object.keys(statusConfig.games).length, 27);
+  assert.equal(Object.keys(statusConfig.games).length, 28);
   for (const [slug, game] of Object.entries(statusConfig.games)) {
     assert.match(game.appId, /^\d+$/, `${slug} is missing a Steam App ID`);
     if (slug === 'alchemy-factory' || slug === 'timberborn') {

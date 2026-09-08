@@ -13,6 +13,7 @@ alter table public.comments
     game_slug in (
       'alchemy-factory',
       'arms-of-god',
+      'astroneer',
       'shapez-2',
       'prince-of-persia-the-lost-crown',
       'bombanana',

@@ -8,6 +8,21 @@
     "note": "Netlify checks every configured Steam public branch hourly; this file is the safe static fallback."
   },
   "games": {
+    "astroneer": {
+      "name": "Astroneer",
+      "appId": "361420",
+      "supportedVersion": "v1.43.2",
+      "verifiedBuildId": "24409322",
+      "currentBuildId": "24409322",
+      "lastSteamUpdate": "2026-08-12T16:54:54.000Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "shapez-2": {
       "name": "Shapez-2",
       "appId": "2162800",

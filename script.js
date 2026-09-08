@@ -74,6 +74,7 @@ const gameStatusDefinitions = {
 // Safe embedded fallback for local file previews and temporary API/JSON outages.
 // The Netlify endpoint and data/game-status.json remain the primary sources.
 const fallbackGameStatuses = Object.freeze({
+  "astroneer": {"name":"Astroneer","appId":"361420","supportedVersion":"v1.43.2","verifiedBuildId":"24409322","currentBuildId":"24409322","lastSteamUpdate":"2026-08-12T16:54:54.000Z","manualStatus":"functional","override":null},
   "shapez-2": {"name":"Shapez-2","appId":"2162800","supportedVersion":"v1.2.0-rc3","verifiedBuildId":"24668948","currentBuildId":"24668948","lastSteamUpdate":"2026-08-13T12:24:59Z","manualStatus":"functional","override":null},
   "prince-of-persia-the-lost-crown": {"name":"Prince of Persia The Lost Crown","appId":"2751000","supportedVersion":"v1.4.3","verifiedBuildId":"17528300","currentBuildId":"17528300","lastSteamUpdate":"2025-03-10T09:25:29Z","manualStatus":"functional","override":null},
   'arms-of-god': { name: 'Arms of God', appId: '3100310', supportedVersion: 'v0.601', verifiedBuildId: '25020984', currentBuildId: '25020984', lastSteamUpdate: '2026-08-30T14:45:37Z', manualStatus: 'functional', override: null },
