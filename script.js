@@ -84,14 +84,14 @@ const fallbackGameStatuses = Object.freeze({
   bombanana: { name: 'BOMBANANA', appId: '4656000', supportedVersion: 'v1.0.1', verifiedBuildId: '25068266', currentBuildId: '25068266', lastSteamUpdate: '2026-09-01T22:50:36Z', manualStatus: 'functional', override: null },
   'breathedge-2': { name: 'Breathedge 2', appId: '2412960', supportedVersion: 'v0.8.7', verifiedBuildId: '25077518', currentBuildId: '25077518', lastSteamUpdate: '2026-09-02T14:14:49Z', manualStatus: 'functional', override: null },
   'parcel-simulator': { name: 'Parcel Simulator', appId: '2424010', supportedVersion: 'v2.0.1.3', verifiedBuildId: '24535906', currentBuildId: '24535906', lastSteamUpdate: '2026-08-04T08:56:15Z', manualStatus: 'functional', override: null },
-  'the-spell-brigade': { name: 'The Spell Brigade', appId: '2904000', supportedVersion: 'v1.1.2.19558', verifiedBuildId: '24087913', currentBuildId: '24087913', lastSteamUpdate: '2026-07-08T12:24:22Z', manualStatus: 'functional', override: null },
+  'the-spell-brigade': { name: 'The Spell Brigade', appId: '2904000', supportedVersion: 'v1.1.2.19558', verifiedBuildId: '25101567', currentBuildId: '25183855', lastSteamUpdate: '2026-09-08T13:08:32.000Z', manualStatus: 'functional', override: null },
   warhounds: { name: 'Warhounds', appId: '3929470', supportedVersion: 'v1.0.1', verifiedBuildId: '24907599', currentBuildId: '24907599', lastSteamUpdate: '2026-08-24T15:26:01Z', manualStatus: 'functional', override: null },
   'powerwash-simulator-2': { name: 'PowerWash Simulator 2', appId: '2968420', supportedVersion: 'v1.3.0', verifiedBuildId: '23737596', currentBuildId: '23737596', lastSteamUpdate: '2026-07-16T13:48:18Z', manualStatus: 'functional', override: null },
   'hearth-and-hamlet': { name: 'Hearth and Hamlet', appId: '4315040', supportedVersion: 'v1.0.07', verifiedBuildId: '25141547', currentBuildId: '25141547', lastSteamUpdate: '2026-08-29T03:54:15Z', manualStatus: 'functional', override: null },
   kynseed: { name: 'Kynseed', appId: '758870', supportedVersion: 'v1.3', verifiedBuildId: '24006355', currentBuildId: '24006355', lastSteamUpdate: '2026-07-01T17:15:53Z', manualStatus: 'functional', override: null },
   'alchemy-factory': { name: 'Alchemy Factory', appId: '3669570', supportedVersion: 'v1.0.4894', verifiedBuildId: null, currentBuildId: '25191104', lastSteamUpdate: '2026-09-08T16:28:10.000Z', manualStatus: 'functional', override: null },
   'e-shop-tycoon': { name: 'E-Shop Tycoon', appId: '4249850', supportedVersion: 'v1.0.8-17ec132', verifiedBuildId: '24775292', currentBuildId: '24971980', lastSteamUpdate: '2026-08-27T14:58:52Z', manualStatus: 'functional', override: null },
-  'yet-another-zombie-survivors': { name: 'Yet Another Zombie Survivors', appId: '2163330', supportedVersion: 'v1.0.0c2_S', verifiedBuildId: '24969189', currentBuildId: '24969189', lastSteamUpdate: '2026-08-27T11:20:11Z', manualStatus: 'functional', override: null },
+  'yet-another-zombie-survivors': { name: 'Yet Another Zombie Survivors', appId: '2163330', supportedVersion: 'v1.0.1', verifiedBuildId: '25211590', currentBuildId: '25211590', lastSteamUpdate: '2026-09-09T15:11:02.000Z', manualStatus: 'functional', override: null },
   cloverpit: { name: 'CloverPit', appId: '3314790', supportedVersion: 'v1.4.11', verifiedBuildId: '22785177', currentBuildId: '22785177', lastSteamUpdate: '2026-04-14T17:27:54Z', manualStatus: 'functional', override: null },
   timberborn: { name: 'Timberborn', appId: '1062090', supportedVersion: 'v1.1.2.4-52e959e-SW', verifiedBuildId: null, currentBuildId: '25096761', lastSteamUpdate: '2026-09-03T11:49:11.000Z', manualStatus: 'functional', override: null },
   restory: { name: 'ReStory: Chill Electronics Repairs', appId: '3812600', supportedVersion: '1.0.015R', verifiedBuildId: '24863916', currentBuildId: '24885009', lastSteamUpdate: '2026-08-22T23:14:40Z', manualStatus: 'functional', override: null },
@@ -434,6 +434,8 @@ const createDetailCommunityUi = () => {
       </div>
     </div>
     <dl>
+      ${gameSlug === 'the-spell-brigade' ? '<div><dt>Steam App ID</dt><dd data-steam-app-id>2904000</dd></div>' : ''}
+      ${gameSlug === 'yet-another-zombie-survivors' ? '<div><dt>Steam App ID</dt><dd data-steam-app-id>2163330</dd></div>' : ''}
       <div><dt>Current Version</dt><dd data-current-version>—</dd></div>
       <div><dt>Current Build</dt><dd data-current-build>—</dd></div>
       <div><dt>Latest Build</dt><dd data-latest-build>—</dd></div>
@@ -542,6 +544,8 @@ const updateVersionStatusPanel = game => {
   panel.querySelector('[data-version-status-label]').textContent = status.label;
   detailCommunityUi.statusControl.querySelector('[data-version-trigger-label]').textContent = status.label;
   detailCommunityUi.statusControl.querySelector('[data-version-trigger-version]').textContent = resolvedGame.supportedVersion || 'Verze —';
+  const steamAppId = panel.querySelector('[data-steam-app-id]');
+  if (steamAppId) steamAppId.textContent = resolvedGame.appId || '—';
   panel.querySelector('[data-current-version]').textContent = resolvedGame.supportedVersion || '—';
   panel.querySelector('[data-current-build]').textContent = verifiedBuildId || '—';
   panel.querySelector('[data-latest-build]').textContent = resolvedGame.currentBuildId ? String(resolvedGame.currentBuildId) : '—';

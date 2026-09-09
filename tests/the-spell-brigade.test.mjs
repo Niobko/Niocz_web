@@ -29,9 +29,9 @@ test("The Spell Brigade is registered consistently across the site", () => {
   assert.equal(game.name, "The Spell Brigade");
   assert.equal(game.appId, "2904000");
   assert.equal(game.supportedVersion, "v1.1.2.19558");
-  assert.equal(game.verifiedBuildId, "24087913");
-  assert.equal(game.currentBuildId, "24087913");
-  assert.equal(resolveDisplayStatus(game).key, "functional");
+  assert.equal(game.verifiedBuildId, "25101567");
+  assert.equal(game.currentBuildId, "25183855");
+  assert.equal(resolveDisplayStatus(game).key, "pending");
   assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "24087914" }).key, "pending");
 });
 
@@ -44,12 +44,17 @@ test("detail uses the requested SEO, content and shared feature hooks", () => {
   assert.match(detail, /data-comments-list/);
   assert.match(detail, /data-download data-game="the-spell-brigade"/);
   assert.match(detail, /data-download-count/);
-  assert.match(detail, /The\.Spell\.Brigade_NioCZ_v0\.2\.zip/);
-  assert.match(detail, /0\.72 MB/);
+  assert.match(detail, /The\.Spell\.Brigade_NioCZ\.zip/);
+  assert.match(detail, /0\.24 MB/);
   assert.match(detail, /30\. 8\. 2026/);
   assert.match(detail, /Kontrola ve hře<\/span><b>80 %/);
-  assert.match(detail, /TheSpellBrigade_Data/);
-  assert.match(detail, /Nahradit soubory v cíli/);
+  assert.match(detail, /install\.exe/);
+  assert.match(detail, /Procházet \(Browse\)/);
+  assert.match(detail, /Nainstalovat češtinu/);
+  assert.match(detail, /Steam App ID<\/dt><dd><a href="https:\/\/store\.steampowered\.com\/app\/2904000\//);
+  assert.match(detail, /datetime="2026-09-09">9\. 9\. 2026/);
+  assert.match(detail, /Verze překladu v0\.3/);
+  assert.match(detail, /Windows může při prvním spuštění zobrazit upozornění SmartScreen, protože instalátor není digitálně podepsaný\./);
   assert.match(detail, /Ověřit integritu herních souborů/);
   assert.match(detail, /Unity/);
   assert.doesNotMatch(detail, /Unit Engine/);

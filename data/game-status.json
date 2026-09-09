@@ -162,15 +162,15 @@
       "name": "The Spell Brigade",
       "appId": "2904000",
       "supportedVersion": "v1.1.2.19558",
-      "verifiedBuildId": "24087913",
-      "currentBuildId": "25101567",
-      "lastSteamUpdate": "2026-07-08T12:24:22Z",
+      "verifiedBuildId": "25101567",
+      "currentBuildId": "25183855",
+      "lastSteamUpdate": "2026-09-08T13:08:32.000Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
-        "key": "functional",
-        "label": "Funkční",
-        "color": "green"
+        "key": "pending",
+        "label": "Čeká na ověření",
+        "color": "orange"
       }
     },
     "warhounds": {
@@ -266,10 +266,10 @@
     "yet-another-zombie-survivors": {
       "name": "Yet Another Zombie Survivors",
       "appId": "2163330",
-      "supportedVersion": "v1.0.0c2_S",
-      "verifiedBuildId": "24969189",
-      "currentBuildId": "24969189",
-      "lastSteamUpdate": "2026-08-27T11:20:11Z",
+      "supportedVersion": "v1.0.1",
+      "verifiedBuildId": "25211590",
+      "currentBuildId": "25211590",
+      "lastSteamUpdate": "2026-09-09T15:11:02.000Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
