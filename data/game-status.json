@@ -8,6 +8,21 @@
     "note": "Netlify checks every configured Steam public branch hourly; this file is the safe static fallback."
   },
   "games": {
+    "ready-or-not": {
+      "name": "Ready or Not",
+      "appId": "1144200",
+      "supportedVersion": "v1.5.2",
+      "verifiedBuildId": "24942528",
+      "currentBuildId": "24942528",
+      "lastSteamUpdate": "2026-09-03T18:59:56.000Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "astroneer": {
       "name": "Astroneer",
       "appId": "361420",
@@ -117,8 +132,8 @@
       "name": "BOMBANANA",
       "appId": "4656000",
       "supportedVersion": "v1.0.1",
-      "verifiedBuildId": "25068266",
-      "currentBuildId": "25068266",
+      "verifiedBuildId": "25104818",
+      "currentBuildId": "25104818",
       "lastSteamUpdate": "2026-09-01T22:50:36Z",
       "manualStatus": "functional",
       "override": null,
@@ -132,8 +147,8 @@
       "name": "Breathedge 2",
       "appId": "2412960",
       "supportedVersion": "v0.8.8",
-      "verifiedBuildId": "25117281",
-      "currentBuildId": "25117281",
+      "verifiedBuildId": "25201608",
+      "currentBuildId": "25201608",
       "lastSteamUpdate": "2026-09-02T14:14:49Z",
       "manualStatus": "functional",
       "override": null,
@@ -267,8 +282,8 @@
       "name": "Yet Another Zombie Survivors",
       "appId": "2163330",
       "supportedVersion": "v1.0.1",
-      "verifiedBuildId": "25211590",
-      "currentBuildId": "25211590",
+      "verifiedBuildId": "25228599",
+      "currentBuildId": "25228599",
       "lastSteamUpdate": "2026-09-09T15:11:02.000Z",
       "manualStatus": "functional",
       "override": null,

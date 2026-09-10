@@ -30,8 +30,8 @@ test("BOMBANANA is registered consistently across the site", () => {
   assert.equal(game.name, "BOMBANANA");
   assert.equal(game.appId, "4656000");
   assert.equal(game.supportedVersion, "v1.0.1");
-  assert.equal(game.verifiedBuildId, "25068266");
-  assert.equal(game.currentBuildId, "25068266");
+  assert.equal(game.verifiedBuildId, "25104818");
+  assert.equal(game.currentBuildId, "25104818");
   assert.equal(resolveDisplayStatus(game).key, "functional");
   assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "25068267" }).key, "pending");
 });

@@ -120,7 +120,7 @@ test("every build changed by the live Steam check waits for verification", () =>
 });
 
 test("every published game has complete Steam status data", () => {
-  assert.equal(Object.keys(statusConfig.games).length, 28);
+  assert.equal(Object.keys(statusConfig.games).length, 29);
   for (const [slug, game] of Object.entries(statusConfig.games)) {
     assert.match(game.appId, /^\d+$/, `${slug} is missing a Steam App ID`);
     if (slug === 'alchemy-factory' || slug === 'timberborn') {
@@ -172,8 +172,8 @@ test("Yet Another Zombie Survivors uses the updated v1.0.1 baseline and detects 
   const game = statusConfig.games["yet-another-zombie-survivors"];
   assert.equal(game.appId, "2163330");
   assert.equal(game.supportedVersion, "v1.0.1");
-  assert.equal(game.verifiedBuildId, "25211590");
-  assert.equal(game.currentBuildId, "25211590");
+  assert.equal(game.verifiedBuildId, "25228599");
+  assert.equal(game.currentBuildId, "25228599");
   assert.equal(resolveDisplayStatus(game).key, "functional");
   assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "101" }).key, "pending");
 });

@@ -14,6 +14,7 @@ alter table public.comments
       'alchemy-factory',
       'arms-of-god',
       'astroneer',
+      'ready-or-not',
       'shapez-2',
       'prince-of-persia-the-lost-crown',
       'bombanana',
