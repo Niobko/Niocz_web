@@ -588,3 +588,11 @@ body{overflow-x:hidden}
     margin-top:55px !important;
 }
 
+
+/* Shared download and translation CTA interaction. */
+.button.button-primary[href],.button.button-primary[data-download]{transition:border-color .2s ease,box-shadow .2s ease}
+.button.button-primary[href]:not([aria-disabled="true"]):not(:disabled):is(:hover,:focus-visible),
+.button.button-primary[data-download]:not([aria-disabled="true"]):not(:disabled):is(:hover,:focus-visible){background:var(--blue);color:#fff;border-color:#8bdcff;box-shadow:0 0 5px rgba(139,220,255,.5),0 0 15px rgba(97,198,255,.25);transform:none}
+.button.button-primary[href]:not([aria-disabled="true"]):not(:disabled):focus-visible,
+.button.button-primary[data-download]:not([aria-disabled="true"]):not(:disabled):focus-visible{outline:2px solid #8bdcff;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.button.button-primary[href],.button.button-primary[data-download]{transition:none}}
