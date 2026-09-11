@@ -298,7 +298,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     let currentUser = null;
     let currentProfile = null;
+    let canReply = false;
     let gamesBySlug = {};
+    let requestedReportFocused = false;
     const requestedGameSlug =
         new URLSearchParams(window.location.search)
             .get("game")
@@ -369,6 +371,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         } = await supabaseClient.auth.getUser();
 
         currentUser = user;
+        currentProfile = null;
+        canReply = false;
 
         if (!currentUser) {
             return;
@@ -383,6 +387,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 .maybeSingle();
 
         currentProfile = profile;
+
+        const { data: isAdmin, error: adminError } =
+            await supabaseClient.rpc("is_game_status_admin");
+        canReply = !adminError && isAdmin === true;
 
     }
 
@@ -518,6 +526,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
 
         await loadReports();
+        document.dispatchEvent(new Event("nio:bug-reports-changed"));
 
     });
 
@@ -639,6 +648,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 document.createElement("article");
 
             card.className = "bug-card";
+            card.id = `bug-report-${report.id}`;
 
 
             const date =
@@ -775,6 +785,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
                         await loadReports();
+                        document.dispatchEvent(new Event("nio:bug-reports-changed"));
 
                     }
                 );
@@ -787,12 +798,121 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
 
+            const replyArea = document.createElement("section");
+            replyArea.className = "bug-admin-reply";
+            card.querySelector(".bug-card-main").appendChild(replyArea);
+            renderReply(replyArea, report);
+
             bugList.appendChild(card);
 
         }
 
+        if (!requestedReportFocused && window.location.hash.startsWith("#bug-report-")) {
+            const target = document.getElementById(window.location.hash.slice(1));
+            if (target) {
+                requestedReportFocused = true;
+                target.tabIndex = -1;
+                requestAnimationFrame(() => {
+                    target.scrollIntoView({ behavior: "smooth", block: "center" });
+                    target.focus({ preventScroll: true });
+                });
+            }
+        }
+
     }
 
+
+    function renderReply(area, report) {
+        area.replaceChildren();
+        area.hidden = !report.admin_reply && !canReply;
+        if (area.hidden) return;
+
+        const heading = document.createElement("strong");
+        heading.className = "bug-reply-label";
+        heading.textContent = "Odpověď NioCZ";
+        const authorBadge = document.createElement("span");
+        authorBadge.className = "author-badge bug-reply-author-badge";
+        authorBadge.textContent = "AUTOR";
+        heading.append(" ", authorBadge);
+        area.appendChild(heading);
+
+        if (report.admin_reply) {
+            const text = document.createElement("p");
+            text.className = "bug-reply-text";
+            text.textContent = report.admin_reply;
+            area.appendChild(text);
+        }
+        if (!canReply || !currentUser) return;
+
+        const editor = document.createElement("form");
+        editor.className = "bug-reply-editor";
+        editor.innerHTML = `
+            <div class="form-group">
+                <label>Text odpovědi
+                    <textarea rows="3" maxlength="5000" required></textarea>
+                </label>
+            </div>
+            <div class="bug-reply-actions">
+                <button type="submit" class="bug-submit-button"></button>
+                <button type="button" class="bug-submit-button bug-reply-delete">Odstranit odpověď</button>
+            </div>
+            <p class="bug-reply-message" role="status" aria-live="polite"></p>
+        `;
+        const input = editor.querySelector("textarea");
+        const save = editor.querySelector('[type="submit"]');
+        const remove = editor.querySelector('[type="button"]');
+        const message = editor.querySelector('[role="status"]');
+        input.value = report.admin_reply || "";
+        save.textContent = report.admin_reply ? "Uložit odpověď" : "Odpovědět";
+        remove.hidden = !report.admin_reply;
+        let saving = false;
+
+        async function persistReply(value) {
+            if (saving || !canReply || !currentUser) return;
+            if (value !== null && !value.trim()) {
+                message.textContent = "Napište prosím odpověď.";
+                message.dataset.type = "error";
+                input.focus();
+                return;
+            }
+            saving = true;
+            input.disabled = save.disabled = remove.disabled = true;
+            editor.setAttribute("aria-busy", "true");
+            message.dataset.type = "";
+            message.textContent = value === null ? "Odstraňuji..." : "Ukládám...";
+            try {
+                const { data, error } = await supabaseClient
+                    .from("bug_reports")
+                    .update({ admin_reply: value === null ? null : value.trim() })
+                    .eq("id", report.id)
+                    .select("admin_reply,admin_reply_updated_at")
+                    .single();
+                if (error || !data) throw error || new Error("Report nebyl aktualizován.");
+                Object.assign(report, data);
+                renderReply(area, report);
+                const feedback = area.querySelector('[role="status"]');
+                if (feedback) feedback.textContent = value === null
+                    ? "Odpověď byla odstraněna." : "Odpověď byla uložena.";
+            } catch (error) {
+                console.error("Uložení odpovědi selhalo:", error);
+                message.dataset.type = "error";
+                message.textContent = "Odpověď se nepodařilo uložit. Zkuste to znovu.";
+            } finally {
+                saving = false;
+                input.disabled = save.disabled = remove.disabled = false;
+                editor.removeAttribute("aria-busy");
+            }
+        }
+
+        editor.addEventListener("submit", event => {
+            event.preventDefault();
+            void persistReply(input.value);
+        });
+        remove.addEventListener("click", () => {
+            if (window.confirm("Opravdu odstranit tuto odpověď?")) void persistReply(null);
+        });
+        area.appendChild(editor);
+    }
 
     function statusLabel(status) {
 
@@ -863,6 +983,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     await loadReports();
+
+    supabaseClient.auth.onAuthStateChange((event) => {
+        if (event !== "SIGNED_OUT" && event !== "SIGNED_IN" && event !== "USER_UPDATED") return;
+        canReply = false;
+        bugList.querySelectorAll(".bug-reply-editor").forEach(editor => editor.remove());
+        // Run outside the auth callback to avoid waiting on Supabase's auth lock.
+        setTimeout(async () => {
+            await loadCurrentUser();
+            await loadReports();
+        }, 0);
+    });
 
 });
 

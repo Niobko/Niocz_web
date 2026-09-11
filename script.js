@@ -338,6 +338,135 @@ let ownGameRating = { stars: null, reaction: null };
 let gameRatingBusy = false;
 let canManageGameStatuses = false;
 let gameStatusSaveBusy = false;
+let bugReportAlertTimer = null;
+let bugReportAlertRequest = 0;
+let replyNotificationTimer = null;
+let replyNotificationRequest = 0;
+let unreadReplyReportId = null;
+
+const replyNotificationLink = (() => {
+  const bugLink = document.querySelector('.bug-nav-link');
+  if (!bugLink) return null;
+  const link = document.createElement('a');
+  link.className = 'reply-notification-link';
+  link.href = 'bug-reports.html';
+  link.title = 'Odpovědi na vaše hlášení';
+  link.setAttribute('aria-label', 'Odpovědi na vaše hlášení');
+  link.innerHTML = `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+      <path d="m4 7 8 6 8-6"></path>
+    </svg>
+    <span>Odpovědi na hlášení</span>`;
+  bugLink.before(link);
+  return link;
+})();
+
+async function refreshReplyNotification() {
+  const requestId = ++replyNotificationRequest;
+  unreadReplyReportId = null;
+  if (replyNotificationTimer) {
+    window.clearTimeout(replyNotificationTimer);
+    replyNotificationTimer = null;
+  }
+  if (!replyNotificationLink) return;
+
+  replyNotificationLink.classList.remove('has-reply-notification');
+  replyNotificationLink.removeAttribute('data-report-id');
+  replyNotificationLink.href = 'bug-reports.html';
+  replyNotificationLink.title = 'Odpovědi na vaše hlášení';
+  replyNotificationLink.setAttribute('aria-label', 'Odpovědi na vaše hlášení');
+  if (!db || !currentUser) return;
+
+  const checkedUserId = currentUser.id;
+  const { data, error } = await db.rpc('get_unread_bug_report_reply');
+  if (requestId !== replyNotificationRequest || currentUser?.id !== checkedUserId) return;
+
+  const unread = Array.isArray(data) ? data[0] : data;
+  const reportId = unread?.report_id;
+  if (!error && reportId) {
+    unreadReplyReportId = reportId;
+    replyNotificationLink.classList.add('has-reply-notification');
+    replyNotificationLink.dataset.reportId = reportId;
+    replyNotificationLink.href = `bug-reports.html#bug-report-${encodeURIComponent(reportId)}`;
+    replyNotificationLink.title = 'NioCZ odpověděl na vaše hlášení';
+    replyNotificationLink.setAttribute('aria-label', 'Nová odpověď NioCZ na vaše hlášení');
+  } else if (error) {
+    console.warn('Unable to load reply notifications', error);
+  }
+
+  replyNotificationTimer = window.setTimeout(refreshReplyNotification, 60000);
+}
+
+replyNotificationLink?.addEventListener('click', async event => {
+  if (!db || !currentUser || !unreadReplyReportId) return;
+  event.preventDefault();
+  const target = replyNotificationLink.href;
+  const reportId = unreadReplyReportId;
+  const { error } = await db.rpc('mark_bug_report_reply_read', {
+    requested_report_id: reportId
+  });
+  if (error) console.warn('Unable to mark the reply notification as read', error);
+  else {
+    unreadReplyReportId = null;
+    replyNotificationLink.classList.remove('has-reply-notification');
+  }
+  window.location.href = target;
+});
+
+async function refreshBugReportAlert() {
+  const links = document.querySelectorAll('.bug-nav-link');
+  const requestId = ++bugReportAlertRequest;
+
+  if (bugReportAlertTimer) {
+    window.clearTimeout(bugReportAlertTimer);
+    bugReportAlertTimer = null;
+  }
+
+  links.forEach(link => {
+    link.classList.remove('has-bug-report-alert');
+    link.removeAttribute('data-open-report-count');
+    link.setAttribute('aria-label', 'Nahlásit chybu');
+    link.title = 'Nahlásit chybu';
+  });
+
+  if (!db || !currentUser || links.length === 0) return;
+
+  const checkedUserId = currentUser.id;
+  const { data: isAdmin, error: adminError } = await db.rpc('is_game_status_admin');
+  if (requestId !== bugReportAlertRequest || currentUser?.id !== checkedUserId) return;
+  if (adminError || isAdmin !== true) return;
+
+  const { count, error } = await db
+    .from('bug_reports')
+    .select('id', { count: 'exact', head: true })
+    .neq('status', 'Vyriešené');
+  if (requestId !== bugReportAlertRequest || currentUser?.id !== checkedUserId) return;
+
+  if (!error && Number(count) > 0) {
+    const openCount = Number(count);
+    const description = `Nevyřešená hlášení chyb: ${openCount}`;
+    links.forEach(link => {
+      link.classList.add('has-bug-report-alert');
+      link.dataset.openReportCount = String(openCount);
+      link.setAttribute('aria-label', `Nahlásit chybu – ${description}`);
+      link.title = description;
+    });
+  } else if (error) {
+    console.warn('Unable to load the bug report notification', error);
+  }
+
+  bugReportAlertTimer = window.setTimeout(refreshBugReportAlert, 60000);
+}
+
+window.NIO_REFRESH_BUG_REPORT_ALERT = refreshBugReportAlert;
+document.addEventListener('nio:bug-reports-changed', refreshBugReportAlert);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && currentUser) {
+    refreshBugReportAlert();
+    refreshReplyNotification();
+  }
+});
 let gameStatusRefreshBusy = false;
 
 const setMessage = (node, message, error = false) => {
@@ -815,6 +944,8 @@ function updateAuthUi(user) {
     voteNote.classList.toggle('logged-in', Boolean(user));
   }
   refreshGameStatusAdminPermission();
+  refreshBugReportAlert();
+  refreshReplyNotification();
   loadVoting();
   loadGameRating();
 }

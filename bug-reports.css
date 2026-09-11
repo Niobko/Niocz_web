@@ -358,3 +358,41 @@
     z-index:1000;
     background:#070a10;
 }
+
+.bug-card:target{
+    border-color:#4aa3ff;
+    box-shadow:0 0 0 2px rgba(74,163,255,.12),0 0 24px rgba(74,163,255,.1);
+}
+
+.bug-admin-reply{
+    margin-top:18px;
+    padding:16px;
+    border:1px solid #243149;
+    border-left:3px solid #4aa3ff;
+    border-radius:10px;
+    background:#0d1320;
+    min-width:0;
+}
+.bug-admin-reply[hidden], .bug-reply-actions [hidden]{display:none;}
+.bug-reply-label{color:#7dbbff;}
+.bug-reply-author-badge{
+    display:inline-block;
+    margin-left:5px;
+    vertical-align:middle;
+}
+.bug-reply-text{
+    margin:10px 0 0;
+    color:#dbe6f4;
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+}
+.bug-reply-editor{margin-top:14px;}
+.bug-reply-editor textarea{min-height:100px;margin-top:8px;font-weight:400;}
+.bug-reply-actions{display:flex;flex-wrap:wrap;gap:10px;}
+.bug-reply-actions button{font:inherit;font-weight:700;}
+.bug-reply-delete{background:#111927;border:1px solid #344258;}
+.bug-reply-editor :disabled{opacity:.6;cursor:wait;}
+.bug-reply-message{margin:10px 0 0;color:#56e69a;font-size:.9rem;}
+.bug-reply-message:empty{display:none;}
+.bug-reply-message[data-type="error"]{color:#ff7a84;}
+@media (max-width:900px){.bug-card-main:has(.bug-admin-reply){width:100%;}}
