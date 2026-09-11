@@ -172,8 +172,8 @@ test("Yet Another Zombie Survivors uses the updated v1.0.1 baseline and detects 
   const game = statusConfig.games["yet-another-zombie-survivors"];
   assert.equal(game.appId, "2163330");
   assert.equal(game.supportedVersion, "v1.0.1");
-  assert.equal(game.verifiedBuildId, "25228599");
-  assert.equal(game.currentBuildId, "25228599");
+  assert.equal(game.verifiedBuildId, "25248478");
+  assert.equal(game.currentBuildId, "25248478");
   assert.equal(resolveDisplayStatus(game).key, "functional");
   assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "101" }).key, "pending");
 });
