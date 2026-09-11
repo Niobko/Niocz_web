@@ -29,9 +29,9 @@ test("Vacation Cafe Simulator is registered consistently across the site", () =>
   const game = status.games["vacation-cafe-simulator"];
   assert.equal(game.name, "Vacation Cafe Simulator");
   assert.equal(game.appId, "3196440");
-  assert.equal(game.supportedVersion, "v1.0.4");
-  assert.equal(game.verifiedBuildId, "24974484");
-  assert.equal(game.currentBuildId, "24974484");
+  assert.equal(game.supportedVersion, "1.0.6");
+  assert.equal(game.verifiedBuildId, "25235598");
+  assert.equal(game.currentBuildId, "25235598");
   assert.equal(resolveDisplayStatus(game).key, "functional");
 });
 
@@ -44,9 +44,9 @@ test("Vacation Cafe Simulator detail includes the supplied content and all share
   assert.match(detail, /data-comments-list/);
   assert.match(detail, /data-download data-game="vacation-cafe-simulator"/);
   assert.match(detail, /data-download-count/);
-  assert.match(detail, /Vacation\.Cafe\.Simulator_NioCZ_v0\.2\.zip/);
-  assert.match(detail, /0\.19 MB/);
-  assert.match(detail, /VacationCafe_Data/);
+  assert.match(detail, /Vacation\.Cafe\.Simulato_NioCZ\.zip/);
+  assert.match(detail, /1\.91 MB/);
+  assert.match(detail, /install\.exe/);
   assert.match(detail, /Ověřit integritu herních souborů/);
 });
 

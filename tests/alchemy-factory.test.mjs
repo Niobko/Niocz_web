@@ -19,9 +19,9 @@ test("Alchemy Factory is registered across the public site", () => {
   assert.match(translations, /data-game-status="alchemy-factory"/);
   assert.match(sitemap, /https:\/\/nioczloc\.com\/alchemy-factory\.html/);
   assert.equal(status.games["alchemy-factory"].appId, "3669570");
-  assert.equal(status.games["alchemy-factory"].supportedVersion, "v1.0.4894");
-  assert.equal(status.games["alchemy-factory"].verifiedBuildId, null);
-  assert.equal(status.games["alchemy-factory"].currentBuildId, "25191104");
+  assert.equal(status.games["alchemy-factory"].supportedVersion, "v1.0.4950");
+  assert.equal(status.games["alchemy-factory"].verifiedBuildId, "25257476");
+  assert.equal(status.games["alchemy-factory"].currentBuildId, "25257476");
   assert.match(script, /'alchemy-factory': \{ name: 'Alchemy Factory'/);
 });
 
@@ -32,8 +32,8 @@ test("Alchemy Factory detail keeps every shared community and download hook", ()
   assert.match(detail, /data-download data-game="alchemy-factory"/);
   assert.match(detail, /data-download-count/);
   assert.match(detail, /Alchemy\.Factory_NioCZ\.zip/);
-  assert.match(detail, /Aktuálně podporovaná verze hry: v1\.0\.4894/);
-  assert.doesNotMatch(detail, /v\s+1\.0\.4894/);
+  assert.match(detail, /Aktuálně podporovaná verze hry: v1\.0\.4950/);
+  assert.doesNotMatch(detail, /v\s+1\.0\.4950/);
   assert.match(detail, /Unreal Engine/);
 });
 

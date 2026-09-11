@@ -116,9 +116,9 @@
     "vacation-cafe-simulator": {
       "name": "Vacation Cafe Simulator",
       "appId": "3196440",
-      "supportedVersion": "1.0.5",
-      "verifiedBuildId": "24974484",
-      "currentBuildId": "25123796",
+      "supportedVersion": "1.0.6",
+      "verifiedBuildId": "25235598",
+      "currentBuildId": "25235598",
       "lastSteamUpdate": "2026-08-27T15:53:42Z",
       "manualStatus": "functional",
       "override": null,
@@ -251,16 +251,16 @@
     "alchemy-factory": {
       "name": "Alchemy Factory",
       "appId": "3669570",
-      "supportedVersion": "v1.0.4894",
-      "verifiedBuildId": null,
-      "currentBuildId": "25191104",
+      "supportedVersion": "v1.0.4950",
+      "verifiedBuildId": "25257476",
+      "currentBuildId": "25257476",
       "lastSteamUpdate": "2026-09-08T16:28:10.000Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
-        "key": "pending",
-        "label": "Čeká na ověření",
-        "color": "orange"
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
       }
     },
     "e-shop-tycoon": {
