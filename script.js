@@ -44,7 +44,7 @@ const createSupportUi = () => {
       <p class="eyebrow">Dobrovolná podpora</p>
       <h2 id="support-title">Podpořit NioCZ LOC</h2>
       <p id="support-description" class="support-copy">Pokud vám moje překlady pomáhají a chcete dobrovolně podpořit další práci na NioCZ LOC, můžete tak učinit zde.</p>
-      <a class="button button-primary support-cta" href="https://revolut.me/niokyuubi" target="_blank" rel="noopener noreferrer">Podpořit NioCZ LOC <span aria-hidden="true">↗</span></a>
+      <a class="button button-primary support-cta" href="https://ko-fi.com/nioczloc" target="_blank" rel="noopener noreferrer">Podpořit NioCZ LOC <span aria-hidden="true">↗</span></a>
       <p id="support-note" class="support-note">Podpora je dobrovolná a není podmínkou používání překladů.</p>
     </section>`;
   document.body.append(modal);
@@ -82,7 +82,7 @@ const fallbackGameStatuses = Object.freeze({
   'kingdom-rush-vengeance': { name: 'Kingdom Rush Vengeance', appId: '1367550', supportedVersion: 'v1.16.4.0', verifiedBuildId: '22944017', currentBuildId: '22944017', lastSteamUpdate: '2026-04-24T16:09:16Z', manualStatus: 'functional', override: null },
   'sleeping-dogs': { name: 'Sleeping Dogs', appId: '307690', supportedVersion: 'v1.0', verifiedBuildId: '979344', currentBuildId: '979344', lastSteamUpdate: '2016-03-31T09:22:31Z', manualStatus: 'functional', override: null },
   'vacation-cafe-simulator': { name: 'Vacation Cafe Simulator', appId: '3196440', supportedVersion: '1.0.6', verifiedBuildId: '25235598', currentBuildId: '25235598', lastSteamUpdate: '2026-08-27T15:53:42Z', manualStatus: 'functional', override: null },
-  bombanana: { name: 'BOMBANANA', appId: '4656000', supportedVersion: 'v1.0.1', verifiedBuildId: '25104818', currentBuildId: '25104818', lastSteamUpdate: '2026-09-01T22:50:36Z', manualStatus: 'functional', override: null },
+  bombanana: { name: 'BOMBANANA', appId: '4656000', supportedVersion: 'v1.0.2', verifiedBuildId: '25239138', currentBuildId: '25239138', lastSteamUpdate: '2026-09-01T22:50:36Z', manualStatus: 'functional', override: null },
   'breathedge-2': { name: 'Breathedge 2', appId: '2412960', supportedVersion: 'v0.8.8', verifiedBuildId: '25201608', currentBuildId: '25201608', lastSteamUpdate: '2026-09-02T14:14:49Z', manualStatus: 'functional', override: null },
   'parcel-simulator': { name: 'Parcel Simulator', appId: '2424010', supportedVersion: 'v2.0.1.3', verifiedBuildId: '24535906', currentBuildId: '24535906', lastSteamUpdate: '2026-08-04T08:56:15Z', manualStatus: 'functional', override: null },
   'the-spell-brigade': { name: 'The Spell Brigade', appId: '2904000', supportedVersion: 'v1.1.2.19558', verifiedBuildId: '25101567', currentBuildId: '25183855', lastSteamUpdate: '2026-09-08T13:08:32.000Z', manualStatus: 'functional', override: null },
@@ -90,7 +90,7 @@ const fallbackGameStatuses = Object.freeze({
   'powerwash-simulator-2': { name: 'PowerWash Simulator 2', appId: '2968420', supportedVersion: 'v1.3.0', verifiedBuildId: '23737596', currentBuildId: '23737596', lastSteamUpdate: '2026-07-16T13:48:18Z', manualStatus: 'functional', override: null },
   'hearth-and-hamlet': { name: 'Hearth and Hamlet', appId: '4315040', supportedVersion: 'v1.0.07', verifiedBuildId: '25141547', currentBuildId: '25141547', lastSteamUpdate: '2026-08-29T03:54:15Z', manualStatus: 'functional', override: null },
   kynseed: { name: 'Kynseed', appId: '758870', supportedVersion: 'v1.3', verifiedBuildId: '24006355', currentBuildId: '24006355', lastSteamUpdate: '2026-07-01T17:15:53Z', manualStatus: 'functional', override: null },
-  'alchemy-factory': { name: 'Alchemy Factory', appId: '3669570', supportedVersion: 'v1.0.4950', verifiedBuildId: '25257476', currentBuildId: '25257476', lastSteamUpdate: '2026-09-08T16:28:10.000Z', manualStatus: 'functional', override: null },
+  'alchemy-factory': { name: 'Alchemy Factory', appId: '3669570', supportedVersion: 'v1.0.4950', verifiedBuildId: '25267026', currentBuildId: '25267026', lastSteamUpdate: '2026-09-08T16:28:10.000Z', manualStatus: 'functional', override: null },
   'e-shop-tycoon': { name: 'E-Shop Tycoon', appId: '4249850', supportedVersion: 'v1.0.8-17ec132', verifiedBuildId: '24775292', currentBuildId: '24971980', lastSteamUpdate: '2026-08-27T14:58:52Z', manualStatus: 'functional', override: null },
   'yet-another-zombie-survivors': { name: 'Yet Another Zombie Survivors', appId: '2163330', supportedVersion: 'v1.0.1', verifiedBuildId: '25248478', currentBuildId: '25248478', lastSteamUpdate: '2026-09-09T15:11:02.000Z', manualStatus: 'functional', override: null },
   cloverpit: { name: 'CloverPit', appId: '3314790', supportedVersion: 'v1.4.11', verifiedBuildId: '22785177', currentBuildId: '22785177', lastSteamUpdate: '2026-04-14T17:27:54Z', manualStatus: 'functional', override: null },

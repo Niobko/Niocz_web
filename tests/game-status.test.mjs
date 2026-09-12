@@ -148,10 +148,10 @@ test("Alchemy Factory verifies the updated build and detects a later update", ()
   const game = statusConfig.games["alchemy-factory"];
   assert.equal(game.appId, "3669570");
   assert.equal(game.supportedVersion, "v1.0.4950");
-  assert.equal(game.verifiedBuildId, "25257476");
-  assert.equal(game.currentBuildId, "25257476");
+  assert.equal(game.verifiedBuildId, "25267026");
+  assert.equal(game.currentBuildId, "25267026");
   assert.equal(resolveDisplayStatus(game).key, "functional");
-  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "25257477" }).key, "pending");
+  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "25267027" }).key, "pending");
 });
 
 test("CloverPit is connected to the pending compatibility state", () => {

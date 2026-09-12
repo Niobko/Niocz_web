@@ -20,8 +20,8 @@ test("Alchemy Factory is registered across the public site", () => {
   assert.match(sitemap, /https:\/\/nioczloc\.com\/alchemy-factory\.html/);
   assert.equal(status.games["alchemy-factory"].appId, "3669570");
   assert.equal(status.games["alchemy-factory"].supportedVersion, "v1.0.4950");
-  assert.equal(status.games["alchemy-factory"].verifiedBuildId, "25257476");
-  assert.equal(status.games["alchemy-factory"].currentBuildId, "25257476");
+  assert.equal(status.games["alchemy-factory"].verifiedBuildId, "25267026");
+  assert.equal(status.games["alchemy-factory"].currentBuildId, "25267026");
   assert.match(script, /'alchemy-factory': \{ name: 'Alchemy Factory'/);
 });
 
