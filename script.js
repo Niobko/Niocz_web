@@ -74,6 +74,7 @@ const gameStatusDefinitions = {
 // Safe embedded fallback for local file previews and temporary API/JSON outages.
 // The Netlify endpoint and data/game-status.json remain the primary sources.
 const fallbackGameStatuses = Object.freeze({
+  "no-mans-sky": {"name":"No Man's Sky","appId":"275850","supportedVersion":"COSMOS (7.0)","verifiedBuildId":"25233815","currentBuildId":"25233815","lastSteamUpdate":"2026-09-10T15:03:20.000Z","manualStatus":"functional","override":null},
   "ready-or-not": {"name":"Ready or Not","appId":"1144200","supportedVersion":"v1.5.2","verifiedBuildId":"24942528","currentBuildId":"24942528","lastSteamUpdate":"2026-09-03T18:59:56.000Z","manualStatus":"functional","override":null},
   "astroneer": {"name":"Astroneer","appId":"361420","supportedVersion":"v1.43.2","verifiedBuildId":"24409322","currentBuildId":"24409322","lastSteamUpdate":"2026-08-12T16:54:54.000Z","manualStatus":"functional","override":null},
   "shapez-2": {"name":"Shapez-2","appId":"2162800","supportedVersion":"v1.2.0-rc3","verifiedBuildId":"24668948","currentBuildId":"24668948","lastSteamUpdate":"2026-08-13T12:24:59Z","manualStatus":"functional","override":null},
@@ -564,8 +565,7 @@ const createDetailCommunityUi = () => {
       </div>
     </div>
     <dl>
-      ${gameSlug === 'the-spell-brigade' ? '<div><dt>Steam App ID</dt><dd data-steam-app-id>2904000</dd></div>' : ''}
-      ${gameSlug === 'yet-another-zombie-survivors' ? '<div><dt>Steam App ID</dt><dd data-steam-app-id>2163330</dd></div>' : ''}
+      <div><dt>Steam App ID</dt><dd data-steam-app-id>—</dd></div>
       <div><dt>Current Version</dt><dd data-current-version>—</dd></div>
       <div><dt>Current Build</dt><dd data-current-build>—</dd></div>
       <div><dt>Latest Build</dt><dd data-latest-build>—</dd></div>

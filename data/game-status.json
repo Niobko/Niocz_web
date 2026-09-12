@@ -8,6 +8,21 @@
     "note": "Netlify checks every configured Steam public branch hourly; this file is the safe static fallback."
   },
   "games": {
+    "no-mans-sky": {
+      "name": "No Man's Sky",
+      "appId": "275850",
+      "supportedVersion": "COSMOS (7.0)",
+      "verifiedBuildId": "25233815",
+      "currentBuildId": "25233815",
+      "lastSteamUpdate": "2026-09-10T15:03:20.000Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "ready-or-not": {
       "name": "Ready or Not",
       "appId": "1144200",

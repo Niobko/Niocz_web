@@ -29,6 +29,7 @@ alter table public.comments
       'e-shop-tycoon',
       'factory-planner',
       'leafy-corner',
+      'no-mans-sky',
       'parcel-simulator',
       'restory',
       'sleeping-dogs',

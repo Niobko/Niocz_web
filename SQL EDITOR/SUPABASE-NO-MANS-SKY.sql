@@ -1,0 +1,120 @@
+-- NioCZ LOC: No Man's Sky
+-- Spusťte celý soubor jednou v Supabase -> SQL Editor -> Run.
+-- Migrace rozšíří povolené slugy pro komentáře, hlášení chyb,
+-- hodnocení a počítadlo stažení. Je bezpečné ji spustit opakovaně.
+
+begin;
+
+alter table public.comments
+  drop constraint if exists comments_game_slug_check_v17;
+
+alter table public.comments
+  add constraint comments_game_slug_check_v17
+  check (game_slug in (
+    'alchemy-factory', 'arms-of-god', 'astroneer', 'ready-or-not',
+    'shapez-2', 'prince-of-persia-the-lost-crown', 'bookshop-simulator',
+    'bombanana', 'breathedge-2', 'catmailco', 'cloverpit', 'e-shop-tycoon',
+    'factory-planner', 'hearth-and-hamlet', 'kingdom-rush-vengeance',
+    'kynseed', 'leafy-corner', 'no-mans-sky', 'parcel-simulator',
+    'powerwash-simulator-2', 'restory', 'sleeping-dogs',
+    'streamer-life-simulator-2', 'the-spell-brigade', 'the-universim',
+    'timberborn', 'vacation-cafe-simulator', 'warhounds',
+    'yet-another-zombie-survivors', 'youtubers-life-2'
+  )) not valid;
+
+alter table public.comments
+  validate constraint comments_game_slug_check_v17;
+
+alter table public.comments
+  drop constraint if exists comments_game_slug_check;
+
+alter table public.comments
+  rename constraint comments_game_slug_check_v17
+  to comments_game_slug_check;
+
+alter table public.bug_reports
+  drop constraint if exists bug_reports_game_slug_check_v17;
+
+alter table public.bug_reports
+  add constraint bug_reports_game_slug_check_v17
+  check (game_slug in (
+    'alchemy-factory', 'arms-of-god', 'astroneer', 'ready-or-not',
+    'shapez-2', 'prince-of-persia-the-lost-crown', 'bookshop-simulator',
+    'bombanana', 'breathedge-2', 'catmailco', 'cloverpit', 'e-shop-tycoon',
+    'factory-planner', 'hearth-and-hamlet', 'kingdom-rush-vengeance',
+    'kynseed', 'leafy-corner', 'no-mans-sky', 'parcel-simulator',
+    'powerwash-simulator-2', 'restory', 'sleeping-dogs',
+    'streamer-life-simulator-2', 'the-spell-brigade', 'the-universim',
+    'timberborn', 'vacation-cafe-simulator', 'warhounds',
+    'yet-another-zombie-survivors', 'youtubers-life-2'
+  )) not valid;
+
+alter table public.bug_reports
+  validate constraint bug_reports_game_slug_check_v17;
+
+alter table public.bug_reports
+  drop constraint if exists bug_reports_game_slug_check;
+
+alter table public.bug_reports
+  rename constraint bug_reports_game_slug_check_v17
+  to bug_reports_game_slug_check;
+
+alter table public.game_ratings
+  drop constraint if exists game_ratings_game_slug_check_v17;
+
+alter table public.game_ratings
+  add constraint game_ratings_game_slug_check_v17
+  check (game_slug = any (array[
+    'alchemy-factory', 'arms-of-god', 'astroneer', 'ready-or-not',
+    'shapez-2', 'prince-of-persia-the-lost-crown', 'bookshop-simulator',
+    'bombanana', 'breathedge-2', 'catmailco', 'cloverpit', 'e-shop-tycoon',
+    'factory-planner', 'hearth-and-hamlet', 'kingdom-rush-vengeance',
+    'kynseed', 'leafy-corner', 'no-mans-sky', 'parcel-simulator',
+    'powerwash-simulator-2', 'restory', 'sleeping-dogs',
+    'streamer-life-simulator-2', 'the-spell-brigade', 'the-universim',
+    'timberborn', 'vacation-cafe-simulator', 'warhounds',
+    'yet-another-zombie-survivors', 'youtubers-life-2'
+  ]::text[])) not valid;
+
+alter table public.game_ratings
+  validate constraint game_ratings_game_slug_check_v17;
+
+alter table public.game_ratings
+  drop constraint if exists game_ratings_game_slug_check;
+
+alter table public.game_ratings
+  rename constraint game_ratings_game_slug_check_v17
+  to game_ratings_game_slug_check;
+
+alter table public.download_totals
+  drop constraint if exists download_totals_game_slug_check_v17;
+
+alter table public.download_totals
+  add constraint download_totals_game_slug_check_v17
+  check (game_slug in (
+    'alchemy-factory', 'arms-of-god', 'astroneer', 'ready-or-not',
+    'shapez-2', 'prince-of-persia-the-lost-crown', 'bookshop-simulator',
+    'bombanana', 'breathedge-2', 'catmailco', 'cloverpit', 'e-shop-tycoon',
+    'factory-planner', 'hearth-and-hamlet', 'kingdom-rush-vengeance',
+    'kynseed', 'leafy-corner', 'no-mans-sky', 'parcel-simulator',
+    'powerwash-simulator-2', 'restory', 'sleeping-dogs',
+    'streamer-life-simulator-2', 'the-spell-brigade', 'the-universim',
+    'timberborn', 'vacation-cafe-simulator', 'warhounds',
+    'yet-another-zombie-survivors', 'youtubers-life-2'
+  )) not valid;
+
+alter table public.download_totals
+  validate constraint download_totals_game_slug_check_v17;
+
+alter table public.download_totals
+  drop constraint if exists download_totals_game_slug_check;
+
+alter table public.download_totals
+  rename constraint download_totals_game_slug_check_v17
+  to download_totals_game_slug_check;
+
+insert into public.download_totals (game_slug, download_count)
+values ('no-mans-sky', 0)
+on conflict (game_slug) do nothing;
+
+commit;
