@@ -176,10 +176,10 @@
     "breathedge-2": {
       "name": "Breathedge 2",
       "appId": "2412960",
-      "supportedVersion": "v0.8.8",
-      "verifiedBuildId": "25201608",
-      "currentBuildId": "25201608",
-      "lastSteamUpdate": "2026-09-02T14:14:49Z",
+      "supportedVersion": "v0.8.9",
+      "verifiedBuildId": "25259567",
+      "currentBuildId": "25259567",
+      "lastSteamUpdate": "2026-09-13T08:39:54.000Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {

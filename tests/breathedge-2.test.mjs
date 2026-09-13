@@ -28,11 +28,15 @@ test("Breathedge 2 is registered consistently across the site", () => {
   const game = status.games["breathedge-2"];
   assert.equal(game.name, "Breathedge 2");
   assert.equal(game.appId, "2412960");
-  assert.equal(game.supportedVersion, "v0.8.5");
-  assert.equal(game.verifiedBuildId, "25077518");
-  assert.equal(game.currentBuildId, "25077518");
+  assert.equal(game.supportedVersion, "v0.8.9");
+  assert.equal(game.verifiedBuildId, "25259567");
+  assert.equal(game.currentBuildId, "25259567");
+  assert.equal(game.lastSteamUpdate, "2026-09-13T08:39:54.000Z");
   assert.equal(resolveDisplayStatus(game).key, "functional");
-  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "25077519" }).key, "pending");
+  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "25259568" }).key, "pending");
+  assert.match(script, /'breathedge-2': \{ name: 'Breathedge 2', appId: '2412960', supportedVersion: 'v0\.8\.9', verifiedBuildId: '25259567', currentBuildId: '25259567'/);
+  assert.match(translations, /Breathedge 2[\s\S]*?datetime="2026-09-13">13\. 9\. 2026/);
+  assert.match(index, /Čeština · v0\.3 · 100 %[\s\S]*?<h4>Breathedge 2<\/h4>[\s\S]*?datetime="2026-09-13">13\. 9\. 2026/);
 });
 
 test("detail uses the requested SEO, content and shared feature hooks", () => {
@@ -44,15 +48,23 @@ test("detail uses the requested SEO, content and shared feature hooks", () => {
   assert.match(detail, /data-comments-list/);
   assert.match(detail, /data-download data-game="breathedge-2"/);
   assert.match(detail, /data-download-count/);
-  assert.match(detail, /Breathedge_2_NioCZ_v0\.1\.zip/);
-  assert.match(detail, /0\.44 MB/);
-  assert.match(detail, /2\. 9\. 2026/);
+  assert.match(detail, /Breathedge\.2_NioCZ\.zip/);
+  assert.match(detail, /https:\/\/github\.com\/Niobko\/NioCZ-Cestiny\/releases\/download\/Breathedg2_NioCZ\/Breathedge\.2_NioCZ\.zip/);
+  assert.match(detail, /0\.18 MB/);
+  assert.match(detail, /13\. 9\. 2026/);
+  assert.match(detail, /Verze překladu v0\.3/);
+  assert.match(detail, /Breathedge 2 · v0\.8\.9/);
+  assert.match(detail, /Steam App ID<\/dt><dd><a href="https:\/\/store\.steampowered\.com\/app\/2412960\//);
   assert.match(detail, /Kontrola ve hře<\/span><b>75 %/);
   assert.match(detail, /Breathedge2_CZ_P\.pak/);
   assert.match(detail, /Breathedge2_CZ_P\.utoc/);
   assert.match(detail, /Breathedge2_CZ_P\.ucas/);
-  assert.match(detail, /Breathedge2\\Content\\Paks/);
-  assert.match(detail, /English \/ English \(US\)/);
+  assert.match(detail, /C:\.\.\.\\Breathedge2\\Breathedge2\\Content\\Paks/);
+  assert.match(detail, /install\.exe/);
+  assert.match(detail, /Procházet \(Browse\)/);
+  assert.match(detail, /Nainstalovat češtinu/);
+  assert.match(detail, /V nastavení jazyka přepněte jazyk na <strong>Čeština<\/strong>/);
+  assert.match(detail, /Windows může při prvním spuštění zobrazit upozornění SmartScreen/);
   assert.match(detail, /Unreal Engine/);
   assert.match(script, /from\('game_ratings'\)/);
   assert.match(script, /bug-reports\.html\?game=\$\{encodeURIComponent\(gameSlug\)\}/);
