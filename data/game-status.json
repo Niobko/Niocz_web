@@ -8,6 +8,21 @@
     "note": "Netlify checks every configured Steam public branch hourly; this file is the safe static fallback."
   },
   "games": {
+    "scrap-mechanic": {
+      "name": "Scrap Mechanic",
+      "appId": "387990",
+      "supportedVersion": "v1.0.5",
+      "verifiedBuildId": "25229539",
+      "currentBuildId": "25229539",
+      "lastSteamUpdate": "2026-09-10T13:56:43.000Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "no-mans-sky": {
       "name": "No Man's Sky",
       "appId": "275850",

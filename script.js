@@ -74,6 +74,7 @@ const gameStatusDefinitions = {
 // Safe embedded fallback for local file previews and temporary API/JSON outages.
 // The Netlify endpoint and data/game-status.json remain the primary sources.
 const fallbackGameStatuses = Object.freeze({
+  'scrap-mechanic': { name: 'Scrap Mechanic', appId: '387990', supportedVersion: 'v1.0.5', verifiedBuildId: '25229539', currentBuildId: '25229539', lastSteamUpdate: '2026-09-10T13:56:43.000Z', manualStatus: 'functional', override: null },
   "no-mans-sky": {"name":"No Man's Sky","appId":"275850","supportedVersion":"COSMOS (7.0)","verifiedBuildId":"25233815","currentBuildId":"25233815","lastSteamUpdate":"2026-09-10T15:03:20.000Z","manualStatus":"functional","override":null},
   "ready-or-not": {"name":"Ready or Not","appId":"1144200","supportedVersion":"v1.5.2","verifiedBuildId":"24942528","currentBuildId":"24942528","lastSteamUpdate":"2026-09-03T18:59:56.000Z","manualStatus":"functional","override":null},
   "astroneer": {"name":"Astroneer","appId":"361420","supportedVersion":"v1.43.2","verifiedBuildId":"24409322","currentBuildId":"24409322","lastSteamUpdate":"2026-08-12T16:54:54.000Z","manualStatus":"functional","override":null},

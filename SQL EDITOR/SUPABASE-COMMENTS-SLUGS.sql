@@ -30,6 +30,7 @@ alter table public.comments
       'factory-planner',
       'leafy-corner',
       'no-mans-sky',
+      'scrap-mechanic',
       'parcel-simulator',
       'restory',
       'sleeping-dogs',
