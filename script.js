@@ -1114,19 +1114,121 @@ const renderTranslationAuthor = profile => {
       );
     });
   });
-  // Připraveno pro budoucí důvěryhodný Realtime Presence zdroj.
-  setTranslationAuthorPresence(null);
 };
+
+const sitePresence = (() => {
+  const channelName = 'site-presence';
+  let channel = null;
+  let channelStatus = 'CLOSED';
+  let ownerUserId = null;
+  let activeUserId = null;
+  let activeAccessToken = null;
+  let connectionVersion = 0;
+
+  const readPresenceUsers = () => Object.values(channel?.presenceState?.() || {})
+    .flatMap(presences => Array.isArray(presences) ? presences : []);
+
+  const publishOwnerState = () => {
+    if (!ownerUserId || channelStatus !== 'SUBSCRIBED') {
+      setTranslationAuthorPresence(null);
+      return;
+    }
+
+    const ownerIsOnline = readPresenceUsers().some(presence => (
+      presence?.role === 'owner' && presence?.user_id === ownerUserId
+    ));
+    setTranslationAuthorPresence(ownerIsOnline ? 'online' : 'offline');
+  };
+
+  const connect = async session => {
+    const version = ++connectionVersion;
+    const previousChannel = channel;
+    channel = null;
+    channelStatus = 'CLOSED';
+    publishOwnerState();
+
+    if (previousChannel) await db.removeChannel(previousChannel);
+    if (version !== connectionVersion) return;
+
+    // Private Realtime channels must receive the current Auth JWT before joining.
+    if (session?.access_token) await db.realtime.setAuth(session.access_token);
+    else await db.realtime.setAuth();
+    if (version !== connectionVersion) return;
+
+    const nextChannel = db.channel(channelName, {
+      config: { private: true, presence: { enabled: true } }
+    });
+    channel = nextChannel;
+
+    nextChannel
+      .on('presence', { event: 'sync' }, publishOwnerState)
+      .on('presence', { event: 'join' }, publishOwnerState)
+      .on('presence', { event: 'leave' }, publishOwnerState)
+      .subscribe(async (status, error) => {
+        if (version !== connectionVersion || channel !== nextChannel) return;
+        channelStatus = status;
+
+        if (status !== 'SUBSCRIBED') {
+          publishOwnerState();
+          if (error) console.warn('Site Presence channel is not available.', error);
+          return;
+        }
+
+        // presenceState() is complete only after the channel is subscribed/synced.
+        publishOwnerState();
+        if (!session?.user?.id) return;
+
+        const { data: isAdmin, error: adminError } = await db.rpc('is_game_status_admin');
+        if (version !== connectionVersion || channel !== nextChannel) return;
+        if (adminError) {
+          console.warn('Unable to verify the Presence owner.', adminError);
+          return;
+        }
+        if (isAdmin !== true) return;
+
+        const trackStatus = await nextChannel.track({
+          user_id: session.user.id,
+          role: 'owner',
+          online_at: new Date().toISOString()
+        });
+        if (trackStatus !== 'ok') console.warn('Unable to track the Presence owner.', trackStatus);
+      });
+  };
+
+  return {
+    setOwnerUserId(userId) {
+      ownerUserId = userId || null;
+      publishOwnerState();
+    },
+    async setSession(session) {
+      const nextUserId = session?.user?.id || null;
+      const nextAccessToken = session?.access_token || null;
+
+      if (channel && nextUserId === activeUserId && nextAccessToken === activeAccessToken) return;
+
+      if (channel && nextUserId && nextUserId === activeUserId) {
+        activeAccessToken = nextAccessToken;
+        await db.realtime.setAuth(nextAccessToken);
+        return;
+      }
+
+      activeUserId = nextUserId;
+      activeAccessToken = nextAccessToken;
+      await connect(session);
+    }
+  };
+})();
 
 const loadTranslationAuthor = async () => {
   if (!detailCommunityUi?.authorBadge) return;
   renderTranslationAuthor(null);
+  setTranslationAuthorPresence(null);
   if (!db) return;
   const { data, error } = await db
     .from('profiles')
     .select('id,display_name,avatar_url')
     .eq('is_author', true)
-    .order('display_name', { ascending: true })
+    .order('id', { ascending: true })
     .limit(1)
     .maybeSingle();
   if (error) {
@@ -1134,6 +1236,7 @@ const loadTranslationAuthor = async () => {
     return;
   }
   renderTranslationAuthor(data);
+  sitePresence.setOwnerUserId(data?.id);
 };
 
 loadTranslationAuthor();
@@ -1519,8 +1622,23 @@ document.querySelector('[data-download]')?.addEventListener('click', async event
   window.location.href = target;
 });
 if (db) {
-  db.auth.getSession().then(({ data }) => updateAuthUi(data.session?.user || null));
-  db.auth.onAuthStateChange((_event, session) => window.setTimeout(() => updateAuthUi(session?.user || null), 0));
+  const applyAuthSession = session => {
+    updateAuthUi(session?.user || null);
+    sitePresence.setSession(session).catch(error => {
+      console.warn('Unable to update Site Presence for the current session.', error);
+      setTranslationAuthorPresence(null);
+    });
+  };
+
+  // Restore both the account UI and Presence after a page refresh.
+  db.auth.getSession().then(({ data, error }) => {
+    if (error) console.warn('Unable to restore the current session.', error);
+    applyAuthSession(data?.session || null);
+  });
+  db.auth.onAuthStateChange((_event, session) => {
+    // Run outside Supabase's auth callback so Realtime can safely read the new token.
+    window.setTimeout(() => applyAuthSession(session), 0);
+  });
 } else updateAuthUi(null);
 loadComments();
 loadDownloadCount();
