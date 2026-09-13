@@ -24,7 +24,7 @@
       <a class="brand" href="index.html" aria-label="Nio Localization – domů"><span class="brand-mark" aria-hidden="true">N</span><span>Nio <strong>Localization</strong></span></a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-menu" data-menu-toggle><span class="sr-only">Otevřít menu</span><span></span><span></span><span></span></button>
       <nav id="main-menu" class="main-nav" aria-label="Hlavní navigace" data-menu>
-        <a href="index.html">Domů</a><a href="preklady.html">Překlady</a><a href="index.html#novinky">Novinky</a><a href="index.html#o-projektu">O projektu</a><a href="index.html#kontakt">Kontakt</a><a href="hlasovani.html" class="vote-nav-link" title="Hlasování" aria-label="Hlasování"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M8.5 14.5C7.5 13.5 7 12.2 7 10.8a5 5 0 0 1 10 0c0 1.4-.5 2.7-1.5 3.7-.9.9-1.5 1.8-1.5 3h-4c0-1.2-.6-2.1-1.5-3Z"></path><path d="M12 2V1"></path><path d="M4.9 4.9 4.2 4.2"></path><path d="M19.8 4.2 19.1 4.9"></path><path d="M3 11H2"></path><path d="M22 11h-1"></path></svg><span>Hlasování</span></a><a href="bug-reports.html" class="bug-nav-link" title="Nahlásit chybu" aria-label="Nahlásit chybu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.5V6a3 3 0 0 1 6 0v.5"></path><path d="M8.5 9.5C8.5 8.12 9.62 7 11 7h2c1.38 0 2.5 1.12 2.5 2.5V15a4.5 4.5 0 1 1-9 0V9.5Z"></path><path d="M12 11v8"></path><path d="M8 11H5"></path><path d="M19 11h-3"></path><path d="M8 15H4.5"></path><path d="M19.5 15H16"></path><path d="M9.2 3.8 7.8 2.4"></path><path d="M14.8 3.8 16.2 2.4"></path></svg><span>Nahlásit chybu</span></a><button class="nav-auth" type="button" data-auth-open>Přihlásit se</button>
+        <a href="index.html">Domů</a><a href="preklady.html">Překlady</a><a href="index.html#novinky">Novinky</a><a href="index.html#o-projektu">O projektu</a><a href="index.html#kontakt">Kontakt</a><a href="hlasovani.html" class="request-nav-link">Navrhnout hru</a><a href="hlasovani.html" class="vote-nav-link" title="Hlasování" aria-label="Hlasování"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M8.5 14.5C7.5 13.5 7 12.2 7 10.8a5 5 0 0 1 10 0c0 1.4-.5 2.7-1.5 3.7-.9.9-1.5 1.8-1.5 3h-4c0-1.2-.6-2.1-1.5-3Z"></path><path d="M12 2V1"></path><path d="M4.9 4.9 4.2 4.2"></path><path d="M19.8 4.2 19.1 4.9"></path><path d="M3 11H2"></path><path d="M22 11h-1"></path></svg><span>Hlasování</span></a><a href="bug-reports.html" class="bug-nav-link" title="Nahlásit chybu" aria-label="Nahlásit chybu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.5V6a3 3 0 0 1 6 0v.5"></path><path d="M8.5 9.5C8.5 8.12 9.62 7 11 7h2c1.38 0 2.5 1.12 2.5 2.5V15a4.5 4.5 0 1 1-9 0V9.5Z"></path><path d="M12 11v8"></path><path d="M8 11H5"></path><path d="M19 11h-3"></path><path d="M8 15H4.5"></path><path d="M19.5 15H16"></path><path d="M9.2 3.8 7.8 2.4"></path><path d="M14.8 3.8 16.2 2.4"></path></svg><span>Nahlásit chybu</span></a><button class="nav-auth" type="button" data-auth-open>Přihlásit se</button>
       </nav>
     </div>
   </header>
@@ -45,19 +45,110 @@
       </section>
 
       <div class="account-layout" data-profile-content hidden>
+        <section class="profile-community-hero" data-user-overview>
+          <div class="profile-community-main">
+            <div data-profile-selected-badge>Žádný zobrazený odznak</div>
+            <div class="profile-community-copy">
+              <p class="eyebrow">Komunitní profil</p>
+              <h2 data-profile-member-name>Hráč</h2>
+              <p>Člen od: <time data-profile-member-since>—</time></p>
+            </div>
+          </div>
+          <div class="profile-community-stats">
+            <div class="profile-stat"><strong data-profile-badge-count>0 / 8</strong><span>Odznaky</span></div>
+            <div class="profile-stat"><strong data-profile-follow-count>0</strong><span>Sledované hry</span></div>
+            <div class="profile-stat"><strong data-profile-favorite-count>0</strong><span>Oblíbené hry</span></div>
+          </div>
+        </section>
         <aside class="account-sidebar" aria-label="Nastavení účtu">
           <div class="account-sidebar-user">
             <span class="profile-mini-avatar" data-sidebar-avatar><span data-sidebar-initial>N</span><img data-sidebar-image alt="" hidden></span>
             <span><strong data-sidebar-name>Hráč</strong><small data-sidebar-email></small></span>
           </div>
           <nav>
-            <a href="#profil" class="active" data-account-tab="profil">Profil</a>
+            <a href="#prehled" class="active" data-account-tab="prehled">Přehled</a>
+            <a href="#sledovane-hry" data-account-tab="sledovane-hry">Moje sledované hry</a>
+            <a href="#oblibene-hry" data-account-tab="oblibene-hry">Moje oblíbené hry</a>
+            <a href="#upozorneni" data-account-tab="upozorneni">Upozornění</a>
+            <a href="#odznaky" data-account-tab="odznaky">Moje odznaky</a>
+            <a href="#aktivita" data-account-tab="aktivita">Aktivita</a>
+            <a href="#komentare" data-account-tab="komentare">Komentáře</a>
+            <a href="#hlasovani" data-account-tab="hlasovani">Hlasování</a>
+            <a href="#profil" data-account-tab="profil">Upravit profil</a>
             <a href="#zabezpeceni" data-account-tab="zabezpeceni">Zabezpečení</a>
-            <a href="#nastaveni" data-account-tab="nastaveni">Nastavení</a>
+            <a href="#administrace" class="account-admin-link" data-account-tab="administrace" data-admin-nav hidden>Administrace</a>
           </nav>
         </aside>
 
         <div class="account-content">
+          <section class="account-panel" id="prehled" data-account-section="prehled">
+            <div class="account-panel-heading"><div><p class="eyebrow">Přehled</p><h2>Váš účet na jednom místě</h2></div></div>
+            <p class="profile-section-copy">Sledujte aktualizace překladů, sbírejte odznaky a vraťte se rychle ke své komunitní aktivitě.</p>
+            <div class="profile-section-summary">
+              <a class="profile-summary-chip" href="#sledovane-hry"><strong data-profile-follow-count>0</strong><span>Sledovaných her</span></a>
+              <a class="profile-summary-chip" href="#oblibene-hry"><strong data-profile-favorite-count>0</strong><span>Oblíbené hry</span></a>
+              <a class="profile-summary-chip" href="#odznaky"><strong data-profile-badge-count>0 / 8</strong><span>Získaných odznaků</span></a>
+              <a class="profile-summary-chip" href="#upozorneni"><strong data-profile-unread-count>0</strong><span>Nepřečtených upozornění</span></a>
+            </div>
+            <div class="profile-dashboard" aria-label="Rychlý přehled účtu">
+              <article class="dashboard-card dashboard-news-card">
+                <header><div><span class="dashboard-kicker">Aktuality</span><h3>Co je nové</h3></div><a href="#upozorneni">Zobrazit vše →</a></header>
+                <div class="dashboard-card-content" data-dashboard-news><p class="empty-state">Načítám upozornění…</p></div>
+              </article>
+              <article class="dashboard-card dashboard-games-card">
+                <header><div><span class="dashboard-kicker">Knihovna</span><h3>Sledované hry</h3></div><a href="#sledovane-hry">Zobrazit vše →</a></header>
+                <div class="dashboard-card-content" data-dashboard-games><p class="empty-state">Načítám sledované hry…</p></div>
+              </article>
+              <article class="dashboard-card dashboard-badges-card">
+                <header><div><span class="dashboard-kicker">Odměny</span><h3>Moje odznaky</h3></div><a href="#odznaky">Zobrazit vše →</a></header>
+                <div class="dashboard-card-content" data-dashboard-badges><p class="empty-state">Načítám odznaky…</p></div>
+              </article>
+              <article class="dashboard-card dashboard-activity-card">
+                <header><div><span class="dashboard-kicker">Historie</span><h3>Poslední aktivita</h3></div><a href="#aktivita">Zobrazit vše →</a></header>
+                <div class="dashboard-card-content" data-dashboard-activity><p class="empty-state">Načítám aktivitu…</p></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="account-panel" id="sledovane-hry" data-account-section="sledovane-hry">
+            <div class="account-panel-heading"><div><p class="eyebrow">Knihovna</p><h2>Moje sledované hry</h2></div></div>
+            <p class="profile-section-copy">Novou verzi zvýrazníme, dokud znovu neotevřete detail hry.</p>
+            <div class="followed-games-grid" data-profile-followed-games><p class="empty-state">Načítám sledované hry…</p></div>
+          </section>
+
+          <section class="account-panel" id="oblibene-hry" data-account-section="oblibene-hry">
+            <div class="account-panel-heading"><div><p class="eyebrow">Osobní sbírka</p><h2>Moje oblíbené hry</h2></div></div>
+            <p class="profile-section-copy">Oblíbené hry jsou vaše osobní sbírka a neposílají upozornění na nové verze.</p>
+            <div class="favorite-games-grid" data-profile-favorite-games><p class="empty-state">Načítám oblíbené hry…</p></div>
+          </section>
+
+          <section class="account-panel" id="upozorneni" data-account-section="upozorneni">
+            <div class="account-panel-heading"><div><p class="eyebrow">Centrum upozornění</p><h2>Upozornění</h2></div><button class="button button-secondary" type="button" data-profile-notifications-read-all>Označit vše jako přečtené</button></div>
+            <div class="profile-notification-list" data-profile-notifications><p class="empty-state">Načítám upozornění…</p></div>
+          </section>
+
+          <section class="account-panel" id="odznaky" data-account-section="odznaky">
+            <div class="account-panel-heading"><div><p class="eyebrow">Komunitní odměny</p><h2>Moje odznaky</h2></div></div>
+            <p class="profile-section-copy">Zamčené odznaky ukazují aktuální progres. Ze získaných si můžete vybrat jeden zobrazený u profilu a komentářů.</p>
+            <div class="badge-grid" data-profile-badges><p class="empty-state">Načítám odznaky…</p></div>
+            <p class="form-message" data-badge-message role="status" aria-live="polite"></p>
+          </section>
+
+          <section class="account-panel" id="aktivita" data-account-section="aktivita">
+            <div class="account-panel-heading"><div><p class="eyebrow">Historie</p><h2>Aktivita</h2></div></div>
+            <div class="profile-list" data-profile-activity><p class="empty-state">Načítám aktivitu…</p></div>
+          </section>
+
+          <section class="account-panel" id="komentare" data-account-section="komentare">
+            <div class="account-panel-heading"><div><p class="eyebrow">Diskuse</p><h2>Komentáře</h2></div></div>
+            <div class="profile-list" data-profile-comments><p class="empty-state">Načítám komentáře…</p></div>
+          </section>
+
+          <section class="account-panel" id="hlasovani" data-account-section="hlasovani">
+            <div class="account-panel-heading"><div><p class="eyebrow">Komunitní výběr</p><h2>Hlasování</h2></div></div>
+            <div class="profile-list" data-profile-votes><p class="empty-state">Načítám hlasování…</p></div>
+          </section>
+
           <section class="account-panel" id="profil" data-account-section="profil">
             <div class="account-panel-heading"><div><p class="eyebrow">Veřejný profil</p><h2>Profilové údaje</h2></div><span class="profile-status">Viditelné v komentářích</span></div>
             <form data-profile-form>
@@ -93,11 +184,48 @@
             <p class="form-message" data-reset-message role="status"></p>
           </section>
 
-          <section class="account-panel" id="nastaveni" data-account-section="nastaveni">
-            <div class="account-panel-heading"><div><p class="eyebrow">Nastavení</p><h2>Nastavení účtu</h2></div></div>
-            <p class="panel-copy">Další nastavení účtu zde přibudou postupně. Zatím můžete spravovat veřejný profil a zabezpečení.</p>
-            <div class="settings-links"><a class="button button-secondary" href="#profil">Upravit profil</a><a class="button button-secondary" href="#zabezpeceni">Spravovat heslo</a></div>
+          <section class="account-panel admin-account-panel" id="administrace" data-account-section="administrace" data-admin-section hidden>
+            <div class="account-panel-heading"><div><p class="eyebrow">Správa webu</p><h2>Administrace</h2></div><span class="profile-status admin-status-label">Pouze administrátor</span></div>
+            <p class="profile-section-copy">Odznaky, verze překladů a komunitní žádosti spravujete přehledně na jednom místě.</p>
+
+            <section class="badge-admin" data-badge-admin hidden>
+              <h3>Odznaky uživatelů</h3>
+              <p>Odznaky lze bezpečně udělit nebo odebrat. Tester a Podporovatel se udělují pouze zde.</p>
+              <div class="admin-user-badge-grid">
+                <label>Uživatel<select data-admin-user></select></label>
+                <label>Odznak<select data-admin-badge></select></label>
+              </div>
+              <div class="badge-admin-actions">
+                <button class="button button-primary" type="button" data-admin-badge-action="grant">Udělit</button>
+                <button class="button button-secondary" type="button" data-admin-badge-action="revoke">Odebrat</button>
+              </div>
+              <p class="admin-earned-summary"><strong>Odznaky uživatele:</strong> <span data-admin-user-badges>—</span></p>
+              <p class="form-message" data-admin-badge-message role="status"></p>
+
+              <form class="admin-version-form" data-admin-version-form>
+                <h4>Verze a upozornění sledovatelů</h4>
+                <div class="admin-version-grid">
+                  <label>Hra<select data-admin-game></select></label>
+                  <label>Verze češtiny<input data-admin-translation-version required maxlength="80"></label>
+                  <label>Current Version (verze hry)<input data-admin-game-version required maxlength="120"></label>
+                  <label>Datum aktualizace<input data-admin-version-date type="date" required></label>
+                  <label>Steam App ID<input data-admin-steam-app-id inputmode="numeric" pattern="[0-9]+" maxlength="20" required></label>
+                  <label>Current Build (ověřený build)<input data-admin-verified-build-id inputmode="numeric" pattern="[0-9]*" maxlength="30"></label>
+                  <label>Latest Build <span>automaticky ze Steamu</span><input data-admin-latest-build readonly></label>
+                  <label>Last Steam Update <span>automaticky ze Steamu</span><input data-admin-last-steam-update readonly></label>
+                </div>
+                <p class="admin-version-help">Latest Build a Last Steam Update doplňuje Steam kontrola automaticky. Když se Latest Build liší od Current Build, překlad čeká na ověření.</p>
+                <button class="button button-primary" type="submit">Uložit verze</button>
+                <p class="form-message" data-admin-version-message role="status"></p>
+              </form>
+            </section>
+
+            <section class="admin-request-section">
+              <div class="admin-request-heading"><div><h3>Žádosti o překlad</h3><p>Změňte stav, upravte údaje nebo odstraňte nevhodný návrh.</p></div><a class="button button-secondary" href="hlasovani.html">Veřejná stránka</a></div>
+              <div class="admin-request-list" data-admin-request-list aria-live="polite"><p class="empty-state">Načítám žádosti…</p></div>
+            </section>
           </section>
+
         </div>
       </div>
     </div>

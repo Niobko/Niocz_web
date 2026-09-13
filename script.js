@@ -345,6 +345,31 @@ const loadGameStatusOverrides = async () => {
     .filter(([, override]) => Boolean(override)));
 };
 
+const loadAdminGameConfig = async () => {
+  if (!db) return {};
+  const { data, error } = await db
+    .from('game_versions')
+    .select('game_slug,steam_app_id,verified_build_id,supported_game_version');
+  if (error) {
+    console.warn('Admin game configuration is not available yet', error);
+    return {};
+  }
+  return Object.fromEntries((data || []).map(row => [row.game_slug, row]));
+};
+
+const mergeAdminGameConfig = (games, adminConfig) => Object.fromEntries(
+  Object.entries(games || {}).map(([slug, game]) => {
+    const saved = adminConfig?.[slug];
+    if (!saved) return [slug, game];
+    return [slug, {
+      ...game,
+      appId: normalizeComparableValue(saved.steam_app_id) || game.appId,
+      verifiedBuildId: normalizeComparableValue(saved.verified_build_id) || game.verifiedBuildId,
+      supportedVersion: normalizeComparableValue(saved.supported_game_version) || game.supportedVersion
+    }];
+  })
+);
+
 const mergeGameStatusOverrides = (games, overrides) => Object.fromEntries(
   Object.entries(games || {}).map(([slug, game]) => [slug, {
     ...game,
@@ -353,9 +378,9 @@ const mergeGameStatusOverrides = (games, overrides) => Object.fromEntries(
 );
 
 const loadCombinedGameStatuses = async () => {
-  const [games, overrides] = await Promise.all([loadGameStatuses(), loadGameStatusOverrides()]);
+  const [games, overrides, adminConfig] = await Promise.all([loadGameStatuses(), loadGameStatusOverrides(), loadAdminGameConfig()]);
   activeGameStatusOverrides = overrides;
-  activeGameStatuses = mergeGameStatusOverrides(games, overrides);
+  activeGameStatuses = mergeGameStatusOverrides(mergeAdminGameConfig(games, adminConfig), overrides);
   gameStatusesReady = true;
   applyGameStatuses(activeGameStatuses);
   return activeGameStatuses;
@@ -1409,7 +1434,7 @@ async function updateAuthUi(user) {
   refreshGameStatusAdminPermission();
   refreshBugReportAlert();
   refreshReplyNotification();
-  loadVoting();
+  window.NIORequests?.load();
   loadGameRating();
   if (user) {
     const profile = await loadCurrentProfile(user);
@@ -1549,7 +1574,7 @@ async function loadComments() {
     list.innerHTML = '<p class="empty-state">Komentáře se zobrazí po připojení Supabase.</p>';
     return;
   }
-  let { data, error } = await db.from('comments').select('id,body,created_at,user_id,profiles(display_name,is_author,avatar_url)').eq('game_slug', gameSlug).order('created_at', { ascending: false });
+  let { data, error } = await db.from('comments').select('id,body,created_at,user_id,profiles(display_name,is_author,avatar_url,selected_badge_id,selected_badge:badges!profiles_selected_badge_id_fkey(name,description,image_url))').eq('game_slug', gameSlug).order('created_at', { ascending: false });
   if (error) {
     const fallback = await db.from('comments').select('id,body,created_at,user_id,profiles(display_name,is_author)').eq('game_slug', gameSlug).order('created_at', { ascending: false });
     data = fallback.data;
@@ -1572,6 +1597,11 @@ async function loadComments() {
     header.append(avatar);
     const author = document.createElement('strong');
     author.textContent = authorName;
+    const selectedBadge = Array.isArray(comment.profiles?.selected_badge)
+      ? comment.profiles.selected_badge[0]
+      : comment.profiles?.selected_badge;
+    const selectedBadgeIcon = window.NIO_USER_SYSTEM?.createBadgeIcon(selectedBadge, 'small');
+    if (selectedBadgeIcon) header.append(selectedBadgeIcon);
     header.append(author);
     if (comment.profiles?.is_author) { const badge = document.createElement('span'); badge.className = 'author-badge'; badge.textContent = 'AUTOR'; header.append(badge); }
     const date = document.createElement('time');
@@ -1595,6 +1625,7 @@ document.querySelector('[data-comment-form]')?.addEventListener('submit', async 
   textarea.value = '';
   setMessage(message, 'Komentář byl přidán.');
   await loadComments();
+  document.dispatchEvent(new Event('nio:user-activity-changed'));
 });
 async function loadDownloadCount() {
   const output = document.querySelector('[data-download-count]');
@@ -1643,171 +1674,33 @@ if (db) {
 loadComments();
 loadDownloadCount();
 
-const voteStatuses = ['Navrženo', 'Zvažujeme', 'Překládá se', 'Hotovo'];
-let isAuthor = false;
-
-const formatVotes = count => new Intl.NumberFormat('cs-CZ').format(count || 0);
-const createStatus = status => {
-  const badge = document.createElement('span');
-  badge.className = 'vote-status';
-  badge.dataset.status = status;
-  badge.textContent = status;
-  return badge;
+window.NIO_REQUEST_CONTEXT = {
+  get db() { return db; },
+  get user() { return currentUser; },
+  openAuth,
+  setMessage
 };
-
-async function getAuthorPermission() {
-  if (!db || !currentUser) return false;
-  const { data } = await db.from('profiles').select('is_author').eq('id', currentUser.id).maybeSingle();
-  return Boolean(data?.is_author);
+if (document.querySelector('[data-vote-list], [data-vote-preview], [data-request-open], [data-admin-request-list]')) {
+  const requestScript = document.createElement('script');
+  requestScript.src = new URL('translation-requests.js', document.baseURI).href;
+  requestScript.defer = true;
+  document.body.append(requestScript);
 }
 
-async function loadVoting() {
-  const list = document.querySelector('[data-vote-list]');
-  const preview = document.querySelector('[data-vote-preview]');
-  if (!list && !preview) return;
-  if (!db) {
-    const message = '<p class="empty-state">Hlasování se zobrazí po připojení Supabase.</p>';
-    if (list) list.innerHTML = message;
-    if (preview) preview.innerHTML = message;
-    return;
+document.addEventListener('nio:user-system-ready', () => loadComments());
+const loadUserSystem = () => {
+  if (!document.querySelector('link[data-user-system-styles]')) {
+    const stylesheet = document.createElement('link');
+    stylesheet.rel = 'stylesheet';
+    stylesheet.href = new URL('user-system.css', document.baseURI).href;
+    stylesheet.dataset.userSystemStyles = '';
+    document.head.append(stylesheet);
   }
-  const { data: requests, error } = await db.from('translation_requests').select('id,slug,title,cover_url,description,status,vote_count').order('vote_count', { ascending: false }).order('created_at');
-  if (error) {
-    const message = '<p class="empty-state">Hlasování zatím není aktivní. Spusťte nový SQL migrační skript v Supabase.</p>';
-    if (list) list.innerHTML = message;
-    if (preview) preview.innerHTML = message;
-    return;
+  if (!document.querySelector('script[data-user-system-script]')) {
+    const script = document.createElement('script');
+    script.src = new URL('user-system.js', document.baseURI).href;
+    script.dataset.userSystemScript = '';
+    document.body.append(script);
   }
-  let ownVotes = new Set();
-  if (currentUser) {
-    const { data: votes } = await db.from('translation_votes').select('request_id').eq('user_id', currentUser.id);
-    ownVotes = new Set((votes || []).map(vote => vote.request_id));
-    isAuthor = await getAuthorPermission();
-  } else isAuthor = false;
-  if (list) {
-    if (!requests.length) list.innerHTML = '<p class="empty-state">Zatím nebyla navržena žádná hra.</p>';
-    else list.replaceChildren(...requests.map(request => createVoteCard(request, ownVotes.has(request.id))));
-  }
-  if (preview) {
-    const top = requests.filter(request => request.status !== 'Hotovo').slice(0, 3);
-    if (!top.length) preview.innerHTML = '<p class="empty-state">Zatím nebyla navržena žádná hra.</p>';
-    else preview.replaceChildren(...top.map(createPreviewCard));
-  }
-}
-
-function createPreviewCard(request) {
-  const card = document.createElement('a');
-  card.className = 'preview-card';
-  card.href = 'hlasovani.html';
-  const image = document.createElement('img');
-  image.src = request.cover_url;
-  image.alt = '';
-  image.loading = 'lazy';
-  const info = document.createElement('div');
-  const title = document.createElement('h3');
-  title.textContent = request.title;
-  info.append(title, createStatus(request.status));
-  const count = document.createElement('div');
-  count.className = 'preview-count';
-  const strong = document.createElement('strong');
-  strong.textContent = formatVotes(request.vote_count);
-  const label = document.createElement('span');
-  label.textContent = 'hlasů';
-  count.append(strong, label);
-  card.append(image, info, count);
-  return card;
-}
-
-function createVoteCard(request, voted) {
-  const card = document.createElement('article');
-  card.className = 'vote-card';
-  const cover = document.createElement('div');
-  cover.className = 'vote-cover';
-  const image = document.createElement('img');
-  image.src = request.cover_url;
-  image.alt = `Obal hry ${request.title}`;
-  image.loading = 'lazy';
-  cover.append(image);
-  const body = document.createElement('div');
-  body.className = 'vote-card-body';
-  const top = document.createElement('div');
-  top.className = 'vote-card-top';
-  const copy = document.createElement('div');
-  const title = document.createElement('h3');
-  title.textContent = request.title;
-  const description = document.createElement('p');
-  description.className = 'vote-description';
-  description.textContent = request.description;
-  copy.append(title, description);
-  top.append(copy, createStatus(request.status));
-  const actions = document.createElement('div');
-  actions.className = 'vote-card-actions';
-  const total = document.createElement('div');
-  total.className = 'vote-total';
-  const number = document.createElement('strong');
-  number.textContent = formatVotes(request.vote_count);
-  const label = document.createElement('span');
-  label.textContent = 'hlasů komunity';
-  total.append(number, label);
-  const controls = document.createElement('div');
-  const button = document.createElement('button');
-  button.type = 'button';
-  button.className = `button vote-button ${voted ? 'voted' : 'button-primary'}`;
-  button.textContent = voted ? 'ZRUŠIT HLAS' : 'CHCI ČEŠTINU';
-  button.disabled = request.status === 'Hotovo';
-  if (request.status === 'Hotovo') button.textContent = 'PŘEKLAD HOTOV';
-  const feedback = document.createElement('p');
-  feedback.className = 'vote-feedback';
-  button.addEventListener('click', () => toggleVote(request.id, voted, button, feedback));
-  controls.append(button, feedback);
-  actions.append(total, controls);
-  body.append(top);
-  if (isAuthor) body.append(createAdminStatus(request));
-  body.append(actions);
-  card.append(cover, body);
-  return card;
-}
-
-function createAdminStatus(request) {
-  const wrap = document.createElement('div');
-  wrap.className = 'admin-status';
-  const label = document.createElement('label');
-  label.textContent = 'Správa Nio:';
-  const select = document.createElement('select');
-  voteStatuses.forEach(status => {
-    const option = document.createElement('option');
-    option.value = option.textContent = status;
-    option.selected = status === request.status;
-    select.append(option);
-  });
-  select.addEventListener('change', async () => {
-    select.disabled = true;
-    const { error } = await db.from('translation_requests').update({ status: select.value }).eq('id', request.id);
-    select.disabled = false;
-    if (error) alert('Stav se nepodařilo změnit: ' + error.message);
-    else loadVoting();
-  });
-  wrap.append(label, select);
-  return wrap;
-}
-
-async function toggleVote(requestId, voted, button, feedback) {
-  if (!currentUser) {
-    setMessage(feedback, 'Pro hlasování se nejprve přihlaste.', true);
-    openAuth();
-    return;
-  }
-  button.disabled = true;
-  const query = voted
-    ? db.from('translation_votes').delete().eq('request_id', requestId).eq('user_id', currentUser.id)
-    : db.from('translation_votes').insert({ request_id: requestId, user_id: currentUser.id });
-  const { error } = await query;
-  if (error) {
-    button.disabled = false;
-    setMessage(feedback, 'Hlas se nepodařilo uložit: ' + error.message, true);
-    return;
-  }
-  await loadVoting();
-}
-
-loadVoting();
+};
+loadUserSystem();

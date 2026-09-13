@@ -13,6 +13,8 @@ test("frontend combines public overrides with every configured game", () => {
   assert.match(script, /mergeGameStatusOverrides/);
   assert.match(script, /statusOverride: overrides\?\.\[slug\] \|\| null/);
   assert.match(script, /applyGameStatuses\(activeGameStatuses\)/);
+  assert.match(script, /from\('game_versions'\)[\s\S]*steam_app_id,verified_build_id,supported_game_version/);
+  assert.match(script, /mergeAdminGameConfig\(games, adminConfig\)/);
   assert.ok(Object.keys(statusConfig.games).length >= 13);
 });
 

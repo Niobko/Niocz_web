@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
   <link rel="canonical" href="https://nioczloc.com/">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="image.css"><link rel="stylesheet" href="community.css"><link rel="stylesheet" href="voting.css">
+  <link rel="stylesheet" href="image.css"><link rel="stylesheet" href="community.css"><link rel="stylesheet" href="voting.css?v=2">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script><script src="config.js" defer></script><script src="script.js" defer></script>
 </head>
 <body>
@@ -24,7 +24,7 @@
         <span class="sr-only">Otevřít menu</span><span></span><span></span><span></span>
       </button>
       <nav id="main-menu" class="main-nav" aria-label="Hlavní navigace" data-menu>
-        <a href="#domu">Domů</a><a href="preklady.html">Překlady</a><a href="#novinky">Novinky</a><a href="#o-projektu">O projektu</a><a href="#kontakt">Kontakt</a><a href="hlasovani.html" class="vote-nav-link" title="Hlasování"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M8.5 14.5C7.5 13.5 7 12.2 7 10.8a5 5 0 0 1 10 0c0 1.4-.5 2.7-1.5 3.7-.9.9-1.5 1.8-1.5 3h-4c0-1.2-.6-2.1-1.5-3Z"></path><path d="M12 2V1"></path><path d="M4.9 4.9 4.2 4.2"></path><path d="M19.8 4.2 19.1 4.9"></path><path d="M3 11H2"></path><path d="M22 11h-1"></path></svg><span>Hlasování</span></a><a href="bug-reports.html" class="bug-nav-link" title="Nahlásit chybu">
+        <a href="#domu">Domů</a><a href="preklady.html">Překlady</a><a href="#novinky">Novinky</a><a href="#o-projektu">O projektu</a><a href="#kontakt">Kontakt</a><a href="hlasovani.html" class="request-nav-link">Navrhnout hru</a><a href="hlasovani.html" class="vote-nav-link" title="Hlasování"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M8.5 14.5C7.5 13.5 7 12.2 7 10.8a5 5 0 0 1 10 0c0 1.4-.5 2.7-1.5 3.7-.9.9-1.5 1.8-1.5 3h-4c0-1.2-.6-2.1-1.5-3Z"></path><path d="M12 2V1"></path><path d="M4.9 4.9 4.2 4.2"></path><path d="M19.8 4.2 19.1 4.9"></path><path d="M3 11H2"></path><path d="M22 11h-1"></path></svg><span>Hlasování</span></a><a href="bug-reports.html" class="bug-nav-link" title="Nahlásit chybu">
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M9 6.5V6a3 3 0 0 1 6 0v.5"></path>
     <path d="M8.5 9.5C8.5 8.12 9.62 7 11 7h2c1.38 0 2.5 1.12 2.5 2.5V15a4.5 4.5 0 1 1-9 0V9.5Z"></path>
@@ -196,33 +196,16 @@
           </div>
         </div>
 
-        <div class="in-progress reveal" aria-labelledby="in-progress-title">
-          <div class="in-progress-heading">
-            <div><p class="eyebrow">Výhled překladů</p><h3 id="in-progress-title">Na čem právě pracuji</h3></div>
-            <span>Aktualizováno průběžně</span>
-          </div>
-          <div class="in-progress-grid">
-            <!-- TODO: Druhou kartu můžete doplnit, nebo celý tento article odstranit. -->
-            <article class="in-progress-card">
-              <div class="in-progress-cover" aria-hidden="true"><span>N</span><small>Cover bude doplněn</small></div>
-              <div class="in-progress-body">
-                <div class="in-progress-meta"><span class="status"><i></i> Připravuje se</span><strong>— %</strong></div>
-                <h4>Název hry bude doplněn</h4>
-                <p>TODO: Doplňte krátký popis připravovaného překladu.</p>
-                <div class="in-progress-track" role="progressbar" aria-label="Průběh překladu" aria-valuetext="Procento bude doplněno"><span style="--progress:0%"></span></div>
-              </div>
-            </article>
-          </div>
-        </div>
       </div>
     </section>
 
     <section class="section vote-preview-section" aria-labelledby="vote-preview-title">
       <div class="container">
         <div class="section-heading vote-preview-heading reveal">
-          <div><p class="eyebrow">Rozhoduje komunita</p><h2 id="vote-preview-title">O jaký překlad máte zájem?</h2><p>Dejte hlas hře, kterou byste si nejraději zahráli v češtině.</p></div>
-          <a class="text-link" href="hlasovani.html">Zobrazit celé hlasování <span aria-hidden="true">→</span></a>
+          <div><p class="eyebrow">Rozhoduje komunita</p><h2 id="vote-preview-title">Žádosti o překlad</h2><p>Navrhni hru, kterou bys chtěl vidět v češtině.</p></div>
+          <div class="request-heading-actions"><button class="button button-primary" type="button" data-request-open>Navrhnout hru</button><a class="text-link" href="hlasovani.html">Zobrazit všechny žádosti <span aria-hidden="true">→</span></a></div>
         </div>
+        <p class="request-page-message" data-request-page-message role="status" aria-live="polite"></p>
         <div class="vote-preview-grid" data-vote-preview aria-live="polite"><p class="empty-state">Načítám nejžádanější překlady…</p></div>
       </div>
     </section>

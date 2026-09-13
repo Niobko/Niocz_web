@@ -70,7 +70,12 @@ const loadProfilePage = async user => {
   authRequired.hidden = Boolean(user);
   profileContent.hidden = !user;
   if (!user || !profileDb) return;
-  const { data, error } = await profileDb.from('profiles').select('id,display_name,bio,avatar_url,avatar_path').eq('id', user.id).maybeSingle();
+  let { data, error } = await profileDb.from('profiles').select('id,display_name,bio,avatar_url,avatar_path,created_at,selected_badge_id').eq('id', user.id).maybeSingle();
+  if (error) {
+    const fallback = await profileDb.from('profiles').select('id,display_name,bio,avatar_url,avatar_path').eq('id', user.id).maybeSingle();
+    data = fallback.data;
+    error = fallback.error;
+  }
   if (requestId !== profileLoadRequest) return;
   if (error) {
     loadedProfile = null;
@@ -84,8 +89,15 @@ const loadProfilePage = async user => {
 
 const activateAccountTab = () => {
   const hash = window.location.hash.replace('#', '');
-  const active = ['profil', 'zabezpeceni', 'nastaveni'].includes(hash) ? hash : 'profil';
+  const sections = ['prehled', 'sledovane-hry', 'oblibene-hry', 'upozorneni', 'odznaky', 'aktivita', 'komentare', 'hlasovani', 'profil', 'zabezpeceni', 'administrace'];
+  const adminAvailable = !document.querySelector('[data-admin-nav]')?.hidden;
+  const active = sections.includes(hash) && (hash !== 'administrace' || adminAvailable) ? hash : 'prehled';
   document.querySelectorAll('[data-account-tab]').forEach(link => link.classList.toggle('active', link.dataset.accountTab === active));
+  document.querySelectorAll('[data-account-section]').forEach(section => {
+    section.hidden = section.dataset.accountSection !== active;
+  });
+  const overview = document.querySelector('[data-user-overview]');
+  if (overview) overview.hidden = active !== 'prehled';
 };
 window.addEventListener('hashchange', activateAccountTab);
 activateAccountTab();

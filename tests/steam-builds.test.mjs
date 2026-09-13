@@ -8,6 +8,7 @@ import {
   readManualRefreshGameSlug
 } from "../netlify/functions/game-status.mjs";
 import { resolveDisplayStatus } from "../netlify/functions/_lib/game-status.mjs";
+import { applyAdminGameConfig, loadGameStatusConfig } from "../netlify/functions/_lib/game-config.mjs";
 import {
   applySteamSnapshot,
   fetchSteamBuildSnapshot,
@@ -19,6 +20,26 @@ import {
 
 const root = new URL("../", import.meta.url);
 const statusConfig = JSON.parse(readFileSync(new URL("data/game-status.json", root), "utf8"));
+
+test("admin game configuration replaces code values used by Steam checks", async () => {
+  const base = { schemaVersion: 1, games: { example: { appId: "10", verifiedBuildId: "100", supportedVersion: "v1" } } };
+  const merged = applyAdminGameConfig(base, [{ game_slug: "example", steam_app_id: "20", verified_build_id: "200", supported_game_version: "v2" }]);
+  assert.deepEqual(merged.games.example, { appId: "20", verifiedBuildId: "200", supportedVersion: "v2" });
+
+  let requestedUrl = "";
+  const loaded = await loadGameStatusConfig({
+    loadStatic: async () => base,
+    env: { SUPABASE_URL: "https://example.supabase.co", SUPABASE_ANON_KEY: "publishable" },
+    fetchImpl: async url => {
+      requestedUrl = String(url);
+      return { ok: true, json: async () => [{ game_slug: "example", steam_app_id: "30", verified_build_id: "300", supported_game_version: "v3" }] };
+    }
+  });
+  assert.match(requestedUrl, /game_versions\?select=game_slug,steam_app_id,verified_build_id,supported_game_version/);
+  assert.equal(loaded.games.example.appId, "30");
+  assert.equal(loaded.games.example.verifiedBuildId, "300");
+  assert.equal(loaded.games.example.supportedVersion, "v3");
+});
 
 test("public Steam branch metadata exposes the build and real update time", () => {
   assert.deepEqual(parsePublicBranch({

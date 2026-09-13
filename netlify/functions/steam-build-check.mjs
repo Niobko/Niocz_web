@@ -1,6 +1,5 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 import { getStore } from "@netlify/blobs";
+import { loadGameStatusConfig } from "./_lib/game-config.mjs";
 import {
   STEAM_BUILD_STORE,
   refreshSteamBuildSnapshot
@@ -13,8 +12,7 @@ const jsonHeaders = {
 
 export const handler = async () => {
   try {
-    const configPath = path.join(process.cwd(), "data", "game-status.json");
-    const config = JSON.parse(await readFile(configPath, "utf8"));
+    const config = await loadGameStatusConfig();
     const store = getStore(STEAM_BUILD_STORE);
     const snapshot = await refreshSteamBuildSnapshot(config.games, store);
     const updatedGames = Object.keys(snapshot.games).length;
@@ -34,4 +32,3 @@ export const handler = async () => {
     };
   }
 };
-

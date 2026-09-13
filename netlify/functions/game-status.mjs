@@ -1,7 +1,6 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 import { getStore } from "@netlify/blobs";
 import { buildStatusPayload } from "./_lib/game-status.mjs";
+import { loadGameStatusConfig } from "./_lib/game-config.mjs";
 import {
   STEAM_BUILD_KEY,
   STEAM_BUILD_STORE,
@@ -71,10 +70,7 @@ export const readManualRefreshGameSlug = event => {
   return gameSlug;
 };
 
-const loadStatusConfig = async () => {
-  const configPath = path.join(process.cwd(), "data", "game-status.json");
-  return JSON.parse(await readFile(configPath, "utf8"));
-};
+const loadStatusConfig = () => loadGameStatusConfig();
 
 const manualRefreshFailure = error => {
   if (error?.code === "STEAM_TIMEOUT") {
