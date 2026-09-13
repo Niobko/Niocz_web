@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#070a10">
+  <title>Nastavení nového hesla | Nio Localization</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="reset-password.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="config.js" defer></script>
+  <script src="reset-password.js" defer></script>
+</head>
+<body>
+  <header class="site-header reset-header"><div class="container nav-wrap">
+    <a class="brand" href="index.html" aria-label="Nio Localization – domů"><span class="brand-mark" aria-hidden="true">N</span><span>Nio <strong>Localization</strong></span></a>
+    <a class="reset-home-link" href="index.html">Zpět na web</a>
+  </div></header>
+  <main class="reset-password-page" id="main">
+    <div class="reset-password-glow" aria-hidden="true"></div>
+    <section class="reset-password-card" aria-labelledby="reset-password-title">
+      <p class="eyebrow">Komunitní účet</p>
+      <h1 id="reset-password-title">Nastavení nového hesla</h1>
+      <p class="reset-password-intro" data-reset-intro>Ověřujeme odkaz pro obnovení hesla…</p>
+      <form data-reset-password-form hidden>
+        <label for="new-password">Nové heslo</label>
+        <input id="new-password" data-new-password type="password" minlength="8" autocomplete="new-password" required placeholder="Minimálně 8 znaků">
+        <label for="confirm-password">Potvrdit heslo</label>
+        <input id="confirm-password" data-confirm-password type="password" minlength="8" autocomplete="new-password" required placeholder="Zadejte heslo znovu">
+        <button class="button button-primary" type="submit" data-reset-submit>Uložit nové heslo</button>
+      </form>
+      <p class="form-message" data-reset-message role="status" aria-live="polite"></p>
+      <a class="button reset-login-link" data-reset-login href="index.html" hidden>Pokračovat k přihlášení</a>
+    </section>
+  </main>
+</body>
+</html>

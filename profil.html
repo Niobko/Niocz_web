@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Správa uživatelského profilu NioCZ LOC.">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#070a10">
+  <title>Můj profil | NioCZ LOC</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+  <link rel="canonical" href="https://nioczloc.com/profil.html">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="community.css">
+  <link rel="stylesheet" href="account.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="config.js" defer></script>
+  <script src="script.js" defer></script>
+  <script src="account.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Přejít na obsah</a>
+  <header class="site-header scrolled" data-header>
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html" aria-label="Nio Localization – domů"><span class="brand-mark" aria-hidden="true">N</span><span>Nio <strong>Localization</strong></span></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-menu" data-menu-toggle><span class="sr-only">Otevřít menu</span><span></span><span></span><span></span></button>
+      <nav id="main-menu" class="main-nav" aria-label="Hlavní navigace" data-menu>
+        <a href="index.html">Domů</a><a href="preklady.html">Překlady</a><a href="index.html#novinky">Novinky</a><a href="index.html#o-projektu">O projektu</a><a href="index.html#kontakt">Kontakt</a><a href="hlasovani.html" class="vote-nav-link" title="Hlasování" aria-label="Hlasování"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M8.5 14.5C7.5 13.5 7 12.2 7 10.8a5 5 0 0 1 10 0c0 1.4-.5 2.7-1.5 3.7-.9.9-1.5 1.8-1.5 3h-4c0-1.2-.6-2.1-1.5-3Z"></path><path d="M12 2V1"></path><path d="M4.9 4.9 4.2 4.2"></path><path d="M19.8 4.2 19.1 4.9"></path><path d="M3 11H2"></path><path d="M22 11h-1"></path></svg><span>Hlasování</span></a><a href="bug-reports.html" class="bug-nav-link" title="Nahlásit chybu" aria-label="Nahlásit chybu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.5V6a3 3 0 0 1 6 0v.5"></path><path d="M8.5 9.5C8.5 8.12 9.62 7 11 7h2c1.38 0 2.5 1.12 2.5 2.5V15a4.5 4.5 0 1 1-9 0V9.5Z"></path><path d="M12 11v8"></path><path d="M8 11H5"></path><path d="M19 11h-3"></path><path d="M8 15H4.5"></path><path d="M19.5 15H16"></path><path d="M9.2 3.8 7.8 2.4"></path><path d="M14.8 3.8 16.2 2.4"></path></svg><span>Nahlásit chybu</span></a><button class="nav-auth" type="button" data-auth-open>Přihlásit se</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="account-page">
+    <div class="account-glow" aria-hidden="true"></div>
+    <div class="container">
+      <header class="account-heading">
+        <p class="eyebrow">Komunitní účet</p>
+        <h1>Můj profil</h1>
+        <p>Upravte, jak vás ostatní uvidí v komunitě NioCZ LOC, a spravujte zabezpečení účtu.</p>
+      </header>
+
+      <section class="account-auth-required" data-profile-auth-required hidden>
+        <span class="brand-mark" aria-hidden="true">N</span>
+        <div><h2>Nejprve se přihlaste</h2><p>Profil a zabezpečení jsou dostupné pouze přihlášeným uživatelům.</p></div>
+        <button class="button button-primary" type="button" data-auth-open>Přihlásit se</button>
+      </section>
+
+      <div class="account-layout" data-profile-content hidden>
+        <aside class="account-sidebar" aria-label="Nastavení účtu">
+          <div class="account-sidebar-user">
+            <span class="profile-mini-avatar" data-sidebar-avatar><span data-sidebar-initial>N</span><img data-sidebar-image alt="" hidden></span>
+            <span><strong data-sidebar-name>Hráč</strong><small data-sidebar-email></small></span>
+          </div>
+          <nav>
+            <a href="#profil" class="active" data-account-tab="profil">Profil</a>
+            <a href="#zabezpeceni" data-account-tab="zabezpeceni">Zabezpečení</a>
+            <a href="#nastaveni" data-account-tab="nastaveni">Nastavení</a>
+          </nav>
+        </aside>
+
+        <div class="account-content">
+          <section class="account-panel" id="profil" data-account-section="profil">
+            <div class="account-panel-heading"><div><p class="eyebrow">Veřejný profil</p><h2>Profilové údaje</h2></div><span class="profile-status">Viditelné v komentářích</span></div>
+            <form data-profile-form>
+              <div class="profile-avatar-editor">
+                <span class="profile-avatar-preview" data-avatar-preview><span data-avatar-initial>N</span><img data-avatar-image alt="Náhled profilové fotografie" hidden></span>
+                <div><strong>Profilová fotografie</strong><p>PNG, JPG nebo WebP, maximálně 2 MB.</p><label class="button button-secondary" for="profile-avatar">Vybrat obrázek</label><input id="profile-avatar" data-avatar-input type="file" accept="image/png,image/jpeg,image/webp" hidden></div>
+              </div>
+              <div class="profile-fields">
+                <label for="profile-name">Zobrazované jméno</label>
+                <input id="profile-name" name="display_name" data-profile-name minlength="2" maxlength="40" autocomplete="nickname" required>
+                <label for="profile-email">E-mail</label>
+                <input id="profile-email" data-profile-email type="email" autocomplete="email" readonly aria-describedby="profile-email-help">
+                <small id="profile-email-help">E-mail je spravovaný přes přihlašovací účet a na této stránce jej nelze změnit.</small>
+                <label for="profile-bio">Krátké bio <span>volitelné</span></label>
+                <textarea id="profile-bio" name="bio" data-profile-bio maxlength="280" rows="5" placeholder="Něco krátkého o vás…"></textarea>
+                <div class="profile-form-footer"><small><span data-bio-count>0</span>/280</small><button class="button button-primary" type="submit" data-profile-submit>Uložit změny</button></div>
+                <p class="form-message" data-profile-message role="status"></p>
+              </div>
+            </form>
+          </section>
+
+          <section class="account-panel" id="zabezpeceni" data-account-section="zabezpeceni">
+            <div class="account-panel-heading"><div><p class="eyebrow">Zabezpečení</p><h2>Změna hesla</h2></div></div>
+            <p class="panel-copy">Nastavte nové heslo s alespoň 8 znaky. Změna se provede přímo přes zabezpečenou přihlášenou relaci.</p>
+            <form class="security-form" data-password-form>
+              <label for="new-password">Nové heslo</label><input id="new-password" data-new-password type="password" minlength="8" autocomplete="new-password" required>
+              <label for="confirm-password">Potvrdit nové heslo</label><input id="confirm-password" data-confirm-password type="password" minlength="8" autocomplete="new-password" required>
+              <button class="button button-primary" type="submit" data-password-submit>Změnit heslo</button>
+              <p class="form-message" data-password-message role="status"></p>
+            </form>
+            <div class="security-divider"></div>
+            <div class="reset-row"><div><h3>Odkaz pro reset hesla</h3><p>Na přihlašovací e-mail vám pošleme bezpečný odkaz pro nastavení nového hesla.</p></div><button class="button button-secondary" type="button" data-reset-password>Poslat odkaz</button></div>
+            <p class="form-message" data-reset-message role="status"></p>
+          </section>
+
+          <section class="account-panel" id="nastaveni" data-account-section="nastaveni">
+            <div class="account-panel-heading"><div><p class="eyebrow">Nastavení</p><h2>Nastavení účtu</h2></div></div>
+            <p class="panel-copy">Další nastavení účtu zde přibudou postupně. Zatím můžete spravovat veřejný profil a zabezpečení.</p>
+            <div class="settings-links"><a class="button button-secondary" href="#profil">Upravit profil</a><a class="button button-secondary" href="#zabezpeceni">Spravovat heslo</a></div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer><div class="container"><a class="brand" href="index.html"><span class="brand-mark">N</span><span>Nio <strong>Localization</strong></span></a><p>© <span data-year></span> NioCZ komunitní překlady.</p><div class="footer-info"><h3>Informace</h3><a href="podminky.html">Podmínky použití</a><a href="soukromi.html">Ochrana osobních údajů</a></div></div></footer>
+  <div class="avatar-crop-modal" data-crop-modal hidden>
+    <div class="avatar-crop-backdrop" data-crop-cancel></div>
+    <section class="avatar-crop-dialog" role="dialog" aria-modal="true" aria-labelledby="avatar-crop-title" aria-describedby="avatar-crop-help" tabindex="-1">
+      <button class="auth-close" type="button" data-crop-cancel aria-label="Zavřít editor fotografie">×</button>
+      <p class="eyebrow">Profilová fotografie</p>
+      <h2 id="avatar-crop-title">Vyberte výřez</h2>
+      <p id="avatar-crop-help" class="avatar-crop-help">Posunutím fotografie a přiblížením nastavte část, která se použije v kruhovém avataru.</p>
+      <div class="avatar-crop-stage" data-crop-stage>
+        <canvas data-crop-canvas width="640" height="640" aria-label="Náhled výřezu profilové fotografie"></canvas>
+        <span class="avatar-crop-mask" aria-hidden="true"></span>
+      </div>
+      <label class="avatar-crop-zoom" for="avatar-crop-zoom"><span>Přiblížení</span><input id="avatar-crop-zoom" data-crop-zoom type="range" min="1" max="3" value="1" step="0.01"><output data-crop-zoom-value>100 %</output></label>
+      <div class="avatar-crop-actions"><button class="button button-secondary" type="button" data-crop-cancel>Zrušit</button><button class="button button-primary" type="button" data-crop-confirm>Použít výřez</button></div>
+    </section>
+  </div>
+  <div class="auth-modal" data-auth-modal hidden><div class="auth-backdrop" data-auth-close></div><section class="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="auth-title"><button class="auth-close" type="button" data-auth-close aria-label="Zavřít">×</button><p class="eyebrow">Komunitní účet</p><h2 id="auth-title">Přihlášení</h2><div class="auth-tabs"><button class="active" type="button" data-auth-tab="login">Přihlásit</button><button type="button" data-auth-tab="register">Registrovat</button></div><form data-auth-form><label for="auth-name" data-name-label hidden>Jméno</label><input id="auth-name" data-auth-name maxlength="40" autocomplete="nickname" placeholder="Vaše jméno" hidden><label for="auth-email">E-mail</label><input id="auth-email" data-auth-email type="email" autocomplete="email" required placeholder="vas@email.cz"><label for="auth-password">Heslo</label><input id="auth-password" data-auth-password type="password" minlength="6" autocomplete="current-password" required placeholder="Minimálně 6 znaků"><button class="button button-primary" type="submit" data-auth-submit>Přihlásit se</button><p class="form-message" data-auth-message role="status"></p></form></section></div>
+</body>
+</html>

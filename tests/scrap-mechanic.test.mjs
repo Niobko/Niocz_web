@@ -28,9 +28,11 @@ test("Scrap Mechanic is registered consistently across the site", () => {
 });
 
 test("detail uses requested content and every shared feature hook", () => {
-  assert.match(detail, /<title>Scrap Mechanic – čeština, český překlad \| Nio Localization<\/title>/);
-  assert.match(detail, /content="Čeština a český překlad pro hru Scrap Mechanic ke stažení\. Návod na instalaci a novinky o překladu\."/);
+  assert.match(detail, /<title>Scrap Mechanic čeština – český překlad ke stažení \| Nio Localization<\/title>/);
+  assert.match(detail, /content="Scrap Mechanic čeština a český překlad ke stažení\. Návod na instalaci, aktuální verze překladu a informace o kompatibilitě\."/);
   assert.match(detail, /<h1>Scrap Mechanic – Čeština<\/h1>/);
+  assert.match(detail, /Scrap Mechanic čeština přináší kompletní český překlad rozhraní a herních textů\./);
+  assert.match(detail, /rel="canonical" href="https:\/\/nioczloc\.com\/scrap-mechanic\.html"/);
   assert.match(detail, /<body data-game="scrap-mechanic">/);
   assert.equal([...detail.matchAll(/data-game-status="scrap-mechanic"/g)].length, 2);
   assert.match(detail, /data-comments-list/);

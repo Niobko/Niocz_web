@@ -22,37 +22,72 @@ const createSupportUi = () => {
   authButton.before(actions);
   actions.append(authButton);
 
-  const openButton = document.createElement('button');
+  const openButton = document.createElement('a');
   openButton.className = 'nav-support';
-  openButton.type = 'button';
-  openButton.textContent = 'Podpořit projekt';
-  openButton.setAttribute('aria-haspopup', 'dialog');
-  openButton.setAttribute('aria-controls', 'support-modal');
-  openButton.setAttribute('aria-expanded', 'false');
-  openButton.dataset.supportOpen = '';
+  openButton.href = 'https://ko-fi.com/nioczloc';
+  openButton.target = '_blank';
+  openButton.rel = 'noopener noreferrer';
+  openButton.setAttribute('aria-label', 'Podpořit projekt na Ko-fi (otevře se v novém okně)');
+  openButton.innerHTML = `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"></path>
+    </svg>
+    <span>Podpořit projekt</span>`;
   actions.append(openButton);
 
-  const modal = document.createElement('div');
-  modal.id = 'support-modal';
-  modal.className = 'auth-modal support-modal';
-  modal.dataset.supportModal = '';
-  modal.hidden = true;
-  modal.innerHTML = `
-    <div class="auth-backdrop" data-support-close></div>
-    <section class="auth-dialog support-dialog" role="dialog" aria-modal="true" aria-labelledby="support-title" aria-describedby="support-description support-note" tabindex="-1">
-      <button class="auth-close" type="button" data-support-close aria-label="Zavřít podporu projektu">×</button>
-      <p class="eyebrow">Dobrovolná podpora</p>
-      <h2 id="support-title">Podpořit NioCZ LOC</h2>
-      <p id="support-description" class="support-copy">Pokud vám moje překlady pomáhají a chcete dobrovolně podpořit další práci na NioCZ LOC, můžete tak učinit zde.</p>
-      <a class="button button-primary support-cta" href="https://ko-fi.com/nioczloc" target="_blank" rel="noopener noreferrer">Podpořit NioCZ LOC <span aria-hidden="true">↗</span></a>
-      <p id="support-note" class="support-note">Podpora je dobrovolná a není podmínkou používání překladů.</p>
-    </section>`;
-  document.body.append(modal);
-
-  return { modal, openButton };
+  return { modal: null, openButton };
 };
 
 const supportUi = createSupportUi();
+const createAccountUi = () => {
+  const actions = document.querySelector('.nav-account-actions');
+  const authButton = actions?.querySelector('[data-auth-open]');
+  if (!actions || !authButton) return null;
+
+  const navWrap = document.querySelector('.nav-wrap');
+  const utilityGroup = document.createElement('div');
+  utilityGroup.className = 'header-utility-group';
+  utilityGroup.setAttribute('aria-label', 'Rychlé odkazy a uživatelský účet');
+  const supportLink = actions.querySelector('.nav-support');
+  const voteLink = document.querySelector('.vote-nav-link');
+  const bugLink = document.querySelector('.bug-nav-link');
+  if (supportLink) utilityGroup.append(supportLink);
+  if (voteLink) utilityGroup.append(voteLink);
+  if (bugLink) utilityGroup.append(bugLink);
+  utilityGroup.append(authButton);
+
+  const account = document.createElement('div');
+  account.className = 'nav-account';
+  account.hidden = true;
+  account.innerHTML = `
+    <button class="account-trigger" type="button" data-account-trigger aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu" aria-label="Otevřít uživatelské menu">
+      <span class="account-avatar" data-account-avatar aria-hidden="true"><span data-account-initial>N</span><img data-account-avatar-image alt="" hidden></span>
+    </button>
+    <div class="account-menu" id="account-menu" data-account-menu role="menu" hidden>
+      <div class="account-summary">
+        <span class="account-avatar account-avatar-large" data-account-menu-avatar aria-hidden="true"><span data-account-menu-initial>N</span><img data-account-menu-image alt="" hidden></span>
+        <span><strong data-account-name>Hráč</strong><small data-account-email></small></span>
+      </div>
+      <div class="account-divider"></div>
+      <a href="profil.html" role="menuitem">Můj profil</a>
+      <a href="profil.html#nastaveni" role="menuitem">Nastavení</a>
+      <div class="account-divider"></div>
+      <button class="account-signout" type="button" data-account-signout role="menuitem">Odhlásit se</button>
+    </div>`;
+  utilityGroup.append(account);
+  navWrap?.append(utilityGroup);
+  actions.remove();
+
+  return {
+    account,
+    authButton,
+    trigger: account.querySelector('[data-account-trigger]'),
+    menu: account.querySelector('[data-account-menu]'),
+    utilityGroup
+  };
+};
+
+const accountUi = createAccountUi();
 document.querySelectorAll('[data-year]').forEach(node => node.textContent = new Date().getFullYear());
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (reducedMotion || !('IntersectionObserver' in window)) {
@@ -336,6 +371,8 @@ const supportDialog = supportModal?.querySelector('.support-dialog');
 let supportReturnFocus = null;
 let authMode = 'login';
 let currentUser = null;
+let currentProfile = null;
+let authUiRequest = 0;
 let ownGameRating = { stars: null, reaction: null };
 let gameRatingBusy = false;
 let canManageGameStatuses = false;
@@ -345,6 +382,40 @@ let bugReportAlertRequest = 0;
 let replyNotificationTimer = null;
 let replyNotificationRequest = 0;
 let unreadReplyReportId = null;
+
+const passwordResetRequestUi = (() => {
+  if (!authModal || !authForm) return null;
+
+  const passwordInput = authForm.querySelector('[data-auth-password]');
+  const forgotButton = document.createElement('button');
+  forgotButton.className = 'auth-forgot-link';
+  forgotButton.type = 'button';
+  forgotButton.dataset.authForgot = '';
+  forgotButton.textContent = 'Zapomněli jste heslo?';
+  passwordInput?.after(forgotButton);
+
+  const form = document.createElement('form');
+  form.className = 'auth-reset-request';
+  form.dataset.authResetRequest = '';
+  form.hidden = true;
+  form.innerHTML = `
+    <p class="auth-reset-copy">Zadejte e-mail použitý při registraci. Pokud k němu účet existuje, pošleme vám bezpečný odkaz pro nastavení nového hesla.</p>
+    <label for="auth-reset-email">E-mail</label>
+    <input id="auth-reset-email" data-auth-reset-email type="email" autocomplete="email" required placeholder="vas@email.cz">
+    <button class="button button-primary" type="submit" data-auth-reset-submit>Odeslat odkaz</button>
+    <button class="auth-reset-back" type="button" data-auth-reset-back>← Zpět na přihlášení</button>
+    <p class="form-message" data-auth-reset-message role="status" aria-live="polite"></p>`;
+  authForm.after(form);
+
+  return {
+    forgotButton,
+    form,
+    email: form.querySelector('[data-auth-reset-email]'),
+    submit: form.querySelector('[data-auth-reset-submit]'),
+    back: form.querySelector('[data-auth-reset-back]'),
+    message: form.querySelector('[data-auth-reset-message]')
+  };
+})();
 
 const replyNotificationLink = (() => {
   const bugLink = document.querySelector('.bug-nav-link');
@@ -476,8 +547,19 @@ const setMessage = (node, message, error = false) => {
   node.textContent = message;
   node.classList.toggle('error', error);
 };
+const setAuthView = view => {
+  if (!authModal || !authForm || !passwordResetRequestUi) return;
+  const resetting = view === 'reset-request';
+  authForm.hidden = resetting;
+  passwordResetRequestUi.form.hidden = !resetting;
+  authModal.querySelector('.auth-tabs').hidden = resetting;
+  authModal.querySelector('#auth-title').textContent = resetting ? 'Obnovení hesla' : (authMode === 'register' ? 'Registrace' : 'Přihlášení');
+  if (!resetting) setMessage(passwordResetRequestUi.message, '');
+  requestAnimationFrame(() => (resetting ? passwordResetRequestUi.email : authForm.querySelector('[data-auth-email]'))?.focus());
+};
 const openAuth = () => {
   if (!authModal) return;
+  setAuthView('auth');
   authModal.hidden = false;
   document.body.classList.add('modal-open');
   setTimeout(() => document.querySelector('[data-auth-email]')?.focus(), 0);
@@ -485,6 +567,7 @@ const openAuth = () => {
 const closeAuth = () => {
   if (!authModal) return;
   authModal.hidden = true;
+  setAuthView('auth');
   document.body.classList.remove('modal-open');
 };
 const openSupport = event => {
@@ -520,6 +603,11 @@ const createDetailCommunityUi = () => {
   rating.className = 'game-rating-card';
   rating.setAttribute('aria-label', 'Hodnocení překladu');
   rating.innerHTML = `
+    <button class="translation-author-badge" type="button" data-translation-author aria-label="Zobrazit informace o překladu od autora Nio" aria-haspopup="dialog" aria-controls="translation-author-dialog" aria-expanded="false">
+      <span class="translation-author-avatar" data-translation-author-avatar aria-hidden="true"><span data-translation-author-initial>N</span><img data-translation-author-image alt="" hidden></span>
+      <span class="translation-author-copy"><small>Překlad vytvořil</small><strong data-translation-author-name>Nio</strong></span>
+      <span class="translation-author-presence" data-author-presence="unknown" role="img" aria-label="Online stav autora není dostupný"></span>
+    </button>
     <div class="game-rating-controls">
       <div class="rating-stars" role="group" aria-label="Hodnocení od 1 do 5 hvězdiček">
         ${[1, 2, 3, 4, 5].map(value => `<button type="button" data-rating-control data-rating-star="${value}" aria-label="${value} z 5 hvězdiček" aria-pressed="false">★</button>`).join('')}
@@ -532,6 +620,79 @@ const createDetailCommunityUi = () => {
     </div>
     <p class="rating-message" data-rating-message role="status">Načítám hodnocení…</p>`;
   heroSide.append(rating);
+
+  const authorBadge = rating.querySelector('[data-translation-author]');
+  const updatedLabel = [...downloadCard.querySelectorAll('dt')]
+    .find(node => node.textContent.trim().toLocaleLowerCase('cs-CZ') === 'aktualizováno');
+  const updatedSource = updatedLabel?.closest('div')?.querySelector('time');
+  const authorModal = document.createElement('div');
+  authorModal.className = 'translation-author-modal';
+  authorModal.hidden = true;
+  authorModal.innerHTML = `
+    <div class="translation-author-backdrop" data-translation-author-close></div>
+    <section class="translation-author-dialog" id="translation-author-dialog" role="dialog" aria-modal="true" aria-labelledby="translation-author-title" aria-describedby="translation-author-description" tabindex="-1">
+      <button class="translation-author-close" type="button" data-translation-author-close aria-label="Zavřít informace o překladu">×</button>
+      <p class="eyebrow">NioCZ LOC</p>
+      <h2 id="translation-author-title">Informace o překladu</h2>
+      <div class="translation-author-profile">
+        <span class="translation-author-modal-avatar" data-translation-author-avatar aria-hidden="true"><span data-translation-author-initial>N</span><img data-translation-author-image alt="" hidden></span>
+        <span class="translation-author-identity">
+          <span class="translation-author-name-row"><strong data-translation-author-name>Nio</strong><span class="translation-author-role">AUTOR</span></span>
+          <span class="translation-author-modal-presence"><i data-author-presence="unknown" aria-hidden="true"></i><span data-author-presence-label>Stav není dostupný</span></span>
+        </span>
+      </div>
+      <p class="translation-author-description" id="translation-author-description">Tento český překlad vytvořil <strong data-translation-author-description-name>Nio</strong>.</p>
+      <p class="translation-author-updated"><span>Aktualizováno</span><time data-translation-author-updated>Neuvedeno</time></p>
+      <button class="button translation-author-dismiss" type="button" data-translation-author-close>Zavřít</button>
+    </section>`;
+  document.body.append(authorModal);
+
+  const authorDialog = authorModal.querySelector('.translation-author-dialog');
+  const modalUpdated = authorModal.querySelector('[data-translation-author-updated]');
+  if (updatedSource) {
+    modalUpdated.textContent = updatedSource.textContent.trim();
+    if (updatedSource.dateTime) modalUpdated.dateTime = updatedSource.dateTime;
+  }
+  let authorReturnFocus = null;
+  const setAuthorModalOpen = open => {
+    if (open) {
+      authorReturnFocus = document.activeElement === authorBadge ? authorBadge : null;
+      authorModal.hidden = false;
+      authorBadge.setAttribute('aria-expanded', 'true');
+      document.body.classList.add('modal-open');
+      requestAnimationFrame(() => authorModal.querySelector('.translation-author-close')?.focus());
+      return;
+    }
+    if (authorModal.hidden) return;
+    authorModal.hidden = true;
+    authorBadge.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('modal-open');
+    authorReturnFocus?.focus();
+    authorReturnFocus = null;
+  };
+  authorBadge.addEventListener('click', () => setAuthorModalOpen(true));
+  authorModal.querySelectorAll('[data-translation-author-close]').forEach(control => {
+    control.addEventListener('click', () => setAuthorModalOpen(false));
+  });
+  authorModal.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      setAuthorModalOpen(false);
+      return;
+    }
+    if (event.key !== 'Tab') return;
+    const focusable = [...authorDialog.querySelectorAll('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])')];
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
 
   const statusControl = document.createElement('div');
   statusControl.className = 'version-status-control';
@@ -651,7 +812,17 @@ const createDetailCommunityUi = () => {
     saveGameRating({ reaction: ownGameRating.reaction === value ? null : value });
   }));
 
-  return { rating, statusControl, statusPanel, refreshButton, adminStatusEditor, adminStatusMenu, setAdminStatusMenuOpen };
+  return {
+    rating,
+    authorBadge,
+    authorModal,
+    statusControl,
+    statusPanel,
+    refreshButton,
+    adminStatusEditor,
+    adminStatusMenu,
+    setAdminStatusMenuOpen
+  };
 };
 
 const formatStatusDate = value => {
@@ -837,15 +1008,172 @@ supportModal?.addEventListener('keydown', event => {
     first.focus();
   }
 });
-document.querySelectorAll('[data-auth-open]').forEach(button => button.addEventListener('click', async () => {
-  if (currentUser && db) { await db.auth.signOut(); return; }
-  openAuth();
+const safeAvatarUrl = value => {
+  if (!value) return '';
+  try {
+    const url = new URL(value, window.location.href);
+    return ['http:', 'https:'].includes(url.protocol) ? url.href : '';
+  } catch {
+    return '';
+  }
+};
+const getProfileName = (user, profile = null) => profile?.display_name?.trim()
+  || user?.user_metadata?.display_name?.trim()
+  || user?.email?.split('@')[0]
+  || 'Hráč';
+const getProfileInitial = name => Array.from(name.trim())[0]?.toLocaleUpperCase('cs-CZ') || 'N';
+const setAvatar = (wrapper, image, initialNode, name, avatarUrl) => {
+  if (!wrapper || !image || !initialNode) return;
+  const validUrl = safeAvatarUrl(avatarUrl);
+  initialNode.textContent = getProfileInitial(name);
+  image.hidden = !validUrl;
+  initialNode.hidden = Boolean(validUrl);
+  if (validUrl) image.src = validUrl;
+  else image.removeAttribute('src');
+  image.onerror = () => {
+    image.hidden = true;
+    image.removeAttribute('src');
+    initialNode.hidden = false;
+  };
+};
+const setAccountMenuOpen = open => {
+  if (!accountUi) return;
+  accountUi.menu.hidden = !open;
+  accountUi.trigger.setAttribute('aria-expanded', String(open));
+};
+const renderAccountUi = (user, profile = null) => {
+  if (!accountUi) return;
+  accountUi.authButton.hidden = Boolean(user);
+  accountUi.account.hidden = !user;
+  if (!user) {
+    setAccountMenuOpen(false);
+    return;
+  }
+  const name = getProfileName(user, profile);
+  const avatarUrl = profile?.avatar_url;
+  accountUi.account.querySelector('[data-account-name]').textContent = name;
+  accountUi.account.querySelector('[data-account-email]').textContent = user.email || '';
+  accountUi.trigger.setAttribute('aria-label', `Otevřít uživatelské menu pro ${name}`);
+  setAvatar(
+    accountUi.account.querySelector('[data-account-avatar]'),
+    accountUi.account.querySelector('[data-account-avatar-image]'),
+    accountUi.account.querySelector('[data-account-initial]'),
+    name,
+    avatarUrl
+  );
+  setAvatar(
+    accountUi.account.querySelector('[data-account-menu-avatar]'),
+    accountUi.account.querySelector('[data-account-menu-image]'),
+    accountUi.account.querySelector('[data-account-menu-initial]'),
+    name,
+    avatarUrl
+  );
+};
+const loadCurrentProfile = async user => {
+  if (!db || !user) return null;
+  const { data, error } = await db
+    .from('profiles')
+    .select('display_name,avatar_url,bio')
+    .eq('id', user.id)
+    .maybeSingle();
+  if (error) console.warn('Profil zatím není dostupný. Spusťte profilovou SQL migraci.', error);
+  return error ? null : data;
+};
+
+const setTranslationAuthorPresence = state => {
+  if (!detailCommunityUi?.authorBadge) return;
+  const normalized = state === 'online' || state === 'offline' ? state : 'unknown';
+  const labels = {
+    online: 'Autor je online',
+    offline: 'Autor je offline',
+    unknown: 'Online stav autora není dostupný'
+  };
+  document.querySelectorAll('[data-author-presence]').forEach(presence => {
+    presence.dataset.authorPresence = normalized;
+    if (presence.getAttribute('role') === 'img') presence.setAttribute('aria-label', labels[normalized]);
+  });
+  const modalLabel = detailCommunityUi.authorModal?.querySelector('[data-author-presence-label]');
+  if (modalLabel) modalLabel.textContent = normalized === 'online' ? 'Online' : normalized === 'offline' ? 'Offline' : 'Stav není dostupný';
+};
+
+const renderTranslationAuthor = profile => {
+  const badge = detailCommunityUi?.authorBadge;
+  if (!badge) return;
+  const name = profile?.display_name?.trim() || 'Nio';
+  badge.setAttribute('aria-label', `Zobrazit informace o překladu od autora ${name}`);
+  [badge, detailCommunityUi.authorModal].filter(Boolean).forEach(container => {
+    container.querySelectorAll('[data-translation-author-name]').forEach(node => { node.textContent = name; });
+    container.querySelectorAll('[data-translation-author-description-name]').forEach(node => { node.textContent = name; });
+    container.querySelectorAll('[data-translation-author-avatar]').forEach(avatar => {
+      setAvatar(
+        avatar,
+        avatar.querySelector('[data-translation-author-image]'),
+        avatar.querySelector('[data-translation-author-initial]'),
+        name,
+        profile?.avatar_url
+      );
+    });
+  });
+  // Připraveno pro budoucí důvěryhodný Realtime Presence zdroj.
+  setTranslationAuthorPresence(null);
+};
+
+const loadTranslationAuthor = async () => {
+  if (!detailCommunityUi?.authorBadge) return;
+  renderTranslationAuthor(null);
+  if (!db) return;
+  const { data, error } = await db
+    .from('profiles')
+    .select('id,display_name,avatar_url')
+    .eq('is_author', true)
+    .order('display_name', { ascending: true })
+    .limit(1)
+    .maybeSingle();
+  if (error) {
+    console.warn('Profil autora překladu není dostupný.', error);
+    return;
+  }
+  renderTranslationAuthor(data);
+};
+
+loadTranslationAuthor();
+
+document.querySelectorAll('[data-auth-open]').forEach(button => button.addEventListener('click', openAuth));
+accountUi?.trigger.addEventListener('click', event => {
+  event.stopPropagation();
+  setAccountMenuOpen(accountUi.menu.hidden);
+});
+accountUi?.menu.addEventListener('click', event => event.stopPropagation());
+accountUi?.menu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+  setAccountMenuOpen(false);
+  menu?.classList.remove('open');
+  toggle?.setAttribute('aria-expanded', 'false');
 }));
+accountUi?.account.querySelector('[data-account-signout]')?.addEventListener('click', async () => {
+  if (!db) return;
+  const button = accountUi.account.querySelector('[data-account-signout]');
+  button.disabled = true;
+  button.textContent = 'Odhlašuji…';
+  const { error } = await db.auth.signOut();
+  button.disabled = false;
+  button.textContent = 'Odhlásit se';
+  if (error) console.error('Odhlášení se nezdařilo', error);
+});
+document.addEventListener('nio:profile-updated', event => {
+  if (!currentUser || event.detail?.userId !== currentUser.id) return;
+  currentProfile = { ...(currentProfile || {}), ...(event.detail.profile || {}) };
+  renderAccountUi(currentUser, currentProfile);
+  loadComments();
+});
+document.addEventListener('click', event => {
+  if (accountUi && !accountUi.account.contains(event.target)) setAccountMenuOpen(false);
+});
 document.querySelectorAll('[data-auth-close]').forEach(button => button.addEventListener('click', closeAuth));
 document.addEventListener('keydown', event => {
   if (event.key !== 'Escape') return;
   closeAuth();
   closeSupport();
+  setAccountMenuOpen(false);
 });
 document.querySelectorAll('[data-auth-tab]').forEach(tab => tab.addEventListener('click', () => {
   authMode = tab.dataset.authTab;
@@ -856,8 +1184,37 @@ document.querySelectorAll('[data-auth-tab]').forEach(tab => tab.addEventListener
   document.querySelector('[data-auth-name]').required = registering;
   document.querySelector('[data-auth-submit]').textContent = registering ? 'Vytvořit účet' : 'Přihlásit se';
   document.querySelector('#auth-title').textContent = registering ? 'Registrace' : 'Přihlášení';
+  passwordResetRequestUi?.forgotButton.toggleAttribute('hidden', registering);
   setMessage(document.querySelector('[data-auth-message]'), '');
 }));
+passwordResetRequestUi?.forgotButton.addEventListener('click', () => {
+  passwordResetRequestUi.email.value = authForm.querySelector('[data-auth-email]')?.value.trim() || '';
+  setMessage(passwordResetRequestUi.message, '');
+  setAuthView('reset-request');
+});
+passwordResetRequestUi?.back.addEventListener('click', () => setAuthView('auth'));
+passwordResetRequestUi?.form.addEventListener('submit', async event => {
+  event.preventDefault();
+  const { email, submit, message } = passwordResetRequestUi;
+  if (!db) return setMessage(message, 'Obnovení hesla teď není dostupné. Zkuste to prosím později.', true);
+  if (!passwordResetRequestUi.form.checkValidity()) {
+    passwordResetRequestUi.form.reportValidity();
+    return;
+  }
+
+  submit.disabled = true;
+  submit.textContent = 'Odesílám…';
+  setMessage(message, '');
+  const redirectTo = new URL('reset-hesla.html', document.baseURI).href;
+  const { error } = await db.auth.resetPasswordForEmail(email.value.trim(), { redirectTo });
+  submit.disabled = false;
+  submit.textContent = 'Odeslat odkaz';
+  if (error) {
+    console.error('Password reset request failed', error);
+    return setMessage(message, 'Odkaz se nepodařilo odeslat. Zkontrolujte připojení a zkuste to znovu.', true);
+  }
+  setMessage(message, 'Pokud účet s tímto e-mailem existuje, odeslali jsme odkaz pro obnovení hesla.');
+});
 authForm?.addEventListener('submit', async event => {
   event.preventDefault();
   const message = document.querySelector('[data-auth-message]');
@@ -932,9 +1289,11 @@ contactForm?.addEventListener('submit', async event => {
   }
 });
 
-function updateAuthUi(user) {
+async function updateAuthUi(user) {
+  const requestId = ++authUiRequest;
   currentUser = user;
-  document.querySelectorAll('[data-auth-open]').forEach(button => button.textContent = user ? 'Odhlásit se' : 'Přihlásit se');
+  currentProfile = null;
+  renderAccountUi(user);
   const form = document.querySelector('[data-comment-form]');
   const note = document.querySelector('[data-comment-login]');
   if (form) form.hidden = !user;
@@ -949,6 +1308,13 @@ function updateAuthUi(user) {
   refreshReplyNotification();
   loadVoting();
   loadGameRating();
+  if (user) {
+    const profile = await loadCurrentProfile(user);
+    if (requestId !== authUiRequest || currentUser?.id !== user.id) return;
+    currentProfile = profile;
+    renderAccountUi(user, profile);
+    document.dispatchEvent(new CustomEvent('nio:profile-loaded', { detail: { user, profile } }));
+  }
 }
 
 const setGameRatingMessage = (message, error = false) => {
@@ -1080,15 +1446,29 @@ async function loadComments() {
     list.innerHTML = '<p class="empty-state">Komentáře se zobrazí po připojení Supabase.</p>';
     return;
   }
-  const { data, error } = await db.from('comments').select('id,body,created_at,user_id,profiles(display_name,is_author)').eq('game_slug', gameSlug).order('created_at', { ascending: false });
+  let { data, error } = await db.from('comments').select('id,body,created_at,user_id,profiles(display_name,is_author,avatar_url)').eq('game_slug', gameSlug).order('created_at', { ascending: false });
+  if (error) {
+    const fallback = await db.from('comments').select('id,body,created_at,user_id,profiles(display_name,is_author)').eq('game_slug', gameSlug).order('created_at', { ascending: false });
+    data = fallback.data;
+    error = fallback.error;
+  }
   if (error) return list.innerHTML = '<p class="empty-state">Komentáře se nepodařilo načíst.</p>';
   if (!data.length) return list.innerHTML = '<p class="empty-state">Zatím tu není žádný komentář. Buďte první.</p>';
   list.replaceChildren(...data.map(comment => {
     const article = document.createElement('article');
     article.className = 'comment';
     const header = document.createElement('div');
+    const avatar = document.createElement('span');
+    avatar.className = 'comment-avatar';
+    const avatarInitial = document.createElement('span');
+    const avatarImage = document.createElement('img');
+    avatarImage.alt = '';
+    avatar.append(avatarInitial, avatarImage);
+    const authorName = comment.profiles?.display_name || 'Hráč';
+    setAvatar(avatar, avatarImage, avatarInitial, authorName, comment.profiles?.avatar_url);
+    header.append(avatar);
     const author = document.createElement('strong');
-    author.textContent = comment.profiles?.display_name || 'Hráč';
+    author.textContent = authorName;
     header.append(author);
     if (comment.profiles?.is_author) { const badge = document.createElement('span'); badge.className = 'author-badge'; badge.textContent = 'AUTOR'; header.append(badge); }
     const date = document.createElement('time');
@@ -1140,7 +1520,7 @@ document.querySelector('[data-download]')?.addEventListener('click', async event
 });
 if (db) {
   db.auth.getSession().then(({ data }) => updateAuthUi(data.session?.user || null));
-  db.auth.onAuthStateChange((_event, session) => updateAuthUi(session?.user || null));
+  db.auth.onAuthStateChange((_event, session) => window.setTimeout(() => updateAuthUi(session?.user || null), 0));
 } else updateAuthUi(null);
 loadComments();
 loadDownloadCount();

@@ -319,7 +319,19 @@ body:has(.legal-page) .site-header .nav-wrap{
 .detail-hero{overflow:visible}
 body{overflow-x:hidden}
 .detail-hero-side{position:absolute;z-index:4;right:0;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:24px;width:min(48%,540px);margin:0;flex-wrap:nowrap}
-.game-rating-card{min-width:0;margin:0;padding:0;border:0;background:none}
+.game-rating-card{position:relative;min-width:0;margin:0;padding:0;border:0;background:none}
+.translation-author-badge{position:absolute;left:0;bottom:calc(100% + 8px);display:inline-flex;align-items:center;gap:8px;max-width:min(230px,90vw);padding:6px 9px 6px 7px;border:1px solid #2a394e;border-radius:10px;background:rgba(9,15,24,.94);box-shadow:0 8px 22px rgba(0,0,0,.15);font:inherit;text-align:left;cursor:pointer;transition:border-color .18s,background .18s,box-shadow .18s,transform .18s}
+.translation-author-badge:hover,.translation-author-badge:focus-visible{border-color:#4779a9;background:#0d1827;box-shadow:0 9px 26px rgba(0,0,0,.25),0 0 0 3px rgba(73,164,255,.1);transform:translateY(-1px);outline:0}
+.translation-author-avatar{display:grid;place-items:center;width:30px;height:30px;flex:0 0 auto;overflow:hidden;border:1px solid #365878;border-radius:50%;background:linear-gradient(145deg,#287bc8,#123d70);color:#fff;font-size:.72rem;font-weight:900}.translation-author-avatar img{width:100%;height:100%;object-fit:cover}
+.translation-author-copy{display:grid;min-width:0;line-height:1.05}.translation-author-copy small{color:#78879b;font-size:.56rem;letter-spacing:.04em}.translation-author-copy strong{overflow:hidden;color:#e5eefb;font-size:.72rem;text-overflow:ellipsis;white-space:nowrap}
+.translation-author-presence{width:7px;height:7px;flex:0 0 auto;border-radius:50%;background:#667182;box-shadow:0 0 0 2px rgba(102,113,130,.14)}.translation-author-presence[data-author-presence="online"]{background:var(--green);box-shadow:0 0 8px rgba(75,214,155,.8);animation:author-presence-pulse 2s ease-in-out infinite}@keyframes author-presence-pulse{50%{opacity:.58;transform:scale(.86)}}
+.translation-author-modal{position:fixed;inset:0;z-index:140;display:grid;place-items:center;padding:20px}.translation-author-modal[hidden]{display:none}.translation-author-backdrop{position:absolute;inset:0;background:rgba(2,6,12,.8);backdrop-filter:blur(7px)}
+.translation-author-dialog{position:relative;width:min(100%,460px);max-height:calc(100dvh - 40px);overflow:auto;padding:31px;border:1px solid #304b6b;border-radius:var(--radius);background:linear-gradient(145deg,#111a28,#0a1019 72%);box-shadow:0 28px 90px rgba(0,0,0,.72),0 0 34px rgba(35,121,203,.1);outline:0}.translation-author-dialog .eyebrow{margin:0 0 7px}.translation-author-dialog h2{margin:0;padding-right:36px;font-size:clamp(1.55rem,5vw,2rem)}
+.translation-author-close{position:absolute;top:12px;right:14px;display:grid;place-items:center;width:36px;height:36px;padding:0;border:1px solid transparent;border-radius:9px;background:none;color:var(--muted);font-size:1.75rem;line-height:1;cursor:pointer}.translation-author-close:hover,.translation-author-close:focus-visible{border-color:#365878;background:#152338;color:#fff;outline:0}
+.translation-author-profile{display:flex;align-items:center;gap:14px;margin-top:24px;padding:16px;border:1px solid #26384e;border-radius:12px;background:rgba(7,12,20,.58)}.translation-author-modal-avatar{display:grid;place-items:center;width:54px;height:54px;flex:0 0 auto;overflow:hidden;border:1px solid #426b94;border-radius:50%;background:linear-gradient(145deg,#287bc8,#123d70);color:#fff;font-size:1.1rem;font-weight:900;box-shadow:0 0 20px rgba(40,123,200,.18)}.translation-author-modal-avatar img{width:100%;height:100%;object-fit:cover}
+.translation-author-identity{display:grid;gap:7px;min-width:0}.translation-author-name-row{display:flex;align-items:center;gap:9px;min-width:0}.translation-author-name-row>strong{overflow:hidden;color:#f1f6fc;font-size:1.08rem;text-overflow:ellipsis;white-space:nowrap}.translation-author-role{padding:3px 7px;border:1px solid #ffd84d;border-radius:5px;color:#ffe176;font-size:.62rem;font-weight:900;letter-spacing:.12em;box-shadow:0 0 12px rgba(255,216,77,.18),inset 0 0 8px rgba(255,216,77,.06)}
+.translation-author-modal-presence{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:.75rem}.translation-author-modal-presence i{width:7px;height:7px;border-radius:50%;background:#667182}.translation-author-modal-presence i[data-author-presence="online"]{background:var(--green);box-shadow:0 0 8px rgba(75,214,155,.75)}
+.translation-author-description{margin:18px 0 0;color:#c7d0dd;line-height:1.65}.translation-author-updated{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:18px 0 0;padding-top:16px;border-top:1px solid #26384e}.translation-author-updated span{color:var(--muted);font-size:.78rem}.translation-author-updated time{color:var(--blue-light);font-size:.88rem;font-weight:800;white-space:nowrap}.translation-author-dismiss{width:100%;margin-top:22px;border-color:#365878;background:#152338;color:#e8f2ff}.translation-author-dismiss:hover,.translation-author-dismiss:focus-visible{border-color:var(--blue-light);background:#1a304b}
 .game-rating-controls{display:flex;align-items:center;gap:8px;margin:0}
 .rating-stars{display:flex;gap:1px;margin:0}
 .rating-stars button,.rating-reactions button{border:1px solid transparent;background:none;color:#627087;cursor:pointer;transition:.18s}
@@ -408,9 +420,14 @@ body{overflow-x:hidden}
 @media(max-width:520px){
     .detail-hero-side{gap:9px}
     .game-rating-controls{flex-wrap:wrap}
+    .translation-author-badge{bottom:calc(100% + 7px)}
     .version-status-panel{left:0;right:auto}
     .game-status-admin-menu{left:auto;right:0;width:min(265px,calc(100vw - 28px))}
+    .translation-author-modal{padding:14px}
+    .translation-author-dialog{max-height:calc(100dvh - 28px);padding:25px 20px}
+    .translation-author-profile{padding:14px}
 }
+@media(prefers-reduced-motion:reduce){.translation-author-presence[data-author-presence="online"]{animation:none}.translation-author-badge{transition:none}}
 
 @media(max-width:360px){
     .rating-reactions{display:none}
