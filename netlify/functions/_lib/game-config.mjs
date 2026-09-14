@@ -13,12 +13,12 @@ export const applyAdminGameConfig = (config, rows = []) => {
     games: Object.fromEntries(Object.entries(config.games || {}).map(([slug, game]) => {
       const admin = adminBySlug[slug];
       if (!admin) return [slug, game];
+      const verifiedBuildId = cleanDigits(admin.verified_build_id);
       return [slug, {
         ...game,
         appId: cleanDigits(admin.steam_app_id) || game.appId,
-        verifiedBuildId: Object.hasOwn(admin, "verified_build_id")
-          ? cleanDigits(admin.verified_build_id)
-          : game.verifiedBuildId,
+        verifiedBuildId: verifiedBuildId || game.verifiedBuildId,
+        verifiedBuildSource: verifiedBuildId ? "database" : game.verifiedBuildSource,
         supportedVersion: String(admin.supported_game_version || "").trim() || game.supportedVersion
       }];
     }))

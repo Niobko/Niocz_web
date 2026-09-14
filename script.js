@@ -171,7 +171,10 @@ const resolveGameDisplayStatus = game => {
     if (statusOverride.status === 'broken') return gameStatusDefinitions.broken;
 
     const currentBuildId = normalizeComparableValue(game?.currentBuildId);
-    if (currentBuildId && statusOverride.verifiedBuildId !== currentBuildId) {
+    const verifiedBuildId = game?.verifiedBuildSource === 'database'
+      ? normalizeComparableValue(game.verifiedBuildId)
+      : statusOverride.verifiedBuildId;
+    if (currentBuildId && verifiedBuildId !== currentBuildId) {
       return gameStatusDefinitions.pending;
     }
 
@@ -445,11 +448,8 @@ const mergeAdminGameConfig = (games, adminConfig) => Object.fromEntries(
       name: saved.name || game.name,
       translationVersion: normalizeComparableValue(saved.translation_version),
       appId: normalizeComparableValue(saved.steam_app_id) || game.appId,
-      // A game_versions row is authoritative for the manually verified build.
-      // In particular, a stored NULL must not revive an old checked-in value.
-      verifiedBuildId: Object.hasOwn(saved, 'verified_build_id')
-        ? normalizeComparableValue(saved.verified_build_id)
-        : game.verifiedBuildId,
+      verifiedBuildId: normalizeComparableValue(saved.verified_build_id) || game.verifiedBuildId,
+      verifiedBuildSource: normalizeComparableValue(saved.verified_build_id) ? 'database' : game.verifiedBuildSource,
       supportedVersion: normalizeComparableValue(saved.supported_game_version) || game.supportedVersion,
       translationUpdatedAt: saved.translation_updated_at || null
     }];
@@ -956,7 +956,12 @@ const updateVersionStatusPanel = game => {
 
   const status = resolveGameDisplayStatus(resolvedGame);
   const statusOverride = normalizeGameStatusOverride(resolvedGame.statusOverride);
-  const verifiedBuildId = statusOverride?.verifiedBuildId || normalizeComparableValue(resolvedGame.verifiedBuildId);
+  const databaseVerifiedBuildId = resolvedGame.verifiedBuildSource === 'database'
+    ? normalizeComparableValue(resolvedGame.verifiedBuildId)
+    : null;
+  const verifiedBuildId = databaseVerifiedBuildId
+    || statusOverride?.verifiedBuildId
+    || normalizeComparableValue(resolvedGame.verifiedBuildId);
   panel.dataset.statusState = status.key;
   detailCommunityUi.statusControl.dataset.statusState = status.key;
   panel.querySelector('[data-version-status-label]').textContent = status.label;
@@ -1014,8 +1019,14 @@ async function refreshCurrentGameStatus() {
   setGameStatusRefreshMessage('Kontroluji aktuální Steam build…');
   try {
     await window.NIO_GAME_STATUSES_READY.catch(() => null);
-    const games = await loadGameStatuses({ forceSteamRefresh: true, gameSlug });
-    activeGameStatuses = mergeGameStatusOverrides(games, activeGameStatusOverrides);
+    const [games, adminConfig] = await Promise.all([
+      loadGameStatuses({ forceSteamRefresh: true, gameSlug }),
+      loadAdminGameConfig()
+    ]);
+    activeGameStatuses = mergeGameStatusOverrides(
+      mergeAdminGameConfig(games, adminConfig),
+      activeGameStatusOverrides
+    );
     applyGameStatuses(activeGameStatuses);
     updateVersionStatusPanel(activeGameStatuses[gameSlug]);
   } catch (error) {

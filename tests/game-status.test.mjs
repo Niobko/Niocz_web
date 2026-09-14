@@ -51,6 +51,19 @@ test("a Supabase functional override is valid only for its verified build", () =
   assert.equal(resolveDisplayStatus({ ...verifiedGame, currentBuildId: "102" }).key, "pending");
 });
 
+test("game_versions verified build supersedes a stale functional status override", () => {
+  const refreshedGame = {
+    verifiedBuildId: "25300519",
+    verifiedBuildSource: "database",
+    currentBuildId: "25300519",
+    manualStatus: "functional",
+    statusOverride: { status: "functional", verifiedBuildId: "25233815" }
+  };
+
+  assert.equal(resolveDisplayStatus(refreshedGame).key, "functional");
+  assert.equal(resolveDisplayStatus({ ...refreshedGame, currentBuildId: "25300520" }).key, "pending");
+});
+
 test("Supabase pending and broken overrides remain explicit", () => {
   const game = { verifiedBuildId: "100", currentBuildId: "100", manualStatus: "functional" };
   assert.equal(resolveDisplayStatus({ ...game, statusOverride: { status: "pending" } }).key, "pending");

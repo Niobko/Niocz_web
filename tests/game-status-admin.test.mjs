@@ -18,6 +18,12 @@ test("frontend combines public overrides with every configured game", () => {
   assert.ok(Object.keys(statusConfig.games).length >= 13);
 });
 
+test("detail Current Build prefers game_versions over a stale status override", () => {
+  assert.match(script, /resolvedGame\.verifiedBuildSource === 'database'/);
+  assert.match(script, /game\?\.verifiedBuildSource === 'database'/);
+  assert.match(script, /databaseVerifiedBuildId[\s\S]*statusOverride\?\.verifiedBuildId/);
+});
+
 test("only a verified admin receives the status editor", () => {
   assert.match(script, /rpc\('is_game_status_admin'\)/);
   assert.match(script, /adminStatusEditor\.hidden = !canManageGameStatuses/);

@@ -24,7 +24,12 @@ const statusConfig = JSON.parse(readFileSync(new URL("data/game-status.json", ro
 test("admin game configuration replaces code values used by Steam checks", async () => {
   const base = { schemaVersion: 1, games: { example: { appId: "10", verifiedBuildId: "100", supportedVersion: "v1" } } };
   const merged = applyAdminGameConfig(base, [{ game_slug: "example", steam_app_id: "20", verified_build_id: "200", supported_game_version: "v2" }]);
-  assert.deepEqual(merged.games.example, { appId: "20", verifiedBuildId: "200", supportedVersion: "v2" });
+  assert.deepEqual(merged.games.example, {
+    appId: "20",
+    verifiedBuildId: "200",
+    verifiedBuildSource: "database",
+    supportedVersion: "v2"
+  });
 
   let requestedUrl = "";
   const loaded = await loadGameStatusConfig({
@@ -41,7 +46,7 @@ test("admin game configuration replaces code values used by Steam checks", async
   assert.equal(loaded.games.example.supportedVersion, "v3");
 });
 
-test("a persisted verified build, including NULL, never falls back to Latest Build", () => {
+test("a persisted verified build wins while NULL keeps the checked-in verified fallback", () => {
   const base = {
     schemaVersion: 1,
     games: {
@@ -56,7 +61,7 @@ test("a persisted verified build, including NULL, never falls back to Latest Bui
 
   assert.equal(merged.games.saved.verifiedBuildId, "25300519");
   assert.equal(merged.games.saved.currentBuildId, "999");
-  assert.equal(merged.games.cleared.verifiedBuildId, null);
+  assert.equal(merged.games.cleared.verifiedBuildId, "200");
   assert.equal(merged.games.cleared.currentBuildId, "999");
 });
 
@@ -391,4 +396,10 @@ test("the UI shows verified, latest and Steam update values from their correct f
   assert.match(script, /\[data-latest-build\]'\)\.textContent = resolvedGame\.currentBuildId/);
   assert.match(script, /\[data-last-steam-update\]'\)\.textContent = formatStatusDate\(resolvedGame\.lastSteamUpdate\)/);
   assert.match(script, /fetch\(endpoint, \{ cache: 'no-store'/);
+});
+
+test("manual Steam refresh reapplies the authoritative admin build configuration", () => {
+  const script = readFileSync(new URL("script.js", root), "utf8");
+  assert.match(script, /loadGameStatuses\(\{ forceSteamRefresh: true, gameSlug \}\)[\s\S]*loadAdminGameConfig\(\)/);
+  assert.match(script, /mergeGameStatusOverrides\([\s\S]*mergeAdminGameConfig\(games, adminConfig\)/);
 });
