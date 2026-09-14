@@ -154,6 +154,16 @@ const normalizeComparableValue = value => {
   return normalized || null;
 };
 
+const isBuildAwaitingVerification = (currentBuildId, verifiedBuildId, verifiedBuildSource) => {
+  if (!currentBuildId) return false;
+  if (!verifiedBuildId) return true;
+  if (verifiedBuildSource !== 'database') return currentBuildId !== verifiedBuildId;
+  const currentDigits = currentBuildId.replace(/^0+(?=\d)/, '');
+  const verifiedDigits = verifiedBuildId.replace(/^0+(?=\d)/, '');
+  return currentDigits.length > verifiedDigits.length
+    || (currentDigits.length === verifiedDigits.length && currentDigits > verifiedDigits);
+};
+
 const normalizeGameStatusOverride = row => {
   if (!row || !gameStatusDefinitions[row.status]) return null;
   return {
@@ -174,7 +184,7 @@ const resolveGameDisplayStatus = game => {
     const verifiedBuildId = game?.verifiedBuildSource === 'database'
       ? normalizeComparableValue(game.verifiedBuildId)
       : statusOverride.verifiedBuildId;
-    if (currentBuildId && verifiedBuildId !== currentBuildId) {
+    if (isBuildAwaitingVerification(currentBuildId, verifiedBuildId, game?.verifiedBuildSource)) {
       return gameStatusDefinitions.pending;
     }
 
@@ -191,7 +201,7 @@ const resolveGameDisplayStatus = game => {
 
   const verifiedBuildId = normalizeComparableValue(game?.verifiedBuildId);
   const currentBuildId = normalizeComparableValue(game?.currentBuildId);
-  if (currentBuildId && (!verifiedBuildId || verifiedBuildId !== currentBuildId)) {
+  if (isBuildAwaitingVerification(currentBuildId, verifiedBuildId, game?.verifiedBuildSource)) {
     return gameStatusDefinitions.pending;
   }
 

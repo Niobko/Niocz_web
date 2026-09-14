@@ -61,7 +61,17 @@ test("game_versions verified build supersedes a stale functional status override
   };
 
   assert.equal(resolveDisplayStatus(refreshedGame).key, "functional");
+  assert.equal(resolveDisplayStatus({ ...refreshedGame, currentBuildId: "25233815" }).key, "functional");
   assert.equal(resolveDisplayStatus({ ...refreshedGame, currentBuildId: "25300520" }).key, "pending");
+});
+
+test("an older cached Steam build cannot invalidate a newer database verification", () => {
+  assert.equal(resolveDisplayStatus({
+    verifiedBuildId: "25300519",
+    verifiedBuildSource: "database",
+    currentBuildId: "25233815",
+    manualStatus: "functional"
+  }).key, "functional");
 });
 
 test("Supabase pending and broken overrides remain explicit", () => {

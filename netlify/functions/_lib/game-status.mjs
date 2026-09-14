@@ -10,6 +10,16 @@ const cleanBuildId = value => {
   return /^\d+$/.test(normalized) ? normalized : null;
 };
 
+const isBuildAwaitingVerification = (currentBuildId, verifiedBuildId, verifiedBuildSource) => {
+  if (!currentBuildId) return false;
+  if (!verifiedBuildId) return true;
+  if (verifiedBuildSource !== "database") return currentBuildId !== verifiedBuildId;
+  const currentDigits = currentBuildId.replace(/^0+(?=\d)/, "");
+  const verifiedDigits = verifiedBuildId.replace(/^0+(?=\d)/, "");
+  return currentDigits.length > verifiedDigits.length
+    || (currentDigits.length === verifiedDigits.length && currentDigits > verifiedDigits);
+};
+
 export const resolveDisplayStatus = game => {
   const statusOverride = game.statusOverride;
   if (statusOverride && STATUSES[statusOverride.status]) {
@@ -20,7 +30,7 @@ export const resolveDisplayStatus = game => {
     const verifiedBuildId = game.verifiedBuildSource === "database"
       ? cleanBuildId(game.verifiedBuildId)
       : cleanBuildId(statusOverride.verifiedBuildId ?? statusOverride.verified_build);
-    if (currentBuildId && currentBuildId !== verifiedBuildId) return STATUSES.pending;
+    if (isBuildAwaitingVerification(currentBuildId, verifiedBuildId, game.verifiedBuildSource)) return STATUSES.pending;
 
     const currentVersion = game.currentVersion ?? game.latestVersion;
     const verifiedVersion = statusOverride.verifiedVersion ?? statusOverride.verified_version;
@@ -36,7 +46,7 @@ export const resolveDisplayStatus = game => {
 
   const verifiedBuildId = cleanBuildId(game.verifiedBuildId);
   const currentBuildId = cleanBuildId(game.currentBuildId);
-  if (currentBuildId && (!verifiedBuildId || verifiedBuildId !== currentBuildId)) {
+  if (isBuildAwaitingVerification(currentBuildId, verifiedBuildId, game.verifiedBuildSource)) {
     return STATUSES.pending;
   }
 
