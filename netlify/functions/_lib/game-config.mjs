@@ -16,7 +16,9 @@ export const applyAdminGameConfig = (config, rows = []) => {
       return [slug, {
         ...game,
         appId: cleanDigits(admin.steam_app_id) || game.appId,
-        verifiedBuildId: cleanDigits(admin.verified_build_id) || game.verifiedBuildId,
+        verifiedBuildId: Object.hasOwn(admin, "verified_build_id")
+          ? cleanDigits(admin.verified_build_id)
+          : game.verifiedBuildId,
         supportedVersion: String(admin.supported_game_version || "").trim() || game.supportedVersion
       }];
     }))

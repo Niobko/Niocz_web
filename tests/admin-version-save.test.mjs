@@ -16,6 +16,12 @@ test('admin save reads the exact row back and rejects missing or stale data', ()
   assert.match(userSystem, /finally \{[\s\S]*submit\.disabled = false/);
 });
 
+test('admin Current Build is loaded only from the persisted verified_build_id', () => {
+  assert.match(userSystem, /verified_build_id: game\.verified_build_id \?\? ''/);
+  assert.doesNotMatch(userSystem, /verified_build_id: game\.verified_build_id \|\| live/);
+  assert.doesNotMatch(userSystem, /gamesResult = await db\.from\('game_versions'\)\.select\('game_slug,name,translation_version,supported_game_version,translation_updated_at'\)/);
+});
+
 test('public pages hydrate version and date content from game_versions', () => {
   assert.match(script, /supported_game_version,name,translation_version,translation_updated_at/);
   assert.match(script, /translationVersion: normalizeComparableValue\(saved\.translation_version\)/);

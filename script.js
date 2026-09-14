@@ -445,7 +445,11 @@ const mergeAdminGameConfig = (games, adminConfig) => Object.fromEntries(
       name: saved.name || game.name,
       translationVersion: normalizeComparableValue(saved.translation_version),
       appId: normalizeComparableValue(saved.steam_app_id) || game.appId,
-      verifiedBuildId: normalizeComparableValue(saved.verified_build_id) || game.verifiedBuildId,
+      // A game_versions row is authoritative for the manually verified build.
+      // In particular, a stored NULL must not revive an old checked-in value.
+      verifiedBuildId: Object.hasOwn(saved, 'verified_build_id')
+        ? normalizeComparableValue(saved.verified_build_id)
+        : game.verifiedBuildId,
       supportedVersion: normalizeComparableValue(saved.supported_game_version) || game.supportedVersion,
       translationUpdatedAt: saved.translation_updated_at || null
     }];

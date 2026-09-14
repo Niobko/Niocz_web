@@ -41,6 +41,25 @@ test("admin game configuration replaces code values used by Steam checks", async
   assert.equal(loaded.games.example.supportedVersion, "v3");
 });
 
+test("a persisted verified build, including NULL, never falls back to Latest Build", () => {
+  const base = {
+    schemaVersion: 1,
+    games: {
+      saved: { verifiedBuildId: "100", currentBuildId: "999" },
+      cleared: { verifiedBuildId: "200", currentBuildId: "999" }
+    }
+  };
+  const merged = applyAdminGameConfig(base, [
+    { game_slug: "saved", verified_build_id: "25300519" },
+    { game_slug: "cleared", verified_build_id: null }
+  ]);
+
+  assert.equal(merged.games.saved.verifiedBuildId, "25300519");
+  assert.equal(merged.games.saved.currentBuildId, "999");
+  assert.equal(merged.games.cleared.verifiedBuildId, null);
+  assert.equal(merged.games.cleared.currentBuildId, "999");
+});
+
 test("public Steam branch metadata exposes the build and real update time", () => {
   assert.deepEqual(parsePublicBranch({
     depots: { branches: { public: { buildid: "24885009", timeupdated: "1787356800" } } }

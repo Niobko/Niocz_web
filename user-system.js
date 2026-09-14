@@ -915,10 +915,7 @@
       db.from('badges').select('slug,name').order('sort_order'),
       db.from('game_versions').select('game_slug,name,translation_version,supported_game_version,translation_updated_at,steam_app_id,verified_build_id').order('name')
     ]);
-    let gamesResult = initialGamesResult;
-    if (gamesResult.error) {
-      gamesResult = await db.from('game_versions').select('game_slug,name,translation_version,supported_game_version,translation_updated_at').order('name');
-    }
+    const gamesResult = initialGamesResult;
     let liveGames = {};
     try { liveGames = await (window.NIO_GAME_STATUSES_READY || Promise.resolve({})); } catch { liveGames = {}; }
     const userSelect = panel.querySelector('[data-admin-user]');
@@ -935,7 +932,9 @@
       const editable = {
         ...game,
         steam_app_id: game.steam_app_id || live.appId || '',
-        verified_build_id: game.verified_build_id || live.statusOverride?.verifiedBuildId || live.verifiedBuildId || '',
+        // Current Build is an administrator-owned value. Never replace a database
+        // NULL/missing value with Latest Build or a checked-in fallback.
+        verified_build_id: game.verified_build_id ?? '',
         latest_build_id: live.currentBuildId || '',
         last_steam_update: live.lastSteamUpdate || null
       };
@@ -955,6 +954,13 @@
     };
     gameSelect.addEventListener('change', showGame);
     showGame();
+    if (gamesResult.error) {
+      setPanelMessage(
+        panel.querySelector('[data-admin-version-message]'),
+        `Verze her se nepodařilo načíst z databáze: ${gamesResult.error.message}`,
+        true
+      );
+    }
     panel.querySelectorAll('[data-admin-badge-action]').forEach(button => button.addEventListener('click', async () => {
       button.disabled = true;
       const shouldGrant = button.dataset.adminBadgeAction === 'grant';
