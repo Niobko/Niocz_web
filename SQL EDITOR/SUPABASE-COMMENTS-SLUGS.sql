@@ -40,6 +40,7 @@ alter table public.comments
       'timberborn',
       'vacation-cafe-simulator',
       'warhounds',
+      'wanderburg',
       'yet-another-zombie-survivors',
       'youtubers-life-2'
     )

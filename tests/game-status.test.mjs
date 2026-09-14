@@ -107,7 +107,6 @@ test("every build changed by the live Steam check waits for verification", () =>
   const changedBuilds = {
     "e-shop-tycoon": "24971980",
     restory: "24885009",
-    "bookshop-simulator": "24788751",
     catmailco: "24865609"
   };
 
@@ -120,7 +119,7 @@ test("every build changed by the live Steam check waits for verification", () =>
 });
 
 test("every published game has complete Steam status data", () => {
-  assert.equal(Object.keys(statusConfig.games).length, 31);
+  assert.equal(Object.keys(statusConfig.games).length, 32);
   for (const [slug, game] of Object.entries(statusConfig.games)) {
     assert.match(game.appId, /^\d+$/, `${slug} is missing a Steam App ID`);
     if (slug === 'timberborn') {

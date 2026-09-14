@@ -47,6 +47,7 @@
     'factory-planner': { name: 'Factory Planner', page: 'factory-planner.html', image: 'assets/Factory_Planner/factoryhl.jpg' },
     'leafy-corner': { name: 'Leafy Corner', page: 'leafycorner.html', image: 'assets/leafy-corner.png' },
     'bookshop-simulator': { name: 'Bookshop Simulator', page: 'bookshop-simulator.html', image: 'assets/bookshop-simulator/bookshop_hl_obrazok.png' },
+    wanderburg: { name: 'Wanderburg', page: 'wanderburg.html', image: 'assets/Wanderburg/Wander_hl.jpg' },
     restory: { name: 'ReStory: Chill Electronics Repairs', page: 'restory.html', image: 'assets/restory/restory_hl.png' }
   });
 
@@ -975,6 +976,7 @@
     panel.querySelector('[data-admin-version-form]').addEventListener('submit', async event => {
       event.preventDefault();
       const submit = event.currentTarget.querySelector('[type="submit"]'); submit.disabled = true;
+      const message = panel.querySelector('[data-admin-version-message]');
       const args = {
         requested_game_slug: gameSelect.value,
         requested_translation_version: panel.querySelector('[data-admin-translation-version]').value.trim(),
@@ -983,13 +985,40 @@
         requested_steam_app_id: panel.querySelector('[data-admin-steam-app-id]').value.trim(),
         requested_verified_build_id: panel.querySelector('[data-admin-verified-build-id]').value.trim() || null
       };
-      const { data: saved, error: versionError } = await db.rpc('admin_update_game_version', args);
-      submit.disabled = false;
-      setPanelMessage(panel.querySelector('[data-admin-version-message]'), versionError ? versionError.message : 'Údaje byly uloženy. Latest Build a Last Steam Update doplní Steam kontrola automaticky.', Boolean(versionError));
-      if (!versionError && saved) {
+      setPanelMessage(message, 'Ukládám a ověřuji údaje…');
+      try {
+        const { error: versionError } = await db.rpc('admin_update_game_version', args);
+        if (versionError) throw versionError;
+
+        const { data: persisted, error: readBackError } = await db
+          .from('game_versions')
+          .select('game_slug,name,translation_version,supported_game_version,translation_updated_at,steam_app_id,verified_build_id')
+          .eq('game_slug', args.requested_game_slug)
+          .maybeSingle();
+        if (readBackError) throw readBackError;
+        if (!persisted) throw new Error('Uložení nebylo potvrzeno: databáze nevrátila vybranou hru. Zkontrolujte game_slug a RLS pravidla.');
+
+        const expected = {
+          translation_version: args.requested_translation_version,
+          supported_game_version: args.requested_supported_game_version,
+          translation_updated_at: args.requested_translation_updated_at,
+          steam_app_id: args.requested_steam_app_id,
+          verified_build_id: args.requested_verified_build_id
+        };
+        const mismatch = Object.entries(expected).find(([key, value]) => (persisted[key] ?? null) !== (value ?? null));
+        if (mismatch) {
+          throw new Error(`Uložení nebylo potvrzeno: hodnota ${mismatch[0]} se v databázi nezměnila.`);
+        }
+
         const previous = JSON.parse(gameSelect.selectedOptions[0].dataset.game || '{}');
-        gameSelect.selectedOptions[0].dataset.game = JSON.stringify({ ...previous, ...saved });
+        gameSelect.selectedOptions[0].dataset.game = JSON.stringify({ ...previous, ...persisted });
         showGame();
+        if (typeof window.NIO_REFRESH_GAME_STATUSES === 'function') await window.NIO_REFRESH_GAME_STATUSES();
+        setPanelMessage(message, 'Údaje byly uloženy a ověřeny z databáze. Latest Build a Last Steam Update doplní Steam kontrola automaticky.');
+      } catch (error) {
+        setPanelMessage(message, error?.message || 'Údaje se nepodařilo uložit a ověřit.', true);
+      } finally {
+        submit.disabled = false;
       }
     });
     panel.dataset.ready = 'true';

@@ -135,6 +135,7 @@ const fallbackGameStatuses = Object.freeze({
   restory: { name: 'ReStory: Chill Electronics Repairs', appId: '3812600', supportedVersion: '1.0.015R', verifiedBuildId: '24863916', currentBuildId: '24885009', lastSteamUpdate: '2026-08-22T23:14:40Z', manualStatus: 'functional', override: null },
   'leafy-corner': { name: 'Leafy Corner', appId: '3558600', supportedVersion: 'v1.0.3(ws)', verifiedBuildId: '24512633', currentBuildId: '24512633', lastSteamUpdate: '2026-08-02T09:48:46Z', manualStatus: 'functional', override: null },
   'bookshop-simulator': { name: 'Bookshop Simulator', appId: '3467040', supportedVersion: 'v1.0.1233', verifiedBuildId: '24319622', currentBuildId: '24788751', lastSteamUpdate: '2026-08-18T03:26:43Z', manualStatus: 'functional', override: null },
+  wanderburg: { name: 'Wanderburg', appId: '3624140', supportedVersion: '0.9.11', verifiedBuildId: '25275561', currentBuildId: '25275561', lastSteamUpdate: '2026-09-12T20:59:49Z', manualStatus: 'functional', override: null },
   'factory-planner': { name: 'Factory Planner', appId: '3679930', supportedVersion: 'EA v1.0.11', verifiedBuildId: '22069907', currentBuildId: '22069907', lastSteamUpdate: '2026-02-24T08:42:18Z', manualStatus: 'functional', override: null },
   'streamer-life-simulator-2': { name: 'Streamer Life Simulator 2', appId: '2890830', supportedVersion: 'Aktuální verze', verifiedBuildId: '21799183', currentBuildId: '21799183', lastSteamUpdate: '2026-02-05T14:00:15Z', manualStatus: 'functional', override: null },
   'the-universim': { name: 'The Universim', appId: '352720', supportedVersion: 'v1.0.02.48225', verifiedBuildId: '16850856', currentBuildId: '16850856', lastSteamUpdate: '2024-12-25T21:57:54Z', manualStatus: 'functional', override: null },
@@ -252,6 +253,84 @@ const applyGameStatuses = games => {
     const game = games?.[slug];
     updateDownloadAvailability(button, game ? resolveGameDisplayStatus(game) : null, gameStatusesReady && Boolean(game));
   });
+  applyGameVersionContent(games);
+};
+
+const formatGameVersionDate = value => {
+  if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+  const [year, month, day] = value.split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  if (Number.isNaN(date.getTime())) return null;
+  return new Intl.DateTimeFormat('cs-CZ', {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC'
+  }).format(date);
+};
+
+const updateGameVersionDate = (time, game) => {
+  const formatted = formatGameVersionDate(game?.translationUpdatedAt);
+  if (!time || !formatted) return;
+  time.dateTime = game.translationUpdatedAt;
+  time.textContent = formatted;
+};
+
+const applyGameVersionContent = games => {
+  if (!games) return;
+
+  document.querySelectorAll('[data-game-status]').forEach(statusNode => {
+    const game = games[statusNode.dataset.gameStatus];
+    if (!game) return;
+    const translationCard = statusNode.closest('.translation-card');
+    const latestCard = statusNode.closest('.latest-game-card');
+    updateGameVersionDate(translationCard?.querySelector('.game-version time'), game);
+    updateGameVersionDate(latestCard?.querySelector('time'), game);
+    const latestSummary = latestCard?.querySelector('.latest-game-body > p');
+    if (latestSummary && game.translationVersion && /\bverze\s+[^·]+/i.test(latestSummary.textContent)) {
+      latestSummary.textContent = latestSummary.textContent
+        .replace(/(\bverze\s+)[^·]+/i, `$1${game.translationVersion} `)
+        .replace(/(\bhra\s+)[^·]+/i, `$1${game.supportedVersion || '—'}`)
+        .trim();
+    }
+  });
+
+  if (!document.body || typeof document.querySelector !== 'function') return;
+  const detailSlug = document.body.dataset.game?.trim();
+  const game = detailSlug ? games[detailSlug] : null;
+  if (!game) return;
+
+  const translationVersion = normalizeComparableValue(game.translationVersion);
+  const supportedVersion = normalizeComparableValue(game.supportedVersion);
+  if (translationVersion) {
+    const heroVersion = document.querySelector('.detail-title .version-box > strong');
+    const downloadVersion = document.querySelector('#stazeni > h2');
+    if (heroVersion) heroVersion.textContent = `Verze ${translationVersion}`;
+    if (downloadVersion) downloadVersion.textContent = `Verze ${translationVersion}`;
+  }
+
+  const heroSummary = document.querySelector('.detail-title .version-box > small');
+  if (heroSummary && supportedVersion) {
+    const parts = heroSummary.textContent.split('·').map(part => part.trim());
+    heroSummary.textContent = [game.name || parts[0], supportedVersion, ...parts.slice(2)].filter(Boolean).join(' · ');
+  }
+
+  const downloadCard = document.querySelector('#stazeni');
+  if (!downloadCard) return;
+  downloadCard.querySelectorAll('dl > div').forEach(row => {
+    const label = row.querySelector('dt')?.textContent.trim();
+    const value = row.querySelector('dd');
+    if (label === 'Hra' && value && supportedVersion) value.textContent = `${game.name || detailSlug} · ${supportedVersion}`;
+    if (label === 'Aktualizováno') updateGameVersionDate(value?.querySelector('time'), game);
+  });
+  downloadCard.querySelectorAll(':scope > small').forEach(node => {
+    if (translationVersion && node.textContent.trim().startsWith('Verze překladu')) {
+      node.textContent = `Verze překladu ${translationVersion}`;
+    }
+    if (supportedVersion && node.textContent.trim().startsWith('Aktuálně podporovaná verze hry:')) {
+      node.textContent = `Aktuálně podporovaná verze hry: ${supportedVersion}`;
+    }
+  });
 };
 
 const loadGameStatuses = async ({ forceSteamRefresh = false, gameSlug: requestedGameSlug = '' } = {}) => {
@@ -349,7 +428,7 @@ const loadAdminGameConfig = async () => {
   if (!db) return {};
   const { data, error } = await db
     .from('game_versions')
-    .select('game_slug,steam_app_id,verified_build_id,supported_game_version');
+    .select('game_slug,steam_app_id,verified_build_id,supported_game_version,name,translation_version,translation_updated_at');
   if (error) {
     console.warn('Admin game configuration is not available yet', error);
     return {};
@@ -363,9 +442,12 @@ const mergeAdminGameConfig = (games, adminConfig) => Object.fromEntries(
     if (!saved) return [slug, game];
     return [slug, {
       ...game,
+      name: saved.name || game.name,
+      translationVersion: normalizeComparableValue(saved.translation_version),
       appId: normalizeComparableValue(saved.steam_app_id) || game.appId,
       verifiedBuildId: normalizeComparableValue(saved.verified_build_id) || game.verifiedBuildId,
-      supportedVersion: normalizeComparableValue(saved.supported_game_version) || game.supportedVersion
+      supportedVersion: normalizeComparableValue(saved.supported_game_version) || game.supportedVersion,
+      translationUpdatedAt: saved.translation_updated_at || null
     }];
   })
 );
@@ -384,6 +466,11 @@ const loadCombinedGameStatuses = async () => {
   gameStatusesReady = true;
   applyGameStatuses(activeGameStatuses);
   return activeGameStatuses;
+};
+window.NIO_REFRESH_GAME_STATUSES = () => {
+  const refresh = loadCombinedGameStatuses();
+  window.NIO_GAME_STATUSES_READY = refresh;
+  return refresh;
 };
 
 applyGameStatuses(fallbackGameStatuses);

@@ -52,7 +52,8 @@ values
   ('streamer-life-simulator-2', 'Streamer Life Simulator 2', 'v0.1', 'Aktualni verze', '2026-08-20'),
   ('factory-planner', 'Factory Planner', '0.1', 'EA v1.0.11', '2026-08-16'),
   ('leafy-corner', 'Leafy Corner', '0.1', 'v1.0.3(ws)', '2026-08-14'),
-  ('bookshop-simulator', 'Bookshop Simulator', '0.2', 'v1.0.1233', '2026-08-30'),
+  ('bookshop-simulator', 'Bookshop Simulator', '0.3', 'v1.1.1258', '2026-09-14'),
+  ('wanderburg', 'Wanderburg', 'v0.1', '0.9.11', '2026-09-14'),
   ('restory', 'ReStory: Chill Electronics Repairs', '0.4', '1.0.015R', '2026-08-30')
 on conflict (game_slug) do nothing;
 

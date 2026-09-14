@@ -386,16 +386,31 @@
     "bookshop-simulator": {
       "name": "Bookshop Simulator",
       "appId": "3467040",
-      "supportedVersion": "v1.0.1233",
-      "verifiedBuildId": "24319622",
-      "currentBuildId": "24788751",
-      "lastSteamUpdate": "2026-08-18T03:26:43Z",
+      "supportedVersion": "v1.1.1258",
+      "verifiedBuildId": "25278775",
+      "currentBuildId": "25278775",
+      "lastSteamUpdate": "2026-09-13T03:31:37Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
-        "key": "pending",
-        "label": "Čeká na ověření",
-        "color": "orange"
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
+    "wanderburg": {
+      "name": "Wanderburg",
+      "appId": "3624140",
+      "supportedVersion": "0.9.11",
+      "verifiedBuildId": "25275561",
+      "currentBuildId": "25275561",
+      "lastSteamUpdate": "2026-09-12T20:59:49Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
       }
     },
     "factory-planner": {

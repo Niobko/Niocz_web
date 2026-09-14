@@ -23,8 +23,8 @@ test("Scrap Mechanic is registered consistently across the site", () => {
   }
   assert.match(sitemap, /https:\/\/nioczloc\.com\/scrap-mechanic\.html/);
   assert.match(script, /'scrap-mechanic': \{ name: 'Scrap Mechanic'/);
-  assert.match(index, /31 hotových češtin/);
-  assert.match(index, /31 překladů/);
+  assert.match(index, /32 hotových češtin/);
+  assert.match(index, /32 překladů/);
 });
 
 test("detail uses requested content and every shared feature hook", () => {
