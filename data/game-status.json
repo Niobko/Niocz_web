@@ -413,6 +413,21 @@
         "color": "green"
       }
     },
+    "tcg-card-shop-simulator": {
+      "name": "TCG Card Shop Simulator",
+      "appId": "3070070",
+      "supportedVersion": "v1.02",
+      "verifiedBuildId": "25381942",
+      "currentBuildId": "25381942",
+      "lastSteamUpdate": "2026-09-18T02:46:08Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "factory-planner": {
       "name": "Factory Planner",
       "appId": "3679930",

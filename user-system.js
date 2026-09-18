@@ -48,6 +48,7 @@
     'leafy-corner': { name: 'Leafy Corner', page: 'leafycorner.html', image: 'assets/leafy-corner.png' },
     'bookshop-simulator': { name: 'Bookshop Simulator', page: 'bookshop-simulator.html', image: 'assets/bookshop-simulator/bookshop_hl_obrazok.png' },
     wanderburg: { name: 'Wanderburg', page: 'wanderburg.html', image: 'assets/Wanderburg/Wander_hl.jpg' },
+    'tcg-card-shop-simulator': { name: 'TCG Card Shop Simulator', page: 'tcg-card-shop-simulator.html', image: 'assets/TCG%20Card%20Shop%20Simulator/TCG_hl.jpg' },
     restory: { name: 'ReStory: Chill Electronics Repairs', page: 'restory.html', image: 'assets/restory/restory_hl.png' }
   });
 

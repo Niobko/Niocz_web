@@ -42,6 +42,7 @@ create table if not exists public.game_ratings (
     'catmailco',
     'vacation-cafe-simulator',
     'wanderburg',
+    'tcg-card-shop-simulator',
     'warhounds'
   ]::text[])),
   constraint game_ratings_stars_check check (stars is null or stars between 1 and 5),
@@ -89,6 +90,7 @@ alter table public.game_ratings
     'catmailco',
     'vacation-cafe-simulator',
     'wanderburg',
+    'tcg-card-shop-simulator',
     'warhounds'
   ]::text[])) not valid;
 

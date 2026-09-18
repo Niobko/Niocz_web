@@ -41,6 +41,7 @@ alter table public.comments
       'vacation-cafe-simulator',
       'warhounds',
       'wanderburg',
+      'tcg-card-shop-simulator',
       'yet-another-zombie-survivors',
       'youtubers-life-2'
     )
