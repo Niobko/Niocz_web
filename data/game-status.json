@@ -101,10 +101,10 @@
     "arms-of-god": {
       "name": "Arms of God",
       "appId": "3100310",
-      "supportedVersion": "v0.601",
-      "verifiedBuildId": "25020984",
-      "currentBuildId": "25020984",
-      "lastSteamUpdate": "2026-08-30T14:45:37Z",
+      "supportedVersion": "v0.618",
+      "verifiedBuildId": "25392212",
+      "currentBuildId": "25392212",
+      "lastSteamUpdate": "2026-09-19T21:58:40.000Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {

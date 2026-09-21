@@ -29,7 +29,7 @@ values
   ('astroneer', 'Astroneer', 'v1.0', 'v1.43.2', '2026-09-08'),
   ('shapez-2', 'Shapez-2', 'v1.0', 'v1.2.0-rc3', '2026-09-08'),
   ('prince-of-persia-the-lost-crown', 'Prince of Persia The Lost Crown', 'v0.1', 'v1.4.3', '2026-09-07'),
-  ('arms-of-god', 'Arms of God', 'v0.1', 'v0.601', '2026-09-05'),
+  ('arms-of-god', 'Arms of God', 'v0.2', 'v0.618', '2026-09-21'),
   ('kingdom-rush-vengeance', 'Kingdom Rush Vengeance', 'v0.1', 'v1.16.4.0', '2026-09-04'),
   ('sleeping-dogs', 'Sleeping Dogs', 'v0.1', 'v1.0', '2026-09-04'),
   ('vacation-cafe-simulator', 'Vacation Cafe Simulator', '0.4', '1.0.6', '2026-09-11'),
