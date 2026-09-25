@@ -11,6 +11,11 @@ V Netlify otevřete **Site configuration → Environment variables** a přidejte
 
 Po přidání nebo změně proměnných spusťte nový deploy webu.
 
+Pokud formulář vrátí hlášku „Odesílání zpráv zatím není nastavené“, nasazená
+funkce běží, ale pro daný Netlify web nebo deploy context chybí alespoň jedna
+z dvojice `RESEND_API_KEY` / `CONTACT_FROM_EMAIL`. Zkontrolujte, že proměnné
+platí pro Production, a potom spusťte nový deploy.
+
 ## Volitelné environment variables
 
 - `CONTACT_TO_EMAIL` – cílová adresa. Když není nastavená, použije se `nioczpreklady@gmail.com`.

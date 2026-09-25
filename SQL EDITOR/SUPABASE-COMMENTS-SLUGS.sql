@@ -42,6 +42,7 @@ alter table public.comments
       'warhounds',
       'wanderburg',
       'tcg-card-shop-simulator',
+      'kingdoms-and-castles',
       'yet-another-zombie-survivors',
       'youtubers-life-2'
     )

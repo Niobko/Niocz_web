@@ -76,3 +76,10 @@
   .account-avatar{width:32px;height:32px}
   .account-avatar-large{width:46px;height:46px}
 }
+
+@media(max-width:360px){
+  .site-header .nav-wrap>.menu-toggle{width:34px;flex:0 0 34px;padding:5px 0}
+  .site-header .nav-wrap>.menu-toggle span:not(.sr-only){margin:5px auto}
+  .header-utility-group .nav-support,.header-utility-group .vote-nav-link,.header-utility-group .reply-notification-link,.header-utility-group .bug-nav-link{width:22px;padding-inline:2px}
+  .header-utility-group>.nav-auth{max-width:72px;padding:7px 2px;font-size:.72rem}
+}

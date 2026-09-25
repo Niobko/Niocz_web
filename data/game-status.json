@@ -428,6 +428,21 @@
         "color": "green"
       }
     },
+    "kingdoms-and-castles": {
+      "name": "Kingdoms and Castles",
+      "appId": "569480",
+      "supportedVersion": "123r6s",
+      "verifiedBuildId": "18567986",
+      "currentBuildId": "18567986",
+      "lastSteamUpdate": "2025-05-22T15:18:07.000Z",
+      "manualStatus": "functional",
+      "override": null,
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
+    },
     "factory-planner": {
       "name": "Factory Planner",
       "appId": "3679930",

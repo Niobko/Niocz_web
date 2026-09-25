@@ -34,6 +34,8 @@ test('request client uses RPC submission, computed list and vote toggle', async 
   assert.match(js, /from\('translation_votes'\)\.insert/);
   assert.match(js, /from\('translation_votes'\)\.delete/);
   assert.match(js, /from\('translation_requests'\)\.update/);
+  assert.match(js, /\.select\('id, game_name, game_url, note, status'\)\s*\.maybeSingle\(\)/);
+  assert.match(js, /if \(!updatedRequest\)/);
   assert.match(js, /from\('translation_requests'\)\.delete/);
   assert.match(js, /data-admin-request-list/);
   assert.match(js, /Administrace je dostupná pouze administrátorovi\./);
@@ -51,12 +53,23 @@ test('migration locks down requests and votes with constraints, policies and gra
   assert.match(sql, /private\.is_admin\(\)/i);
   assert.match(sql, /security definer\s+set search_path = ''/i);
   assert.match(sql, /revoke all on function public\.create_translation_request/i);
+  assert.match(sql, /grant execute on function private\.normalize_translation_request_name\(text\) to authenticated/i);
+  assert.doesNotMatch(sql, /grant execute on function private\.normalize_translation_request_name\(text\) to anon/i);
   assert.match(sql, /pg_advisory_xact_lock/i);
   assert.match(sql, /normalized_game_name/i);
   assert.match(sql, /count\(vote\.request_id\)::bigint as vote_count/i);
   assert.doesNotMatch(sql, /vote\.id/i);
   assert.match(sql, /drop constraint if exists translation_requests_cover_url_check/i);
   assert.match(sql, /drop constraint if exists translation_requests_description_check/i);
+});
+
+test('normalize permission hotfix grants only signed-in users the pure trigger helper', async () => {
+  const sql = await read('SQL EDITOR/SUPABASE-TRANSLATION-REQUESTS-NORMALIZE-PERMISSION-HOTFIX.sql');
+  assert.match(sql, /security invoker/i);
+  assert.match(sql, /set search_path = ''/i);
+  assert.match(sql, /revoke all on function private\.normalize_translation_request_name\(text\)\s+from public, anon, authenticated/i);
+  assert.match(sql, /grant execute on function private\.normalize_translation_request_name\(text\)\s+to authenticated/i);
+  assert.doesNotMatch(sql, /grant execute[\s\S]*to anon/i);
 });
 
 test('cover hotfix removes the obsolete legacy constraint', async () => {

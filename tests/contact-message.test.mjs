@@ -94,6 +94,31 @@ test("the honeypot returns success without contacting the email provider", async
   }
 });
 
+test("the Netlify function explains missing server-side mail configuration", async () => {
+  const originalApiKey = process.env.RESEND_API_KEY;
+  const originalFrom = process.env.CONTACT_FROM_EMAIL;
+  delete process.env.RESEND_API_KEY;
+  delete process.env.CONTACT_FROM_EMAIL;
+
+  try {
+    const response = await handler({
+      httpMethod: "POST",
+      headers: {},
+      body: JSON.stringify({
+        subject: "Chyba v menu",
+        message: "Jedna položka menu není přeložená."
+      })
+    });
+    assert.equal(response.statusCode, 503);
+    assert.match(JSON.parse(response.body).error, /není nastavené/i);
+  } finally {
+    if (originalApiKey === undefined) delete process.env.RESEND_API_KEY;
+    else process.env.RESEND_API_KEY = originalApiKey;
+    if (originalFrom === undefined) delete process.env.CONTACT_FROM_EMAIL;
+    else process.env.CONTACT_FROM_EMAIL = originalFrom;
+  }
+});
+
 test("the Netlify function safely rejects a null payload", async () => {
   const response = await handler({ httpMethod: "POST", headers: {}, body: "null" });
   assert.equal(response.statusCode, 400);

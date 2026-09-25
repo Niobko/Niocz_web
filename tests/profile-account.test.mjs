@@ -27,6 +27,8 @@ test('header keeps support and utility controls together in the requested order'
   assert.match(script, /bugLink\.before\(link\)/);
   assert.match(css, /\.nav-support svg\{/);
   assert.match(css, /\.site-header \.nav-wrap\{padding-right:clamp/);
+  assert.match(css, /@media\(max-width:360px\)[\s\S]*\.site-header \.nav-wrap>\.menu-toggle\{width:34px;flex:0 0 34px/);
+  assert.match(css, /\.header-utility-group \.nav-support[\s\S]*width:22px/);
   assert.match(bugReports, /data-header/);
   assert.match(bugReports, /data-menu-toggle/);
   assert.match(bugReports, /data-menu/);

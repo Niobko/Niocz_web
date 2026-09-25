@@ -273,6 +273,7 @@ grant select, delete on table public.translation_votes to authenticated;
 grant insert (request_id, user_id) on table public.translation_votes to authenticated;
 
 revoke all on function private.normalize_translation_request_name(text) from public, anon, authenticated;
+grant execute on function private.normalize_translation_request_name(text) to authenticated;
 revoke all on function private.prepare_translation_request() from public, anon, authenticated;
 
 create or replace function public.is_translation_request_admin()

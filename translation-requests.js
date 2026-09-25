@@ -237,15 +237,21 @@
       event.preventDefault();
       if (!form.checkValidity()) return form.reportValidity();
       save.disabled = true;
-      const { error } = await context.db.from('translation_requests').update({
+      const { data: updatedRequest, error } = await context.db.from('translation_requests').update({
         game_name: form.elements.game_name.value.trim(),
         game_url: form.elements.game_url.value.trim(),
         note: form.elements.note.value.trim() || null,
         status: select.value
-      }).eq('id', request.id);
+      }).eq('id', request.id)
+        .select('id, game_name, game_url, note, status')
+        .maybeSingle();
       save.disabled = false;
       if (error) setMessage(message, `Změny se nepodařilo uložit: ${error.message}`, true);
-      else load();
+      else if (!updatedRequest) setMessage(message, 'Změny se nepodařilo uložit. Ověřte přihlášení a oprávnění administrátora.', true);
+      else {
+        setMessage(message, 'Změny byly uloženy.');
+        await load();
+      }
     });
     remove.addEventListener('click', async () => {
       if (!window.confirm(`Opravdu odstranit žádost „${request.game_name}“?`)) return;
