@@ -28,11 +28,11 @@ test("Parcel Simulator is registered consistently across the site", () => {
   const game = status.games["parcel-simulator"];
   assert.equal(game.name, "Parcel Simulator");
   assert.equal(game.appId, "2424010");
-  assert.equal(game.supportedVersion, "v2.0.1.3");
-  assert.equal(game.verifiedBuildId, "24535906");
-  assert.equal(game.currentBuildId, "24535906");
+  assert.equal(game.supportedVersion, "v2.0.1.4");
+  assert.equal(game.verifiedBuildId, "25586459");
+  assert.equal(game.currentBuildId, "25586459");
   assert.equal(resolveDisplayStatus(game).key, "functional");
-  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "24535907" }).key, "pending");
+  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "25586460" }).key, "pending");
 });
 
 test("detail uses the requested SEO, content and shared feature hooks", () => {
@@ -44,15 +44,17 @@ test("detail uses the requested SEO, content and shared feature hooks", () => {
   assert.match(detail, /data-comments-list/);
   assert.match(detail, /data-download data-game="parcel-simulator"/);
   assert.match(detail, /data-download-count/);
-  assert.match(detail, /Parcel\.Simulator_NioCZ_v0\.1\.zip/);
-  assert.match(detail, /0\.32 MB/);
-  assert.match(detail, /1\. 9\. 2026/);
+  assert.match(detail, /Parcel\.Simulator_NioCZ\.zip/);
+  assert.match(detail, /0\.12 MB/);
+  assert.match(detail, /1\. 10\. 2026/);
   assert.match(detail, /Kontrola ve hře<\/span><b>100 %/);
-  assert.match(detail, /ParcelSimulator_CZ_P\.pak/);
-  assert.match(detail, /Parcel Simulator\\parcel\\Content\\Paks\\/);
-  assert.match(detail, /složka <code>parcel<\/code>/);
-  assert.match(detail, /sloučení složek nebo přepsání souborů/);
-  assert.match(detail, /ze složky <code>Content\\Paks\\<\/code>/);
+  for (const extension of ['ucas', 'utoc', 'pak']) assert.ok(detail.includes('Parcel_Simulator_CZ_P.' + extension));
+  assert.ok(detail.includes('C:\\...\\Parcel Simulator\\parcel\\Content\\Paks'));
+  assert.match(detail, /install\.exe/);
+  assert.match(detail, /Procházet \(Browse\)/);
+  assert.match(detail, /Nainstalovat češtinu/);
+  assert.match(detail, /SmartScreen/);
+  assert.match(detail, /V nastavení jazyka přepněte jazyk na/);
   assert.match(detail, /Unity/);
   assert.match(script, /from\('game_ratings'\)/);
   assert.match(script, /bug-reports\.html\?game=\$\{encodeURIComponent\(gameSlug\)\}/);

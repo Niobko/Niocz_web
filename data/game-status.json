@@ -191,10 +191,12 @@
     "parcel-simulator": {
       "name": "Parcel Simulator",
       "appId": "2424010",
-      "supportedVersion": "v2.0.1.3",
-      "verifiedBuildId": "24535906",
-      "currentBuildId": "24535906",
-      "lastSteamUpdate": "2026-08-04T08:56:15Z",
+      "supportedVersion": "v2.0.1.4",
+      "translationVersion": "v0.2",
+      "translationUpdatedAt": "2026-10-01",
+      "verifiedBuildId": "25586459",
+      "currentBuildId": "25586459",
+      "lastSteamUpdate": "2026-09-29T08:15:58.000Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {

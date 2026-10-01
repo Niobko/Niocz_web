@@ -159,11 +159,11 @@ test("every published game has complete Steam status data", () => {
 test("Parcel Simulator is connected to the pending compatibility state", () => {
   const game = statusConfig.games["parcel-simulator"];
   assert.equal(game.appId, "2424010");
-  assert.equal(game.supportedVersion, "v2.0.1.3");
-  assert.equal(game.verifiedBuildId, "24535906");
-  assert.equal(game.currentBuildId, "24535906");
+  assert.equal(game.supportedVersion, "v2.0.1.4");
+  assert.equal(game.verifiedBuildId, "25586459");
+  assert.equal(game.currentBuildId, "25586459");
   assert.equal(resolveDisplayStatus(game).key, "functional");
-  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "24535907" }).key, "pending");
+  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "25586460" }).key, "pending");
 });
 
 test("Alchemy Factory verifies the updated build and detects a later update", () => {
