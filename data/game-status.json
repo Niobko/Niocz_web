@@ -508,17 +508,19 @@
     "catmailco": {
       "name": "CatMailCo",
       "appId": "4380490",
-      "supportedVersion": "patch 6",
-      "verifiedBuildId": "24261759",
-      "currentBuildId": "24865609",
-      "lastSteamUpdate": "2026-08-21T15:49:55Z",
+      "supportedVersion": "Patch #7",
+      "verifiedBuildId": "25651540",
+      "currentBuildId": "25651540",
+      "lastSteamUpdate": "2026-10-01T13:31:24.000Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
-        "key": "pending",
-        "label": "Čeká na ověření",
-        "color": "orange"
-      }
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      },
+      "translationVersion": "0.3",
+      "translationUpdatedAt": "2026-10-02"
     }
   }
 }

@@ -142,7 +142,7 @@ const fallbackGameStatuses = Object.freeze({
   'streamer-life-simulator-2': { name: 'Streamer Life Simulator 2', appId: '2890830', supportedVersion: 'Aktuální verze', verifiedBuildId: '21799183', currentBuildId: '21799183', lastSteamUpdate: '2026-02-05T14:00:15Z', manualStatus: 'functional', override: null },
   'the-universim': { name: 'The Universim', appId: '352720', supportedVersion: 'v1.0.02.48225', verifiedBuildId: '16850856', currentBuildId: '16850856', lastSteamUpdate: '2024-12-25T21:57:54Z', manualStatus: 'functional', override: null },
   'youtubers-life-2': { name: 'Youtubers Life 2', appId: '1493760', supportedVersion: 'v1.4.0', verifiedBuildId: '20266715', currentBuildId: '20266715', lastSteamUpdate: '2025-10-06T08:19:20Z', manualStatus: 'functional', override: null },
-  catmailco: { name: 'CatMailCo', appId: '4380490', supportedVersion: 'patch 6', verifiedBuildId: '24261759', currentBuildId: '24865609', lastSteamUpdate: '2026-08-21T15:49:55Z', manualStatus: 'functional', override: null }
+  catmailco: { name: 'CatMailCo', appId: '4380490', supportedVersion: 'Patch #7', translationVersion: '0.3', translationUpdatedAt: '2026-10-02', verifiedBuildId: '25651540', currentBuildId: '25651540', lastSteamUpdate: '2026-10-01T13:31:24.000Z', manualStatus: 'functional', override: null }
 });
 
 let activeGameStatuses = fallbackGameStatuses;
@@ -455,6 +455,10 @@ const mergeAdminGameConfig = (games, adminConfig) => Object.fromEntries(
   Object.entries(games || {}).map(([slug, game]) => {
     const saved = adminConfig?.[slug];
     if (!saved) return [slug, game];
+    // A locally released translation can be newer than its admin metadata.
+    // Keep administrator-owned builds and status overrides authoritative.
+    const useReleaseMetadata = Boolean(game.translationUpdatedAt
+      && (!saved.translation_updated_at || saved.translation_updated_at < game.translationUpdatedAt));
     return [slug, {
       ...game,
       name: saved.name || game.name,
@@ -463,7 +467,12 @@ const mergeAdminGameConfig = (games, adminConfig) => Object.fromEntries(
       verifiedBuildId: normalizeComparableValue(saved.verified_build_id) || game.verifiedBuildId,
       verifiedBuildSource: normalizeComparableValue(saved.verified_build_id) ? 'database' : game.verifiedBuildSource,
       supportedVersion: normalizeComparableValue(saved.supported_game_version) || game.supportedVersion,
-      translationUpdatedAt: saved.translation_updated_at || null
+      translationUpdatedAt: saved.translation_updated_at || null,
+      ...(useReleaseMetadata ? {
+        translationVersion: game.translationVersion,
+        supportedVersion: game.supportedVersion,
+        translationUpdatedAt: game.translationUpdatedAt
+      } : {})
     }];
   })
 );

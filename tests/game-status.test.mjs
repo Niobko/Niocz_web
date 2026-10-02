@@ -119,18 +119,18 @@ test("Youtubers Life 2 waits for verification after a detected build change", ()
   assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "20266716" }).key, "pending");
 });
 
-test("CatMailCo waits for verification because Steam has a newer build", () => {
+test("CatMailCo verifies Patch #7 and waits when a later Steam build arrives", () => {
   const game = statusConfig.games.catmailco;
-  assert.equal(game.verifiedBuildId, "24261759");
-  assert.equal(game.currentBuildId, "24865609");
-  assert.equal(resolveDisplayStatus(game).key, "pending");
+  assert.equal(game.verifiedBuildId, "25651540");
+  assert.equal(game.currentBuildId, "25651540");
+  assert.equal(resolveDisplayStatus(game).key, "functional");
+  assert.equal(resolveDisplayStatus({ ...game, currentBuildId: "25651541" }).key, "pending");
 });
 
 test("every build changed by the live Steam check waits for verification", () => {
   const changedBuilds = {
     "e-shop-tycoon": "24971980",
-    restory: "24885009",
-    catmailco: "24865609"
+    restory: "24885009"
   };
 
   for (const [slug, currentBuildId] of Object.entries(changedBuilds)) {

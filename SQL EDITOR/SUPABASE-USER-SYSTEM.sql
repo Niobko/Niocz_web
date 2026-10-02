@@ -46,7 +46,7 @@ values
   ('yet-another-zombie-survivors', 'Yet Another Zombie Survivors', 'v0.4', 'v1.0.1', '2026-09-10'),
   ('cloverpit', 'CloverPit', '0.1', 'v1.4.11', '2026-08-23'),
   ('timberborn', 'Timberborn', '0.2', 'v1.1.2.4-52e959e-SW', '2026-09-08'),
-  ('catmailco', 'CatMailCo', '0.2', 'patch 6', '2026-08-30'),
+  ('catmailco', 'CatMailCo', '0.3', 'Patch #7', '2026-10-02'),
   ('youtubers-life-2', 'Youtubers Life 2', 'v0.1', 'v1.4.0', '2026-08-21'),
   ('the-universim', 'The Universim', 'v0.1', 'v1.0.02.48225', '2026-08-19'),
   ('streamer-life-simulator-2', 'Streamer Life Simulator 2', 'v0.1', 'Aktualni verze', '2026-08-20'),

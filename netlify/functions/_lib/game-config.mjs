@@ -14,12 +14,14 @@ export const applyAdminGameConfig = (config, rows = []) => {
       const admin = adminBySlug[slug];
       if (!admin) return [slug, game];
       const verifiedBuildId = cleanDigits(admin.verified_build_id);
+      const useReleaseMetadata = Boolean(game.translationUpdatedAt
+        && (!admin.translation_updated_at || admin.translation_updated_at < game.translationUpdatedAt));
       return [slug, {
         ...game,
         appId: cleanDigits(admin.steam_app_id) || game.appId,
         verifiedBuildId: verifiedBuildId || game.verifiedBuildId,
         verifiedBuildSource: verifiedBuildId ? "database" : game.verifiedBuildSource,
-        supportedVersion: String(admin.supported_game_version || "").trim() || game.supportedVersion
+        supportedVersion: useReleaseMetadata ? game.supportedVersion : (String(admin.supported_game_version || "").trim() || game.supportedVersion)
       }];
     }))
   };
@@ -42,7 +44,7 @@ export const loadGameStatusConfig = async ({
   if (!supabaseUrl || !supabaseKey) return config;
 
   try {
-    const response = await fetchImpl(`${supabaseUrl}/rest/v1/game_versions?select=game_slug,steam_app_id,verified_build_id,supported_game_version`, {
+    const response = await fetchImpl(`${supabaseUrl}/rest/v1/game_versions?select=game_slug,steam_app_id,verified_build_id,supported_game_version,translation_updated_at`, {
       cache: "no-store",
       headers: {
         apikey: supabaseKey,
