@@ -42,7 +42,7 @@ values
   ('hearth-and-hamlet', 'Hearth and Hamlet', 'v0.3', 'v1.0.07', '2026-08-30'),
   ('kynseed', 'Kynseed', 'v0.1', 'v1.3', '2026-08-28'),
   ('alchemy-factory', 'Alchemy Factory', 'v1.0', 'v1.0.4950', '2026-09-12'),
-  ('e-shop-tycoon', 'E-Shop Tycoon', '0.2', 'v1.0.8-17ec132', '2026-08-30'),
+  ('e-shop-tycoon', 'E-Shop Tycoon', '0.3', 'Patch #7', '2026-10-03'),
   ('yet-another-zombie-survivors', 'Yet Another Zombie Survivors', 'v0.4', 'v1.0.1', '2026-09-10'),
   ('cloverpit', 'CloverPit', '0.1', 'v1.4.11', '2026-08-23'),
   ('timberborn', 'Timberborn', '0.2', 'v1.1.2.4-52e959e-SW', '2026-09-08'),

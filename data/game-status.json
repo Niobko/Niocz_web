@@ -298,17 +298,19 @@
     "e-shop-tycoon": {
       "name": "E-Shop Tycoon",
       "appId": "4249850",
-      "supportedVersion": "v1.0.8-17ec132",
-      "verifiedBuildId": "24775292",
-      "currentBuildId": "24971980",
-      "lastSteamUpdate": "2026-08-27T14:58:52Z",
+      "supportedVersion": "Patch #7",
+      "verifiedBuildId": "25658096",
+      "currentBuildId": "25658096",
+      "lastSteamUpdate": "2026-10-01T16:57:15.000Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
-        "key": "pending",
-        "label": "Čeká na ověření",
-        "color": "orange"
-      }
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      },
+      "translationVersion": "0.3",
+      "translationUpdatedAt": "2026-10-03"
     },
     "yet-another-zombie-survivors": {
       "name": "Yet Another Zombie Survivors",

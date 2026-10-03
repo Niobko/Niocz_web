@@ -129,7 +129,6 @@ test("CatMailCo verifies Patch #7 and waits when a later Steam build arrives", (
 
 test("every build changed by the live Steam check waits for verification", () => {
   const changedBuilds = {
-    "e-shop-tycoon": "24971980",
     restory: "24885009"
   };
 
