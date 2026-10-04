@@ -523,6 +523,23 @@
       },
       "translationVersion": "0.3",
       "translationUpdatedAt": "2026-10-02"
+    },
+    "inzoi": {
+      "name": "inZOI",
+      "appId": "2456740",
+      "supportedVersion": "0.10.4",
+      "verifiedBuildId": "25336085",
+      "currentBuildId": "25336085",
+      "lastSteamUpdate": "2026-09-16T06:00:09.000Z",
+      "manualStatus": "functional",
+      "override": null,
+      "translationVersion": "v1.0",
+      "translationUpdatedAt": "2026-10-04",
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
     }
   }
 }

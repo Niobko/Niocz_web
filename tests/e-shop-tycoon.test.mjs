@@ -59,7 +59,7 @@ test("E-Shop release metadata and fallback agree without duplicating the game", 
   assert.equal(game.verifiedBuildId, '25658096');
   assert.equal(game.currentBuildId, '25658096');
   assert.equal(game.lastSteamUpdate, '2026-10-01T16:57:15.000Z');
-  assert.equal(Object.keys(status.games).length, 34);
+  assert.equal(Object.keys(status.games).length, 35);
   const news = index.match(/<a class="latest-game-card" href="e-shop-tycoon\.html">[\s\S]*?<\/a>/g);
   assert.equal(news.length, 1);
   const card = translations.match(/<article class="translation-card reveal">(?:(?!<\/article>)[\s\S])*?href="e-shop-tycoon\.html"[\s\S]*?<\/article>/)[0];

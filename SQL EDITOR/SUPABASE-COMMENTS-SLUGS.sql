@@ -11,6 +11,7 @@ alter table public.comments
   add constraint comments_game_slug_check_v2
   check (
     game_slug in (
+      'inzoi',
       'alchemy-factory',
       'arms-of-god',
       'astroneer',

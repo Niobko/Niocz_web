@@ -17,6 +17,7 @@
   let isAdmin = false;
 
   const catalog = Object.freeze({
+    inzoi: { name: 'inZOI', page: 'inzoi.html', image: 'assets/inZOI/Zoi_hl.jpg' },
     'scrap-mechanic': { name: 'Scrap Mechanic', page: 'scrap-mechanic.html', image: 'assets/Scrap%20Mechanic/Scrap_hl.jpg' },
     'no-mans-sky': { name: "No Man's Sky", page: 'no-mans-sky.html', image: 'assets/No%20Man%20Sky/Sky_hl.jpg' },
     'ready-or-not': { name: 'Ready or Not', page: 'ready-or-not.html', image: 'assets/Ready%20or%20Not/Ready_hl.jpg' },

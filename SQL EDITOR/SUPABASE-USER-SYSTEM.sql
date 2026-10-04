@@ -23,6 +23,7 @@ create table if not exists public.game_versions (
 
 insert into public.game_versions (game_slug, name, translation_version, supported_game_version, translation_updated_at)
 values
+  ('inzoi', 'inZOI', 'v1.0', '0.10.4', '2026-10-04'),
   ('scrap-mechanic', 'Scrap Mechanic', 'v1.0', 'v1.0.5', '2026-09-13'),
   ('no-mans-sky', 'No Man''s Sky', 'v1.0', 'COSMOS (7.0)', '2026-09-12'),
   ('ready-or-not', 'Ready or Not', 'v1.0', 'v1.5.2', '2026-09-10'),
