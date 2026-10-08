@@ -40,9 +40,9 @@ test("Breathedge 2 is registered consistently across the site", () => {
 });
 
 test("detail uses the requested SEO, content and shared feature hooks", () => {
-  assert.match(detail, /<title>Breathedge 2 – čeština, český překlad \| Nio Localization<\/title>/);
-  assert.match(detail, /content="Čeština a český překlad pro hru Breathedge 2 ke stažení\. Návod na instalaci a novinky o překladu\."/);
-  assert.match(detail, /<h1>Breathedge 2 – Čeština<\/h1>/);
+  assert.match(detail, /<title>Breathedge 2 čeština – český překlad ke stažení \| Nio Localization<\/title>/);
+  assert.match(detail, /content="Breathedge 2 čeština a český překlad ke stažení\. Instalace lokalizace vesmírné survival adventury\."/);
+  assert.match(detail, /<h1>Breathedge 2 čeština<\/h1>/);
   assert.match(detail, /<body data-game="breathedge-2">/);
   assert.equal([...detail.matchAll(/data-game-status="breathedge-2"/g)].length, 2);
   assert.match(detail, /data-comments-list/);
@@ -76,7 +76,7 @@ test("all supplied images keep their exact names in the requested asset folder",
   }
 
   assert.equal([...detail.matchAll(/assets\/Breathedge_2\/Breathedge_[1-5]\.png/g)].length, 10);
-  assert.doesNotMatch(detail, /assets\/Breathedge_2\/Breathedge_hl\.png/);
+  assert.doesNotMatch(detail.split('</head>')[1], /assets\/Breathedge_2\/Breathedge_hl\.png/);
 });
 
 test("Supabase migrations whitelist the slug for every persisted feature", () => {

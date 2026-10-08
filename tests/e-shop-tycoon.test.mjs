@@ -60,7 +60,7 @@ test("E-Shop release metadata and fallback agree without duplicating the game", 
   assert.equal(game.currentBuildId, '25658096');
   assert.equal(game.lastSteamUpdate, '2026-10-01T16:57:15.000Z');
   assert.equal(Object.keys(status.games).length, 35);
-  const news = index.match(/<a class="latest-game-card" href="e-shop-tycoon\.html">[\s\S]*?<\/a>/g);
+  const news = index.match(/<a class="latest-game-card" href="e-shop-tycoon\.html"[^>]*>[\s\S]*?<\/a>/g);
   assert.equal(news.length, 1);
   const card = translations.match(/<article class="translation-card reveal">(?:(?!<\/article>)[\s\S])*?href="e-shop-tycoon\.html"[\s\S]*?<\/article>/)[0];
   for (const content of [news[0], card, detail]) {
@@ -69,7 +69,7 @@ test("E-Shop release metadata and fallback agree without duplicating the game", 
     assert.match(content, /datetime="2026-10-03">3\. 10\. 2026/);
   }
   assert.match(detail, /0\.19 MB/);
-  assert.match(sitemap, /e-shop-tycoon\.html<\/loc>\s*<lastmod>2026-10-03<\/lastmod>/);
+  assert.match(sitemap, /e-shop-tycoon\.html<\/loc>\s*<lastmod>2026-10-08<\/lastmod>/);
   const steps = detail.match(/<ol class="steps install-steps">([\s\S]*?)<\/ol>/)[1];
   assert.equal([...steps.matchAll(/<li>/g)].length, 6);
   assert.match(steps, /install\.exe/);

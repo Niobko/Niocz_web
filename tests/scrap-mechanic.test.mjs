@@ -30,7 +30,7 @@ test("Scrap Mechanic is registered consistently across the site", () => {
 test("detail uses requested content and every shared feature hook", () => {
   assert.match(detail, /<title>Scrap Mechanic čeština – český překlad ke stažení \| Nio Localization<\/title>/);
   assert.match(detail, /content="Scrap Mechanic čeština a český překlad ke stažení\. Návod na instalaci, aktuální verze překladu a informace o kompatibilitě\."/);
-  assert.match(detail, /<h1>Scrap Mechanic – Čeština<\/h1>/);
+  assert.match(detail, /<h1>Scrap Mechanic čeština<\/h1>/);
   assert.match(detail, /Scrap Mechanic čeština přináší kompletní český překlad rozhraní a herních textů\./);
   assert.match(detail, /rel="canonical" href="https:\/\/nioczloc\.com\/scrap-mechanic\.html"/);
   assert.match(detail, /<body data-game="scrap-mechanic">/);
@@ -51,7 +51,7 @@ test("all supplied images have the intended hero and gallery roles", () => {
     assert.ok(existsSync(new URL(`assets/Scrap%20Mechanic/${file}`, root)), `${file} is missing`);
   }
   assert.equal([...detail.matchAll(/assets\/Scrap%20Mechanic\/Scrap_[1-5]\.png/g)].length, 10);
-  assert.equal([...detail.matchAll(/assets\/Scrap%20Mechanic\/Scrap_hl\.jpg/g)].length, 2);
+  assert.equal([...detail.split('</head>')[1].matchAll(/assets\/Scrap%20Mechanic\/Scrap_hl\.jpg/g)].length, 2);
 });
 
 test("Steam status is configured as the verified functional build", () => {

@@ -21,7 +21,7 @@ test("Arms of God v0.2 release details are consistent", () => {
   assert.match(detail, /Arm\.of\.God_NioCZ\.zip/);
   assert.match(translations, /Verze překladu v0\.2 · hra v0\.618/);
   assert.match(index, /Čeština · 100 % · verze v0\.2 · hra v0\.618/);
-  assert.match(sitemap, /arms-of-god\.html<\/loc>\s*<lastmod>2026-09-21<\/lastmod>/);
+  assert.match(sitemap, /arms-of-god\.html<\/loc>\s*<lastmod>2026-10-08<\/lastmod>/);
 });
 
 test("Arms of God installation and SmartScreen guidance are present", () => {

@@ -36,9 +36,9 @@ test("Sleeping Dogs is registered consistently across the site", () => {
 });
 
 test("Sleeping Dogs detail includes the supplied content and all shared hooks", () => {
-  assert.match(detail, /<title>Sleeping Dogs – čeština, český překlad \| Nio Localization<\/title>/);
-  assert.match(detail, /content="Čeština a český překlad pro hru Sleeping Dogs ke stažení\. Návod na instalaci a novinky o překladu\."/);
-  assert.match(detail, /<h1>Sleeping Dogs – Čeština<\/h1>/);
+  assert.match(detail, /<title>Sleeping Dogs čeština – český překlad ke stažení \| Nio Localization<\/title>/);
+  assert.match(detail, /content="Sleeping Dogs čeština a český překlad ke stažení\. Návod na instalaci lokalizace pro Definitive Edition\."/);
+  assert.match(detail, /<h1>Sleeping Dogs čeština<\/h1>/);
   assert.match(detail, /<body data-game="sleeping-dogs">/);
   assert.equal([...detail.matchAll(/data-game-status="sleeping-dogs"/g)].length, 2);
   assert.match(detail, /data-comments-list/);
@@ -63,7 +63,7 @@ test("all supplied Sleeping Dogs images are wired to their intended roles", () =
   }
 
   assert.equal([...detail.matchAll(/assets\/Sleeping-Dogs\/Dogs_[1-5]\.png/g)].length, 10);
-  assert.doesNotMatch(detail, /assets\/Sleeping-Dogs\/Dogs_hl\.jpg/);
+  assert.doesNotMatch(detail.split('</head>')[1], /assets\/Sleeping-Dogs\/Dogs_hl\.jpg/);
 });
 
 test("Sleeping Dogs database migration enables every community feature", () => {

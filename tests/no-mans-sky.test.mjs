@@ -24,8 +24,8 @@ test("No Man's Sky is listed everywhere and uses the requested artwork", () => {
 });
 
 test("No Man's Sky detail keeps all shared community and download hooks", () => {
-  assert.match(detail, /<title>No Man's Sky – čeština, český překlad \| Nio Localization<\/title>/);
-  assert.match(detail, /<h1>No Man's Sky – Čeština<\/h1>/);
+  assert.match(detail, /<title>No Man's Sky čeština – český překlad ke stažení \| Nio Localization<\/title>/);
+  assert.match(detail, /<h1>No Man's Sky čeština<\/h1>/);
   assert.equal([...detail.matchAll(/data-game-status="no-mans-sky"/g)].length, 2);
   assert.match(detail, /data-comments-list/);
   assert.match(detail, /data-download data-game="no-mans-sky"/);

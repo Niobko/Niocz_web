@@ -14,7 +14,7 @@ const sql = read("SQL EDITOR/SUPABASE-BOOKSHOP-SIMULATOR-UPDATE.sql");
 
 test("Bookshop Simulator release details are synchronized across the site", () => {
   const translationCard = translations.match(/<article class="translation-card reveal">[\s\S]*?href="bookshop-simulator\.html"[\s\S]*?<\/article>/)?.[0] || "";
-  const newsCard = news.match(/<a class="latest-game-card" href="bookshop-simulator\.html">[\s\S]*?<\/a>/)?.[0] || "";
+  const newsCard = news.match(/<a class="latest-game-card" href="bookshop-simulator\.html"[^>]*>[\s\S]*?<\/a>/)?.[0] || "";
   assert.match(detail, /Verze 0\.3/);
   assert.match(detail, /v1\.1\.1258/);
   assert.match(detail, /Bookshop\.Simulator\.NioCZ\.zip/);
@@ -24,7 +24,7 @@ test("Bookshop Simulator release details are synchronized across the site", () =
   assert.match(translationCard, /datetime="2026-09-14">14\. 9\. 2026/);
   assert.match(newsCard, /Čeština · 97 % · verze 0\.3 · hra v1\.1\.1258/);
   assert.match(newsCard, /datetime="2026-09-14">14\. 9\. 2026/);
-  assert.match(sitemap, /bookshop-simulator\.html<\/loc>\s*<lastmod>2026-09-14<\/lastmod>/);
+  assert.match(sitemap, /bookshop-simulator\.html<\/loc>\s*<lastmod>2026-10-08<\/lastmod>/);
 });
 
 test("Bookshop Simulator uses the verified current Steam public build", () => {

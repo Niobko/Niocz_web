@@ -38,9 +38,9 @@ test("Kingdom Rush Vengeance is registered consistently across the site", () => 
 });
 
 test("Kingdom Rush Vengeance detail includes the supplied content and all shared hooks", () => {
-  assert.match(detail, /<title>Kingdom Rush Vengeance – čeština, český překlad \| Nio Localization<\/title>/);
-  assert.match(detail, /content="Čeština a český překlad pro hru Kingdom Rush Vengeance ke stažení\. Návod na instalaci a novinky o překladu\."/);
-  assert.match(detail, /<h1>Kingdom Rush Vengeance – Čeština<\/h1>/);
+  assert.match(detail, /<title>Kingdom Rush Vengeance čeština – český překlad ke stažení \| Nio Localization<\/title>/);
+  assert.match(detail, /content="Kingdom Rush Vengeance čeština a český překlad ke stažení\. Návod na instalaci překladu tower defense hry\."/);
+  assert.match(detail, /<h1>Kingdom Rush Vengeance čeština<\/h1>/);
   assert.match(detail, /<body data-game="kingdom-rush-vengeance">/);
   assert.equal([...detail.matchAll(/data-game-status="kingdom-rush-vengeance"/g)].length, 2);
   assert.match(detail, /data-comments-list/);
@@ -65,7 +65,7 @@ test("all supplied Kingdom Rush Vengeance images are wired to their intended rol
   }
 
   assert.equal([...detail.matchAll(/assets\/Kingdom Rush Vengeance\/Kings_[1-5]\.png/g)].length, 10);
-  assert.doesNotMatch(detail, /assets\/Kingdom Rush Vengeance\/Kings_hl\.jpg/);
+  assert.doesNotMatch(detail.split('</head>')[1], /assets\/Kingdom Rush Vengeance\/Kings_hl\.jpg/);
 });
 
 test("Kingdom Rush Vengeance database migration enables every community feature", () => {

@@ -129,7 +129,7 @@ test("Ready or Not is registered across the site with every supplied image", () 
 });
 
 test("Ready or Not detail keeps the requested data and shared hooks", () => {
-  assert.match(detail, /<title>Ready or Not – čeština, český překlad \| Nio Localization<\/title>/);
+  assert.match(detail, /<title>Ready or Not čeština – český překlad ke stažení \| Nio Localization<\/title>/);
   assert.match(detail, /<body data-game="ready-or-not">/);
   assert.match(detail, /data-comments-list/);
   assert.match(detail, /data-download data-game="ready-or-not"/);

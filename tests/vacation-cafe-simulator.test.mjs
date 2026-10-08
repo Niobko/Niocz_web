@@ -36,9 +36,9 @@ test("Vacation Cafe Simulator is registered consistently across the site", () =>
 });
 
 test("Vacation Cafe Simulator detail includes the supplied content and all shared hooks", () => {
-  assert.match(detail, /<title>Vacation Cafe Simulator – čeština, český překlad \| Nio Localization<\/title>/);
-  assert.match(detail, /content="Čeština a český překlad pro hru Vacation Cafe Simulator ke stažení\. Návod na instalaci a novinky o překladu\."/);
-  assert.match(detail, /<h1>Vacation Cafe Simulator – Čeština<\/h1>/);
+  assert.match(detail, /<title>Vacation Cafe Simulator čeština – český překlad ke stažení \| Nio Localization<\/title>/);
+  assert.match(detail, /content="Vacation Cafe Simulator čeština a český překlad ke stažení\. Návod na instalaci překladu simulátoru kavárny\."/);
+  assert.match(detail, /<h1>Vacation Cafe Simulator čeština<\/h1>/);
   assert.match(detail, /<body data-game="vacation-cafe-simulator">/);
   assert.equal([...detail.matchAll(/data-game-status="vacation-cafe-simulator"/g)].length, 2);
   assert.match(detail, /data-comments-list/);
@@ -57,7 +57,7 @@ test("all supplied Vacation Cafe Simulator images are wired to their intended ro
   }
 
   assert.equal([...detail.matchAll(/assets\/Vacation_Cafe_Simulator\/Vaca_[1-5]\.png/g)].length, 10);
-  assert.doesNotMatch(detail, /assets\/Vacation_Cafe_Simulator\/Vaca_hl\.jpg/);
+  assert.doesNotMatch(detail.split('</head>')[1], /assets\/Vacation_Cafe_Simulator\/Vaca_hl\.jpg/);
 });
 
 test("Vacation Cafe Simulator database migration enables every community feature", () => {

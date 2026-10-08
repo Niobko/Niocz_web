@@ -21,15 +21,15 @@ test("Wanderburg is published consistently across the site", () => {
     assert.match(html, /assets\/Wanderburg\/Wander_hl\.jpg/);
     assert.match(html, /datetime="2026-09-14">14\. 9\. 2026/);
   }
-  assert.match(sitemap, /wanderburg\.html<\/loc><lastmod>2026-09-14<\/lastmod>/);
+  assert.match(sitemap, /wanderburg\.html<\/loc><lastmod>2026-10-08<\/lastmod>/);
   assert.match(script, /wanderburg: \{ name: 'Wanderburg'/);
   assert.match(userSystem, /wanderburg: \{ name: 'Wanderburg', page: 'wanderburg\.html'/);
 });
 
 test("Wanderburg detail contains release data, SEO and all shared hooks", () => {
-  assert.match(detail, /<title>Wanderburg – čeština, český překlad \| Nio Localization<\/title>/);
+  assert.match(detail, /<title>Wanderburg čeština – český překlad ke stažení \| Nio Localization<\/title>/);
   assert.match(detail, /Wanderburg čeština a český překlad ke stažení/);
-  assert.match(detail, /<h1>Wanderburg – Čeština<\/h1>/);
+  assert.match(detail, /<h1>Wanderburg čeština<\/h1>/);
   assert.match(detail, /rel="canonical" href="https:\/\/nioczloc\.com\/wanderburg\.html"/);
   assert.match(detail, /property="og:title"/);
   assert.match(detail, /name="twitter:card" content="summary_large_image"/);

@@ -36,9 +36,9 @@ test("The Spell Brigade is registered consistently across the site", () => {
 });
 
 test("detail uses the requested SEO, content and shared feature hooks", () => {
-  assert.match(detail, /<title>The Spell Brigade – čeština, český překlad \| Nio Localization<\/title>/);
-  assert.match(detail, /content="Čeština a český překlad pro hru The Spell Brigade ke stažení\. Návod na instalaci a novinky o překladu\."/);
-  assert.match(detail, /<h1>The Spell Brigade – Čeština<\/h1>/);
+  assert.match(detail, /<title>The Spell Brigade čeština – český překlad ke stažení \| Nio Localization<\/title>/);
+  assert.match(detail, /content="The Spell Brigade čeština a český překlad ke stažení\. Návod na instalaci lokalizace kooperativní akční hry\."/);
+  assert.match(detail, /<h1>The Spell Brigade čeština<\/h1>/);
   assert.match(detail, /<body data-game="the-spell-brigade">/);
   assert.equal([...detail.matchAll(/data-game-status="the-spell-brigade"/g)].length, 2);
   assert.match(detail, /data-comments-list/);
@@ -66,7 +66,7 @@ test("all supplied images keep their exact names in the requested asset folder",
   }
 
   assert.equal([...detail.matchAll(/assets\/The Spell Brigade\/TheSpell_[1-5]\.png/g)].length, 10);
-  assert.doesNotMatch(detail, /assets\/The Spell Brigade\/TheSpell_hl\.png/);
+  assert.doesNotMatch(detail.split('</head>')[1], /assets\/The Spell Brigade\/TheSpell_hl\.png/);
 });
 
 test("Supabase migrations whitelist the slug for every persisted feature", () => {

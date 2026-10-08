@@ -25,8 +25,8 @@ test('inZOI participates in the shared catalog, listing, SEO and database regist
   assert.match(detail,/<body data-game="inzoi">/);
   assert.match(detail,/data-download data-game="inzoi"/);
   assert.match(detail,/data-comments-list/);
-  assert.match(detail,/<title>inZOI – čeština, český překlad \| Nio Localization<\/title>/);
-  assert.match(detail,/<h1>inZOI – Čeština<\/h1>/);
+  assert.match(detail, /<title>inZOI čeština – český překlad ke stažení \| Nio Localization<\/title>/);
+  assert.match(detail, /<h1>inZOI čeština<\/h1>/);
   assert.match(detail,/rel="canonical" href="https:\/\/nioczloc.com\/inzoi.html"/);
   const schema=JSON.parse(detail.match(/<script type="application\/ld\+json">(.*?)<\/script>/)[1]);
   assert.equal(schema.url,'https://nioczloc.com/inzoi.html');

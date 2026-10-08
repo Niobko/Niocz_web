@@ -31,7 +31,7 @@ test('CatMailCo keeps its existing identity and uses the new release everywhere'
   assert.equal(game.lastSteamUpdate, '2026-10-01T13:31:24.000Z');
   for (const [file, pattern] of [
     ['preklady.html', /<article class="translation-card reveal">(?:(?!<\/article>)[\s\S])*?href="catmailco\.html"[\s\S]*?<\/article>/],
-    ['index.html', /<a class="latest-game-card" href="catmailco\.html">[\s\S]*?<\/a>/]
+    ['index.html', /<a class="latest-game-card" href="catmailco\.html"[^>]*>[\s\S]*?<\/a>/]
   ]) {
     const card = read(file).match(pattern)?.[0];
     assert.ok(card);
@@ -39,7 +39,7 @@ test('CatMailCo keeps its existing identity and uses the new release everywhere'
     assert.match(card, /Patch #7/);
     assert.match(card, /datetime="2026-10-02">2\. 10\. 2026/);
   }
-  assert.match(read('sitemap.xml'), /<loc>https:\/\/nioczloc\.com\/catmailco\.html<\/loc>\s*<lastmod>2026-10-02<\/lastmod>/);
+  assert.match(read('sitemap.xml'), /<loc>https:\/\/nioczloc\.com\/catmailco\.html<\/loc>\s*<lastmod>2026-10-08<\/lastmod>/);
   const steps = detail.match(/<ol class="steps install-steps">([\s\S]*?)<\/ol>/)[1];
   assert.equal([...steps.matchAll(/<li>/g)].length, 6);
   assert.match(steps, /install\.exe/);

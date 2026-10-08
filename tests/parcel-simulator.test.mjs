@@ -36,9 +36,9 @@ test("Parcel Simulator is registered consistently across the site", () => {
 });
 
 test("detail uses the requested SEO, content and shared feature hooks", () => {
-  assert.match(detail, /<title>Parcel Simulator – čeština, český překlad \| Nio Localization<\/title>/);
-  assert.match(detail, /content="Čeština a český překlad pro hru Parcel Simulator ke stažení\. Návod na instalaci a novinky o překladu\."/);
-  assert.match(detail, /<h1>Parcel Simulator – Čeština<\/h1>/);
+  assert.match(detail, /<title>Parcel Simulator čeština – český překlad ke stažení \| Nio Localization<\/title>/);
+  assert.match(detail, /content="Parcel Simulator čeština a český překlad ke stažení\. Návod na instalaci překladu simulátoru balíkového depa\."/);
+  assert.match(detail, /<h1>Parcel Simulator čeština<\/h1>/);
   assert.match(detail, /<body data-game="parcel-simulator">/);
   assert.equal([...detail.matchAll(/data-game-status="parcel-simulator"/g)].length, 2);
   assert.match(detail, /data-comments-list/);
@@ -66,7 +66,7 @@ test("all supplied images keep their exact names in the requested asset folder",
   }
 
   assert.equal([...detail.matchAll(/assets\/Parcel Simulator\/Parcel_[1-5]\.png/g)].length, 10);
-  assert.doesNotMatch(detail, /assets\/Parcel Simulator\/Parcel_hl\.avif/);
+  assert.doesNotMatch(detail.split('</head>')[1], /assets\/Parcel Simulator\/Parcel_hl\.avif/);
 });
 
 test("Supabase migrations whitelist the slug for every persisted feature", () => {

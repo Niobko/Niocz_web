@@ -23,15 +23,15 @@ test("Kingdoms and Castles is registered across the public site", () => {
     assert.match(html, /assets\/Kingdoms%20and%20Castles\/KingCastles_hl\.jpg/);
     assert.match(html, /datetime="2026-09-25">25\. 9\. 2026/);
   }
-  assert.match(sitemap, /kingdoms-and-castles\.html<\/loc><lastmod>2026-09-25<\/lastmod>/);
+  assert.match(sitemap, /kingdoms-and-castles\.html<\/loc><lastmod>2026-10-08<\/lastmod>/);
   assert.match(script, /'kingdoms-and-castles': \{ name: 'Kingdoms and Castles'/);
   assert.match(userSystem, /'kingdoms-and-castles': \{ name: 'Kingdoms and Castles', page: 'kingdoms-and-castles\.html'/);
 });
 
 test("Kingdoms and Castles detail keeps SEO, content and every shared hook", () => {
-  assert.match(detail, /<title>Kingdoms and Castles – čeština, český překlad \| Nio Localization<\/title>/);
+  assert.match(detail, /<title>Kingdoms and Castles čeština – český překlad ke stažení \| Nio Localization<\/title>/);
   assert.match(detail, /Kingdoms and Castles čeština a český překlad/);
-  assert.match(detail, /<h1>Kingdoms and Castles – Čeština<\/h1>/);
+  assert.match(detail, /<h1>Kingdoms and Castles čeština<\/h1>/);
   assert.match(detail, /rel="canonical" href="https:\/\/nioczloc\.com\/kingdoms-and-castles\.html"/);
   assert.match(detail, /<body data-game="kingdoms-and-castles">/);
   assert.equal([...detail.matchAll(/data-game-status="kingdoms-and-castles"/g)].length, 2);

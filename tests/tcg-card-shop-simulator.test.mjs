@@ -23,15 +23,15 @@ test("TCG Card Shop Simulator is registered across the public site", () => {
     assert.match(html, /assets\/TCG%20Card%20Shop%20Simulator\/TCG_hl\.jpg/);
     assert.match(html, /datetime="2026-09-18">18\. 9\. 2026/);
   }
-  assert.match(sitemap, /tcg-card-shop-simulator\.html<\/loc><lastmod>2026-09-18<\/lastmod>/);
+  assert.match(sitemap, /tcg-card-shop-simulator\.html<\/loc><lastmod>2026-10-08<\/lastmod>/);
   assert.match(script, /'tcg-card-shop-simulator': \{ name: 'TCG Card Shop Simulator'/);
   assert.match(userSystem, /'tcg-card-shop-simulator': \{ name: 'TCG Card Shop Simulator', page: 'tcg-card-shop-simulator\.html'/);
 });
 
 test("TCG detail keeps SEO, supplied content and every shared hook", () => {
-  assert.match(detail, /<title>TCG Card Shop Simulator – čeština, český překlad \| Nio Localization<\/title>/);
+  assert.match(detail, /<title>TCG Card Shop Simulator čeština – český překlad ke stažení \| Nio Localization<\/title>/);
   assert.match(detail, /TCG Card Shop Simulator čeština a český překlad/);
-  assert.match(detail, /<h1>TCG Card Shop Simulator – Čeština<\/h1>/);
+  assert.match(detail, /<h1>TCG Card Shop Simulator čeština<\/h1>/);
   assert.match(detail, /rel="canonical" href="https:\/\/nioczloc\.com\/tcg-card-shop-simulator\.html"/);
   assert.match(detail, /<body data-game="tcg-card-shop-simulator">/);
   assert.equal([...detail.matchAll(/data-game-status="tcg-card-shop-simulator"/g)].length, 2);

@@ -37,9 +37,9 @@ test("BOMBANANA is registered consistently across the site", () => {
 });
 
 test("detail uses the requested SEO, Czech content and shared feature hooks", () => {
-  assert.match(detail, /<title>BOMBANANA – čeština, český překlad \| Nio Localization<\/title>/);
-  assert.match(detail, /content="Čeština a český překlad pro hru BOMBANANA ke stažení\. Návod na instalaci a novinky o překladu\."/);
-  assert.match(detail, /<h1>BOMBANANA – Čeština<\/h1>/);
+  assert.match(detail, /<title>BOMBANANA čeština – český překlad ke stažení \| Nio Localization<\/title>/);
+  assert.match(detail, /content="BOMBANANA čeština a český překlad ke stažení\. Návod na instalaci lokalizace akční hry s výbušnými banány\."/);
+  assert.match(detail, /<h1>BOMBANANA čeština<\/h1>/);
   assert.match(detail, /<body data-game="bombanana">/);
   assert.equal([...detail.matchAll(/data-game-status="bombanana"/g)].length, 2);
   assert.match(detail, /data-comments-list/);
@@ -65,7 +65,7 @@ test("all supplied images keep their exact names in the requested asset folder",
   }
 
   assert.equal([...detail.matchAll(/assets\/BOMBANANA\/Banan_[1-5]\.png/g)].length, 10);
-  assert.doesNotMatch(detail, /assets\/BOMBANANA\/Banan_hl\.jpg/);
+  assert.doesNotMatch(detail.split('</head>')[1], /assets\/BOMBANANA\/Banan_hl\.jpg/);
 });
 
 test("Supabase migrations whitelist the slug for every persisted feature", () => {

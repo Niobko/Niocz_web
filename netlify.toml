@@ -10,6 +10,10 @@
 [build.environment]
   NODE_VERSION = "22"
 
+# Keep internal links aligned with the existing .html canonical URLs and sitemap.
+[build.processing.html]
+  pretty_urls = false
+
 [[redirects]]
   from = "/api/game-status"
   to = "/.netlify/functions/game-status"
