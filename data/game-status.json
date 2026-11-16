@@ -540,6 +540,23 @@
         "label": "Funkční",
         "color": "green"
       }
+    },
+    "cooking-simulator-2": {
+      "name": "Cooking Simulator 2: Better Together",
+      "appId": "2455360",
+      "supportedVersion": "v1.23.1f72f80",
+      "verifiedBuildId": null,
+      "currentBuildId": null,
+      "lastSteamUpdate": null,
+      "manualStatus": "functional",
+      "override": null,
+      "translationVersion": "v1.0",
+      "translationUpdatedAt": "2026-11-16",
+      "displayStatus": {
+        "key": "functional",
+        "label": "Funkční",
+        "color": "green"
+      }
     }
   }
 }

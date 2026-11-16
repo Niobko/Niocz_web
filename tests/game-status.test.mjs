@@ -141,9 +141,18 @@ test("every build changed by the live Steam check waits for verification", () =>
 });
 
 test("every published game has complete Steam status data", () => {
-  assert.equal(Object.keys(statusConfig.games).length, 35);
+  assert.equal(Object.keys(statusConfig.games).length, 36);
   for (const [slug, game] of Object.entries(statusConfig.games)) {
     assert.match(game.appId, /^\d+$/, `${slug} is missing a Steam App ID`);
+    if (slug === 'cooking-simulator-2') {
+      // This release has no verified Steam build: never require a fabricated ID.
+      assert.equal(game.verifiedBuildId, null);
+      assert.equal(game.currentBuildId, null);
+      assert.equal(game.lastSteamUpdate, null);
+      assert.equal(resolveDisplayStatus(game).key, 'functional');
+      assert.equal(resolveDisplayStatus({ ...game, currentBuildId: '123456789' }).key, 'pending');
+      continue;
+    }
     if (slug === 'timberborn') {
       assert.equal(game.verifiedBuildId, null);
       assert.equal(resolveDisplayStatus(game).key, 'pending');

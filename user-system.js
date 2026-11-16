@@ -17,6 +17,7 @@
   let isAdmin = false;
 
   const catalog = Object.freeze({
+    'cooking-simulator-2': { name: 'Cooking Simulator 2: Better Together', page: 'cooking-simulator-2.html', image: 'assets/Cooking%20Simulator%202/Cooking_hl.jpg' },
     inzoi: { name: 'inZOI', page: 'inzoi.html', image: 'assets/inZOI/Zoi_hl.jpg' },
     'scrap-mechanic': { name: 'Scrap Mechanic', page: 'scrap-mechanic.html', image: 'assets/Scrap%20Mechanic/Scrap_hl.jpg' },
     'no-mans-sky': { name: "No Man's Sky", page: 'no-mans-sky.html', image: 'assets/No%20Man%20Sky/Sky_hl.jpg' },

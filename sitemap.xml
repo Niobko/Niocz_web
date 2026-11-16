@@ -2,11 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://nioczloc.com/</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-11-16</lastmod>
   </url>
   <url>
     <loc>https://nioczloc.com/preklady.html</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-11-16</lastmod>
   </url>
   <url>
     <loc>https://nioczloc.com/scrap-mechanic.html</loc>
@@ -141,5 +141,9 @@
   <url>
     <loc>https://nioczloc.com/inzoi.html</loc>
     <lastmod>2026-10-08</lastmod>
+  </url>
+  <url>
+    <loc>https://nioczloc.com/cooking-simulator-2.html</loc>
+    <lastmod>2026-11-16</lastmod>
   </url>
 </urlset>
