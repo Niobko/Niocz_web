@@ -238,16 +238,18 @@
     "powerwash-simulator-2": {
       "name": "PowerWash Simulator 2",
       "appId": "2968420",
-      "supportedVersion": "v1.3.0",
+      "supportedVersion": "v1.3.1",
+      "translationVersion": "v0.2",
+      "translationUpdatedAt": "2026-11-17",
       "verifiedBuildId": "23737596",
-      "currentBuildId": "23737596",
-      "lastSteamUpdate": "2026-07-16T13:48:18Z",
+      "currentBuildId": "24530219",
+      "lastSteamUpdate": "2026-09-24T13:54:10.000Z",
       "manualStatus": "functional",
       "override": null,
       "displayStatus": {
-        "key": "functional",
-        "label": "Funkční",
-        "color": "green"
+        "key": "pending",
+        "label": "Čeká na ověření",
+        "color": "orange"
       }
     },
     "hearth-and-hamlet": {

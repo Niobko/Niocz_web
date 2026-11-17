@@ -40,7 +40,7 @@ values
   ('parcel-simulator', 'Parcel Simulator', 'v0.1', 'v2.0.1.3', '2026-09-01'),
   ('the-spell-brigade', 'The Spell Brigade', 'v0.3', 'v1.1.2.19558', '2026-09-09'),
   ('warhounds', 'Warhounds', 'v0.1', 'v1.0.1', '2026-08-30'),
-  ('powerwash-simulator-2', 'PowerWash Simulator 2', 'v0.1', 'v1.3.0', '2026-08-29'),
+  ('powerwash-simulator-2', 'PowerWash Simulator 2', 'v0.2', 'v1.3.1', '2026-11-17'),
   ('hearth-and-hamlet', 'Hearth and Hamlet', 'v0.3', 'v1.0.07', '2026-08-30'),
   ('kynseed', 'Kynseed', 'v0.1', 'v1.3', '2026-08-28'),
   ('alchemy-factory', 'Alchemy Factory', 'v1.0', 'v1.0.4950', '2026-09-12'),

@@ -23,9 +23,9 @@ test("PowerWash Simulator 2 is registered across the site", () => {
   assert.match(sitemap, /https:\/\/nioczloc\.com\/powerwash-simulator-2\.html/);
   assert.match(script, /'powerwash-simulator-2': \{ name: 'PowerWash Simulator 2'/);
   assert.equal(status.games["powerwash-simulator-2"].appId, "2968420");
-  assert.equal(status.games["powerwash-simulator-2"].supportedVersion, "v1.3.0");
+  assert.equal(status.games["powerwash-simulator-2"].supportedVersion, "v1.3.1");
   assert.equal(status.games["powerwash-simulator-2"].verifiedBuildId, "23737596");
-  assert.equal(status.games["powerwash-simulator-2"].currentBuildId, "23737596");
+  assert.equal(status.games["powerwash-simulator-2"].currentBuildId, "24530219");
 });
 
 test("detail uses the complete shared feature contract", () => {
@@ -34,9 +34,9 @@ test("detail uses the complete shared feature contract", () => {
   assert.match(detail, /data-comments-list/);
   assert.match(detail, /data-download data-game="powerwash-simulator-2"/);
   assert.match(detail, /data-download-count/);
-  assert.match(detail, /PowerWash\.Simulator\.2_NioCZ_v0\.1\.zip/);
-  assert.match(detail, /43\.9 MB/);
-  assert.match(detail, /29\. 8\. 2026/);
+  assert.match(detail, /PowerWash\.Simulator\.2\.NioCZ\.zip/);
+  assert.match(detail, /0\.16 MB/);
+  assert.match(detail, /17\. 11\. 2026/);
   assert.match(detail, /Kontrola ve hře<\/span><b>75 %/);
   assert.match(script, /bug-reports\.html\?game=\$\{encodeURIComponent\(gameSlug\)\}/);
   assert.match(script, /className = 'game-rating-card'/);
